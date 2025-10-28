@@ -15,6 +15,17 @@
                         @endif
                     </header>
 
+                    <div class="relative h-72 h-sm-80 overflow-hidden">
+                        <div class="absolute inset-0 z-10 flex justify-end py-10 md:px-28 px-3 flex-col w-full h-full">
+                            <p class="text-2xl font-bold text-white">
+                                Convenios y Alianzas</p>
+                            <p class="text-base text-white font-normal">
+                                Descubre nuestras colaboraciones para enriquecer tu experiencia educativa</p>
+                        </div>
+                        <img class="w-full h-full object-cover object-top brightness-75"
+                            src="{{ asset('images/portada.jpg') }}" alt="Portada" />
+                    </div>
+
                     <x-page.tabs-navigation />
 
                     <main class="mt-100 h-screen max-w-6xl mx-auto p-6 lg:p-8">

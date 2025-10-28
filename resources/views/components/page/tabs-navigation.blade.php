@@ -1,5 +1,5 @@
 <div class="w-full">
-    <div class="mb-4 border-b border-gray-200 bg-[#FFE5ED]">
+    <div class="mb-4 border-b bg-[#FFE5ED] md:px-28 px-0">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
             data-tabs-toggle="#default-styled-tab-content"
             data-tabs-active-classes="text-[#FFFFFF] hover:text-[#FFFFFF] border-[#D9324D] bg-[#D9324D]"
