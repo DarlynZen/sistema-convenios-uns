@@ -13,10 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Usuario DCTIA',
-            'email' => 'dctia@uns.edu.pe',
-            'password' => bcrypt('123'),
-        ]);
+        if (!User::where('email', 'dctia@uns.edu.pe')->exists()) {
+            User::factory()->create([
+                'name' => 'Usuario DCTIA',
+                'email' => 'dctia@uns.edu.pe',
+                'password' => bcrypt('123'),
+            ]);
+        }
     }
 }
