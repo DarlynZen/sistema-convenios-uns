@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documentos_convenio', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('convenio_id')->constrained('convenios');
+            $table->foreignId('convenio_id')->constrained('convenios')->onDelete('cascade');
             $table->string('tipo_documento', 100);
             $table->string('nombre_archivo', 255);
             $table->string('ruta_archivo', 500);

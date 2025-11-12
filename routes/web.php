@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Ramsey\Uuid\Type\Time;
 use App\Models\TipoConvenio;
 
-use function Pest\Laravel\delete;
-
 //auth - admin
 Route::view('admin/dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
 Route::view('admin/profile', 'profile')->middleware(['auth'])->name('profile');
@@ -13,7 +11,7 @@ Route::view('admin/profile', 'profile')->middleware(['auth'])->name('profile');
 require __DIR__ . '/auth.php';
 
 //public
-Route::view('/', 'welcome');
+Route::view('/', 'site/convenios/welcome');
 Route::get('prueba', function () {
     $tipoConvenio = new TipoConvenio;
 
@@ -22,9 +20,9 @@ Route::get('prueba', function () {
     $tipoConvenio->save();
  */
 
-/*     $tipoConvenio = TipoConvenio::find(3);
+    /* $tipoConvenio = TipoConvenio::find(3);
     $tipoConvenio -> delete();
- */
+
     $tipoConvenio = TipoConvenio::all();
-    return $tipoConvenio;
+    return $tipoConvenio; */
 });
