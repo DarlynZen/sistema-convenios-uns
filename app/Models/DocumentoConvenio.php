@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DocumentoConvenio extends Model
 {
@@ -33,8 +34,8 @@ class DocumentoConvenio extends Model
         'updated_at',
     ];
 
-    /* public function convenio()
+    public function convenio(): BelongsTo
     {
         return $this->belongsTo(Convenio::class, 'convenio_id');
-    } */
+    }
 }

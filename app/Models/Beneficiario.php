@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Beneficiario extends Model
 {
@@ -18,4 +19,9 @@ class Beneficiario extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function convenios(): BelongsToMany
+    {
+        return $this->belongsToMany(Convenio::class);
+    }
 }
