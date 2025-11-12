@@ -16,36 +16,84 @@
                     </header>
 
                     <div class="relative h-72 h-sm-80 overflow-hidden">
-                        <div class="absolute inset-0 z-10 flex justify-end py-10 md:px-28 px-3 flex-col w-full h-full">
+                        <div class="absolute inset-0 z-10 flex flex-col justify-end items-start py-10 md:px-28 px-3">
                             <p class="text-2xl font-bold text-white">
-                                Convenios y Alianzas</p>
-                            <p class="text-base text-white font-normal">
-                                Descubre nuestras colaboraciones para enriquecer tu experiencia educativa</p>
+                                Convenios y Alianzas
+                            </p>
+                            <p class="text-base text-white font-normal mt-2">
+                                Descubre nuestras colaboraciones para enriquecer tu experiencia educativa
+                            </p>
                         </div>
                         <img class="w-full h-full object-cover object-top brightness-75"
                             src="{{ asset('images/portada.jpg') }}" alt="Portada" />
                     </div>
 
-                    <x-page.tabs-navigation />
+
+                    <div class="w-full">
+                        <div class="mb-4 border-b bg-[#FFE5ED] md:px-28 px-0">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
+                                data-tabs-toggle="#default-styled-tab-content"
+                                data-tabs-active-classes="text-[#FFFFFF] hover:text-[#FFFFFF] border-[#D9324D] bg-[#D9324D]"
+                                data-tabs-inactive-classes="text-[#393939] hover:text-[#D9324D] hover:border-[#D9324D]"
+                                role="tablist">
+                                <li class="me-1.5" role="presentation">
+                                    <button class="inline-block p-4 border-b-2" id="profile-styled-tab"
+                                        data-tabs-target="#styled-profile" type="button" role="tab"
+                                        aria-selected="false">Información general</button>
+                                </li>
+                                <li class="me-1.5" role="presentation">
+                                    <button class="inline-block p-4 border-b-2" id="dashboard-styled-tab"
+                                        data-tabs-target="#styled-dashboard" type="button" role="tab"
+                                        aria-selected="false">Nuestros
+                                        convenios</button>
+                                </li>
+                                <li class="me-1.5" role="presentation">
+                                    <button class="inline-block p-4 border-b-2" id="settings-styled-tab"
+                                        data-tabs-target="#styled-settings" type="button" role="tab"
+                                        aria-selected="false">Nosotros</button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div id="default-styled-tab-content" class="md:px-28 px-3">
+                            {{-- Información general (visible por defecto) --}}
+                            <div id="styled-profile" role="tabpanel" aria-labelledby="profile-styled-tab"
+                                class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 text-white">
+                                @includeIf('site.convenios.tabs.informacion-general')
+                            </div>
+
+                            {{-- Nuestros convenios --}}
+                            <div id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-styled-tab"
+                                class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                                @includeIf('site.convenios.tabs.nuestros-convenios')
+                            </div>
+
+                            {{-- Nosotros --}}
+                            <div id="styled-settings" role="tabpanel" aria-labelledby="settings-styled-tab"
+                                class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
+                                @includeIf('site.convenios.tabs.nosotros')
+                            </div>
+                        </div>
+                    </div>
 
                     <main class="mt-100 h-screen max-w-6xl mx-auto p-6 lg:p-8">
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-
+                            <!-- contenido adicional si aplica -->
                         </div>
                     </main>
 
                     <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
-                        <div class=" grid grid-cols-3 text-center text-xs text-white w-full md:px-28 px-3 py-6">
+                        <div class="grid grid-cols-3 text-center text-xs text-white w-full md:px-28 px-3 py-6">
                             <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1 gap-3">
                                 <img class="h-24 w-auto" src="{{ asset('images/logo-uns.png') }}" alt="Logo UNS" />
-                                <div class="text-xs text-left justify-center">
+                                <div class="text-xs text-left">
                                     <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
                                     <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
                                         DCTIA</span>
                                 </div>
                             </div>
                             <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                                <div class="text-xs justify-center">
+                                <div class="text-xs">
                                     <span class="block font-bold uppercase">PARA MAYOR INFORMACIÓN</span>
                                     <span class="block">Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS. Rectorado
                                         1er piso</span>
@@ -54,7 +102,7 @@
                                 </div>
                             </div>
                             <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                                <div class="text-xs justify-center">
+                                <div class="text-xs">
                                     <span class="block font-bold uppercase">Administración</span>
                                     <span class="block">Acceso administrativo</span>
                                 </div>
@@ -71,3 +119,61 @@
         </div>
     </div>
 @endcomponent
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabsList = document.getElementById('default-styled-tab');
+        const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+        const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+        // leer clases activas/inactivas desde data-attributes (como usa Flowbite)
+        const activeClasses = (tabsList.dataset.tabsActiveClasses || '').split(' ').filter(Boolean);
+        const inactiveClasses = (tabsList.dataset.tabsInactiveClasses || '').split(' ').filter(Boolean);
+
+        function applyClasses(el, classes, remove = false) {
+            classes.forEach(cls => {
+                if (!cls) return;
+                if (remove) el.classList.remove(cls);
+                else el.classList.add(cls);
+            });
+        }
+
+        function setActiveTab(tab) {
+            tabs.forEach(t => {
+                const panelSelector = t.getAttribute('data-tabs-target');
+                const panel = document.querySelector(panelSelector);
+
+                if (t === tab) {
+                    t.setAttribute('aria-selected', 'true');
+                    // aplicar clases activas / quitar inactivas
+                    applyClasses(t, inactiveClasses, true);
+                    applyClasses(t, activeClasses, false);
+                    if (panel) panel.classList.remove('hidden');
+                } else {
+                    t.setAttribute('aria-selected', 'false');
+                    applyClasses(t, activeClasses, true);
+                    applyClasses(t, inactiveClasses, false);
+                    if (panel) panel.classList.add('hidden');
+                }
+            });
+        }
+
+        // click handlers
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                const current = document.querySelector('[role="tab"][aria-selected="true"]');
+                if (this !== current) setActiveTab(this);
+            });
+        });
+
+        // Inicializar: establecer Profile como tab por defecto sin hacer .click() (evita focus/outline)
+        const defaultTab = document.getElementById('profile-styled-tab');
+        if (defaultTab) {
+            setActiveTab(defaultTab);
+        } else if (tabs.length) {
+            // fallback al primero si no existe profile
+            setActiveTab(tabs[0]);
+        }
+    });
+</script>
