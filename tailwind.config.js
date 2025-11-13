@@ -17,6 +17,7 @@ export default {
 
             colors: {
                 brand: {
+                    25: "#FFECEF",
                     50: "#FFE5ED", // muy claro (fondos sutiles)
                     100: "#FFCED1", // claro
                     200: "#F8A3AA", // tono medio claro

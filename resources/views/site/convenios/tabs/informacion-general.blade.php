@@ -5,8 +5,8 @@
         <!-- Imagen -->
         <div
             class="flex justify-center items-center w-full md:w-1/3 h-[200px] md:h-[180px] bg-cover bg-center bg-blend-darken">
-            <img class="w-full h-full object-cover object-top brightness-75 rounded" src="{{ asset('images/1.jpg') }}"
-                alt="Convenios UNS" />
+            <img class="w-full h-full object-cover object-top brightness-75 rounded"
+                src="{{ asset('assets/images/1.jpg') }}" alt="Convenios UNS" />
         </div>
 
         <!-- Contenedor de texto -->
@@ -49,7 +49,7 @@
             <div class="relative w-full h-52 border border-neutral-400 rounded overflow-hidden flex flex-col">
                 <!-- Imagen con overlay y texto dentro -->
                 <div class="relative w-full h-full flex flex-col justify-end">
-                    <img src="{{ asset('images/tipo-convenio-marco.jpg') }}" alt="Convenio de Marco"
+                    <img src="{{ asset('assets/images/tipo-convenio-marco.jpg') }}" alt="Convenio de Marco"
                         class="w-full h-full object-cover brightness-50" />
                     <div class="absolute inset-0 p-4 text-neutral-50 z-10 flex flex-col justify-start">
                         <h3 class="font-bold text-base mb-2">Convenio de Marco</h3>
@@ -67,7 +67,7 @@
             <div class="relative w-full h-fit border border-neutral-400 rounded overflow-hidden flex flex-col">
                 <!-- Imagen con overlay y texto dentro -->
                 <div class="relative w-full h-52 flex flex-col justify-end">
-                    <img src="{{ asset('images/1.jpg') }}" alt="Convenio Específico"
+                    <img src="{{ asset('assets/images/1.jpg') }}" alt="Convenio Específico"
                         class="w-full h-full object-cover brightness-50" />
                     <div class="absolute inset-0 p-4 text-neutral-50 z-10 flex flex-col justify-start">
                         <h3 class="font-bold text-base mb-2">Convenio Específico</h3>
@@ -96,29 +96,65 @@
         <!-- Contenido de estadísticas -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full h-full items-center text-center">
             <!-- Card - Estadística 1 -->
-            <div class="flex flex-row items-center bg-neutral-100 border border-neutral-400 rounded px-5 py-4">
+            <div
+                class="flex flex-row justify-center items-center bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
                 <div class="flex flex-col items-start gap-2 w-full">
-
-                    <span class="font-extrabold text-3xl text-neutral-600">40+</span>
-                    <span class="font-normal text-base">Convenios Activos</span>
+                    <span class="font-extrabold text-3xl">40+</span>
+                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
                 </div>
-                <div class="w-full h-1 bg-brand-200 mt-2"></div>
-
+                <div class="justify-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,16.4,8.11,34.06,16.85,53,16.85,13.93,0,28.54-4.75,43.82-18a8,8,0,0,0,2.76-6V56A8,8,0,0,0,218.76,50c-28,24.23-51.72,12.49-79.21-1.12C111.07,34.76,78.78,18.79,42.76,50ZM216,172.25c-26.79,21.16-49.87,9.74-76.45-3.41-25-12.35-52.81-26.13-83.55-8.4V59.79c26.79-21.16,49.87-9.75,76.45,3.4,25,12.35,52.82,26.13,83.55,8.4Z">
+                        </path>
+                    </svg>
+                </div>
             </div>
 
-            <!-- Estadística 2 -->
-            <div class="flex flex-col items-center">
-                <span class="font-extrabold text-3xl text-[#D9324D]">30</span>
-                <span class="font-normal text-base">Países Colaboradores</span>
+            <!-- Card - Estadística 2 -->
+            <div
+                class="flex flex-row justify-center items-center bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
+                <div class="flex flex-col items-start gap-2 w-full">
+                    <span class="font-extrabold text-3xl">40+</span>
+                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
+                </div>
+                <div class="justify-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,16.4,8.11,34.06,16.85,53,16.85,13.93,0,28.54-4.75,43.82-18a8,8,0,0,0,2.76-6V56A8,8,0,0,0,218.76,50c-28,24.23-51.72,12.49-79.21-1.12C111.07,34.76,78.78,18.79,42.76,50ZM216,172.25c-26.79,21.16-49.87,9.74-76.45-3.41-25-12.35-52.81-26.13-83.55-8.4V59.79c26.79-21.16,49.87-9.75,76.45,3.4,25,12.35,52.82,26.13,83.55,8.4Z">
+                        </path>
+                    </svg>
+                </div>
             </div>
 
-            <!-- Estadística 3 -->
-            <div class="flex flex-col items-center">
-                <span class="font-extrabold text-3xl text-[#D9324D]">500+</span>
-                <span class="font-normal text-base">Estudiantes Beneficiados</span>
+            <!-- Card - Estadística 3 -->
+            <div
+                class="flex flex-row bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
+                <div class="flex flex-col items-start gap-2 w-full">
+                    <span class="font-extrabold text-3xl">40+</span>
+                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
+                </div>
+                <div class="justify-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                        viewBox="0 0 256 256">
+                        <path
+                            d="M42.76,50A8,8,0,0,0,40,56V224a8,8,0,0,0,16,0V179.77c26.79-21.16,49.87-9.75,76.45,3.41,16.4,8.11,34.06,16.85,53,16.85,13.93,0,28.54-4.75,43.82-18a8,8,0,0,0,2.76-6V56A8,8,0,0,0,218.76,50c-28,24.23-51.72,12.49-79.21-1.12C111.07,34.76,78.78,18.79,42.76,50ZM216,172.25c-26.79,21.16-49.87,9.74-76.45-3.41-25-12.35-52.81-26.13-83.55-8.4V59.79c26.79-21.16,49.87-9.75,76.45,3.4,25,12.35,52.82,26.13,83.55,8.4Z">
+                        </path>
+                    </svg>
+                </div>
             </div>
         </div>
-
-
-
     </div>
+
+    {{-- Mapa de Convenios --}}
+    <div class="flex flex-col items-start w-full h-auto py-2">
+        <!-- Título -->
+        <div class="py-3">
+            <h2 class="font-extrabold text-xl">Tenemos convenios en</h2>
+        </div>
+    </div>
+
+
+</div>

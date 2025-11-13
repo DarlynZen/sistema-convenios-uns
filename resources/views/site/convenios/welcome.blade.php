@@ -16,7 +16,7 @@
                             Descubre nuestras colaboraciones para enriquecer tu experiencia educativa
                         </p>
                     </div>
-                    <img class="w-full h-full object-cover object-top brightness-75" src="{{ asset('images/portada.jpg') }}"
+                    <img class="w-full h-full object-cover object-top brightness-75" src="{{ asset('assets/images/portada.jpg') }}"
                         alt="Portada" />
                 </div>
 
@@ -71,7 +71,7 @@
                 <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
                     <div class="grid grid-cols-3 text-center text-xs text-white w-full md:px-24 px-3 py-6">
                         <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1 gap-3">
-                            <img class="h-24 w-auto" src="{{ asset('images/logo-uns.png') }}" alt="Logo UNS" />
+                            <img class="h-24 w-auto" src="{{ asset('assets/images/logo-uns.png') }}" alt="Logo UNS" />
                             <div class="text-xs text-left">
                                 <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
                                 <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
