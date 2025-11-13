@@ -4,118 +4,104 @@
 
     <div class="antialiased font-sans">
         <div class="text-black/50">
-            <div class="relative flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-                <div class="relative w-full h-full">
-                    <header class="grid grid-cols-2 bg-[#D82F4B] text-white items-center gap-2 px-5 py-4">
-                        <div class="flex justify-start">
-                            <img class="ml-3 w-auto h-11" src="{{ asset('images/logo-uns.png') }}" alt="Logo UNS" />
-                        </div>
-                        @if (Route::has('login'))
-                            <livewire:welcome.navigation />
-                        @endif
-                    </header>
 
-                    <div class="relative h-72 h-sm-80 overflow-hidden">
-                        <div class="absolute inset-0 z-10 flex flex-col justify-end items-start py-10 md:px-28 px-3">
-                            <p class="text-2xl font-bold text-white">
-                                Convenios y Alianzas
-                            </p>
-                            <p class="text-base text-white font-normal mt-2">
-                                Descubre nuestras colaboraciones para enriquecer tu experiencia educativa
-                            </p>
-                        </div>
-                        <img class="w-full h-full object-cover object-top brightness-75"
-                            src="{{ asset('images/portada.jpg') }}" alt="Portada" />
+            <div class="w-full h-full">
+
+                <div class="relative h-72 h-sm-80 overflow-hidden">
+                    <div class="absolute inset-0 z-10 flex flex-col justify-end items-start py-10 md:px-28 px-3">
+                        <p class="text-2xl font-bold text-neutral-50">
+                            Convenios y Alianzas
+                        </p>
+                        <p class="text-base text-neutral-50 font-normal mt-2">
+                            Descubre nuestras colaboraciones para enriquecer tu experiencia educativa
+                        </p>
                     </div>
-
-
-                    <div class="w-full">
-                        <div class="mb-4 border-b bg-[#FFE5ED] md:px-28 px-0">
-                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
-                                data-tabs-toggle="#default-styled-tab-content"
-                                data-tabs-active-classes="text-[#FFFFFF] hover:text-[#FFFFFF] border-[#D9324D] bg-[#D9324D]"
-                                data-tabs-inactive-classes="text-[#393939] hover:text-[#D9324D] hover:border-[#D9324D]"
-                                role="tablist">
-                                <li class="me-1.5" role="presentation">
-                                    <button class="inline-block p-4 border-b-2" id="profile-styled-tab"
-                                        data-tabs-target="#styled-profile" type="button" role="tab"
-                                        aria-selected="false">Información general</button>
-                                </li>
-                                <li class="me-1.5" role="presentation">
-                                    <button class="inline-block p-4 border-b-2" id="dashboard-styled-tab"
-                                        data-tabs-target="#styled-dashboard" type="button" role="tab"
-                                        aria-selected="false">Nuestros
-                                        convenios</button>
-                                </li>
-                                <li class="me-1.5" role="presentation">
-                                    <button class="inline-block p-4 border-b-2" id="settings-styled-tab"
-                                        data-tabs-target="#styled-settings" type="button" role="tab"
-                                        aria-selected="false">Nosotros</button>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div id="default-styled-tab-content" class="md:px-28 px-3">
-                            {{-- Información general (visible por defecto) --}}
-                            <div id="styled-profile" role="tabpanel" aria-labelledby="profile-styled-tab"
-                                class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800 text-white">
-                                @includeIf('site.convenios.tabs.informacion-general')
-                            </div>
-
-                            {{-- Nuestros convenios --}}
-                            <div id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-styled-tab"
-                                class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
-                                @includeIf('site.convenios.tabs.nuestros-convenios')
-                            </div>
-
-                            {{-- Nosotros --}}
-                            <div id="styled-settings" role="tabpanel" aria-labelledby="settings-styled-tab"
-                                class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800">
-                                @includeIf('site.convenios.tabs.nosotros')
-                            </div>
-                        </div>
-                    </div>
-
-                    <main class="mt-100 h-screen max-w-6xl mx-auto p-6 lg:p-8">
-                        <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                            <!-- contenido adicional si aplica -->
-                        </div>
-                    </main>
-
-                    <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
-                        <div class="grid grid-cols-3 text-center text-xs text-white w-full md:px-28 px-3 py-6">
-                            <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1 gap-3">
-                                <img class="h-24 w-auto" src="{{ asset('images/logo-uns.png') }}" alt="Logo UNS" />
-                                <div class="text-xs text-left">
-                                    <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
-                                    <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
-                                        DCTIA</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                                <div class="text-xs">
-                                    <span class="block font-bold uppercase">PARA MAYOR INFORMACIÓN</span>
-                                    <span class="block">Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS. Rectorado
-                                        1er piso</span>
-                                    <span class="block">(+51) 123 456 189</span>
-                                    <span class="block">oficinaconvenios@uns.edu.pe</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                                <div class="text-xs">
-                                    <span class="block font-bold uppercase">Administración</span>
-                                    <span class="block">Acceso administrativo</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            class="p-6 text-center text-xs text-white w-full border-t-[0.1px] border-[#8a8888] md:px-28 px-3 py-6">
-                            &copy; {{ date('Y') }} Dirección de Cooperación Técnica e Intercambio Académico -
-                            Universidad Nacional del Santa.
-                        </div>
-                    </footer>
+                    <img class="w-full h-full object-cover object-top brightness-75" src="{{ asset('images/portada.jpg') }}"
+                        alt="Portada" />
                 </div>
+
+                {{-- Tabs de navegación --}}
+                <div class="w-full">
+                    <div class="mb-4 border-b bg-brand-50 xl:px-28">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab"
+                            data-tabs-toggle="#default-styled-tab-content"
+                            data-tabs-active-classes="text-neutral-50 hover:text-neutral-50 border-[#D9324D] bg-[#D9324D]"
+                            data-tabs-inactive-classes="text-[#393939] hover:text-[#D9324D] hover:border-[#D9324D]"
+                            role="tablist">
+                            <li class="me-1.5" role="presentation">
+                                <button class="inline-block p-4 border-b-2" id="profile-styled-tab"
+                                    data-tabs-target="#styled-profile" type="button" role="tab"
+                                    aria-selected="false">Información general</button>
+                            </li>
+                            <li class="me-1.5" role="presentation">
+                                <button class="inline-block p-4 border-b-2" id="dashboard-styled-tab"
+                                    data-tabs-target="#styled-dashboard" type="button" role="tab"
+                                    aria-selected="false">Nuestros
+                                    convenios</button>
+                            </li>
+                            <li class="me-1.5" role="presentation">
+                                <button class="inline-block p-4 border-b-2" id="settings-styled-tab"
+                                    data-tabs-target="#styled-settings" type="button" role="tab"
+                                    aria-selected="false">Nosotros</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="default-styled-tab-content" class="xl:px-24 py-5">
+                        {{-- Información general (visible por defecto) --}}
+                        <div id="styled-profile" role="tabpanel" aria-labelledby="profile-styled-tab"
+                            class="bg-gray-50 px-4">
+                            @includeIf('site.convenios.tabs.informacion-general')
+                        </div>
+
+                        {{-- Nuestros convenios --}}
+                        <div id="styled-dashboard" role="tabpanel" aria-labelledby="dashboard-styled-tab"
+                            class="hidden bg-gray-50 px-4">
+                            @includeIf('site.convenios.tabs.nuestros-convenios')
+                        </div>
+
+                        {{-- Nosotros --}}
+                        <div id="styled-settings" role="tabpanel" aria-labelledby="settings-styled-tab"
+                            class="hidden bg-gray-50 px-4">
+                            @includeIf('site.convenios.tabs.nosotros')
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
+                    <div class="grid grid-cols-3 text-center text-xs text-white w-full md:px-24 px-3 py-6">
+                        <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1 gap-3">
+                            <img class="h-24 w-auto" src="{{ asset('images/logo-uns.png') }}" alt="Logo UNS" />
+                            <div class="text-xs text-left">
+                                <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
+                                <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
+                                    DCTIA</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
+                            <div class="text-xs">
+                                <span class="block font-bold uppercase">PARA MAYOR INFORMACIÓN</span>
+                                <span class="block">Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS. Rectorado
+                                    1er piso</span>
+                                <span class="block">(+51) 123 456 189</span>
+                                <span class="block">oficinaconvenios@uns.edu.pe</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
+                            <div class="text-xs">
+                                <span class="block font-bold uppercase">Administración</span>
+                                <span class="block">Acceso administrativo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="p-6 text-center text-xs text-white w-full border-t-[0.1px] border-[#8a8888] md:px-28 px-3 py-6">
+                        &copy; {{ date('Y') }} Dirección de Cooperación Técnica e Intercambio Académico -
+                        Universidad Nacional del Santa.
+                    </div>
+                </footer>
             </div>
+
         </div>
     </div>
 @endcomponent
