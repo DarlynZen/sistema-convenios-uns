@@ -161,8 +161,151 @@
         <!-- Título -->
         <div class="py-3">
             <h2 class="font-extrabold text-xl">Establecer un convenio</h2>
+            <p class="font-normal text-base text-neutral-600 w-full">
+                Para establecer un convenio, se deben considerar los siguientes pasos y requisitos:
+            </p>
+        </div>
+
+        <div class="space-y-2 justify-center w-full">
+            <!-- Contenido principal -->
+            <div class="flex flex-col sm:flex-row justify-center items-center sm:gap-4 w-full">
+
+                <!-- COLUMNA IZQUIERDA - FASE 1 -->
+                <div class="flex flex-col items-start w-full max-w-80 mb-2 gap-2">
+                    <div>
+                        <h3 class="font-bold text-base text-neutral-600">
+                            Convenio en Camino
+                        </h3>
+                        <p class="font-normal text-sm text-neutral-600">
+                            Todo comienza aquí. Se reúne la información esencial y se evalúa si el convenio es viable.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA (GRID DE CARDS) -->
+                <div class="w-full max-w-[480px] grid grid-cols-1 gap-2">
+                    <!-- CARD 1 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 1
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Presentar la solicitud formal con los documentos necesarios.
+                            </span>
+                        </div>
+                    </div>
+                    <!-- CARD 2 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100 
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 2
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Evaluación de la propuesta por la entidad correspondiente.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="flex flex-col sm:flex-row justify-center items-center sm:gap-4 w-full">
+
+                <!-- COLUMNA IZQUIERDA - FASE 2 -->
+                <div class="flex flex-col items-start w-full max-w-80 mb-2 gap-2">
+
+                    <div>
+                        <h3 class="font-bold text-base text-neutral-600 mb-2">
+                            Convenio en Revisión
+                        </h3>
+                        <p class="font-normal text-sm text-neutral-600">
+                            El convenio se pule, se ajusta legalmente y se deja listo para ser formalizado. </p>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA (GRID DE CARDS) -->
+                <div class="w-full max-w-[480px] grid grid-cols-1 gap-2">
+                    <!-- CARD 3 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 3
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Revisión legal y ajustes necesarios al documento. </span>
+                        </div>
+                    </div>
+                    <!-- CARD 4 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100 
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 4
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Aprobación final y firma del convenio por ambas partes. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido principal -->
+            <div class="flex flex-col sm:flex-row justify-center items-center sm:gap-4 w-full">
+
+                <!-- COLUMNA IZQUIERDA - FASE 3 -->
+                <div class="flex flex-col items-start w-full max-w-80 mb-2 gap-2">
+
+                    <div>
+                        <h3 class="font-bold text-base text-neutral-600 mb-2">
+                            Convenio Listo
+                        </h3>
+                        <p class="font-normal text-sm text-neutral-600">
+                            Todo comienza aquí. Se reúne la información esencial y se evalúa si el convenio es viable.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA (GRID DE CARDS) -->
+                <div class="w-full max-w-[480px] grid grid-cols-1 gap-2">
+                    <!-- CARD 5 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 1
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Registro del convenio y notificación a las áreas involucradas. </span>
+                        </div>
+                    </div>
+                    <!-- CARD 6 -->
+                    <div
+                        class="flex flex-row items-center p-4 gap-3 bg-neutral-100 
+                        border border-neutral-400 rounded-sm">
+                        <div class="flex flex-col gap-2 w-full">
+                            <span class="font-bold text-base text-neutral-600">
+                                Paso 6
+                            </span>
+                            <span class="text-sm text-neutral-600">
+                                Inicio de implementación del convenio. </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
+
 
     {{-- FAQS --}}
     <div class="flex flex-col items-start w-full h-auto py-2 space-y-2">
@@ -189,7 +332,8 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m5 15 7-7 7 7" />
                             </svg>
-                            <span>¿Quién puede proponer y firmar un convenio en la universidad?</span>
+                            <span class="text-left">¿Quién puede proponer y firmar un convenio en la
+                                universidad?</span>
                         </div>
                     </button>
                 </h2>
