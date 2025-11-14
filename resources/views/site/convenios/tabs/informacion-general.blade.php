@@ -1,4 +1,4 @@
-<div class="rounded-lg text-neutral-600 h-full">
+<div class="text-neutral-600 h-full">
 
     {{--     Convenios para nuestra educación --}}
     <div class="flex flex-col sm:flex-row sm:space-x-5 items-center py-2 w-full h-full">
@@ -97,10 +97,10 @@
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full h-full items-center text-center">
             <!-- Card - Estadística 1 -->
             <div
-                class="flex flex-row justify-center items-center bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
+                class="flex flex-row justify-center items-center h-full bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
                 <div class="flex flex-col items-start gap-2 w-full">
                     <span class="font-extrabold text-3xl">40+</span>
-                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
+                    <span class="font-normal text-base text-left">Convenios nacionales firmados exitosamente</span>
                 </div>
                 <div class="justify-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
@@ -114,10 +114,10 @@
 
             <!-- Card - Estadística 2 -->
             <div
-                class="flex flex-row justify-center items-center bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
+                class="flex flex-row justify-center items-center h-full bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
                 <div class="flex flex-col items-start gap-2 w-full">
-                    <span class="font-extrabold text-3xl">40+</span>
-                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
+                    <span class="font-extrabold text-3xl">20+</span>
+                    <span class="font-normal text-base text-left">Convenios internacionales firmados exitosamente</span>
                 </div>
                 <div class="justify-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
@@ -131,10 +131,10 @@
 
             <!-- Card - Estadística 3 -->
             <div
-                class="flex flex-row bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
+                class="flex flex-row justify-center items-center h-full bg-neutral-100 border border-neutral-400 text-neutral-600 hover:bg-brand-25 hover:border-brand hover:text-brand rounded px-5 py-4">
                 <div class="flex flex-col items-start gap-2 w-full">
-                    <span class="font-extrabold text-3xl">40+</span>
-                    <span class="font-normal text-base">Convenios nacionales firmados exitosamente</span>
+                    <span class="font-extrabold text-3xl">50+</span>
+                    <span class="font-normal text-base text-left">Beneficios para los alumnos y egresados</span>
                 </div>
                 <div class="justify-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
@@ -281,7 +281,7 @@
                         border border-neutral-400 rounded-sm">
                         <div class="flex flex-col gap-2 w-full">
                             <span class="font-bold text-base text-neutral-600">
-                                Paso 1
+                                Paso 5
                             </span>
                             <span class="text-sm text-neutral-600">
                                 Registro del convenio y notificación a las áreas involucradas. </span>
