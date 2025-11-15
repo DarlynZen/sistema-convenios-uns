@@ -154,6 +154,8 @@
         <div class="py-3">
             <h2 class="font-extrabold text-xl">Tenemos convenios en</h2>
         </div>
+
+        <div id="hs-users-datamap" style="width: 100%; height: 500px;"></div>
     </div>
 
     {{-- Pasos --}}
@@ -470,6 +472,34 @@
             options.onToggle(item);
         });
     });
+
+
+
+    <
+    script >
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataMap = new Datamap({
+                element: document.querySelector('#hs-users-datamap'),
+                projection: 'mercator',
+                responsive: true,
+                fills: {
+                    defaultFill: '#d1d5db',
+                    MAJOR: '#9ca3af',
+                },
+                data: {
+                    USA: {
+                        fillKey: 'MAJOR'
+                    },
+                    BRA: {
+                        fillKey: 'MAJOR'
+                    },
+                },
+            });
+        });
+</script>
+
+
+
 </script>
 
 <style>

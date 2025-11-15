@@ -1,5 +1,5 @@
-<div class="text-neutral-600 h-full">
-    <div class="flex flex-col items-center w-full h-auto py-2">
+<div class="text-neutral-600 h-full py-2 space-y-2">
+    <div class="flex flex-col items-center w-full h-auto">
         <!-- Título -->
         <div class="py-3 text-center space-y-1">
             <h2 class="font-extrabold text-lg">Acerca de la Dirección de Cooperación Técnica e Intercambio Académico

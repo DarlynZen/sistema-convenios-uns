@@ -39,6 +39,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    {{-- <script src="./node_modules/preline/dist/preline.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson.min.js"></script>
+    <script src="https://unpkg.com/datamaps@0.5.9/dist/datamaps.world.min.js"></script>
+ --}}
 </body>
 
 </html>

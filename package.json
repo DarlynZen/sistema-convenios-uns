@@ -6,7 +6,7 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@tailwindcss/forms": "^0.5.2",
+        "@tailwindcss/forms": "^0.5.10",
         "autoprefixer": "^10.4.2",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0",
@@ -15,6 +15,8 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "flowbite": "^3.1.2"
+        "datamaps": "^0.5.9",
+        "flowbite": "^3.1.2",
+        "preline": "^3.2.3"
     }
 }
