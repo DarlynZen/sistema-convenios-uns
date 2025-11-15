@@ -16,8 +16,8 @@
                             Descubre nuestras colaboraciones para enriquecer tu experiencia educativa
                         </p>
                     </div>
-                    <img class="w-full h-full object-cover object-top brightness-75" src="{{ asset('assets/images/portada.jpg') }}"
-                        alt="Portada" />
+                    <img class="w-full h-full object-cover object-top brightness-75"
+                        src="{{ asset('assets/images/portada.jpg') }}" alt="Portada" />
                 </div>
 
                 {{-- Tabs de navegación --}}
@@ -30,23 +30,23 @@
                             role="tablist">
                             <li class="me-1.5" role="presentation">
                                 <button class="inline-block p-4 border-b-2" id="profile-styled-tab"
-                                    data-tabs-target="#styled-profile" type="button" role="tab"
+                                    data-tabs-target="#styled-profile" data-tab="inicio" type="button" role="tab"
                                     aria-selected="false">Información general</button>
                             </li>
                             <li class="me-1.5" role="presentation">
                                 <button class="inline-block p-4 border-b-2" id="dashboard-styled-tab"
-                                    data-tabs-target="#styled-dashboard" type="button" role="tab"
-                                    aria-selected="false">Nuestros
+                                    data-tabs-target="#styled-dashboard" data-tab="nuestros-convenios" type="button"
+                                    role="tab" aria-selected="false">Nuestros
                                     convenios</button>
                             </li>
                             <li class="me-1.5" role="presentation">
                                 <button class="inline-block p-4 border-b-2" id="settings-styled-tab"
-                                    data-tabs-target="#styled-settings" type="button" role="tab"
+                                    data-tabs-target="#styled-settings" data-tab="nosotros" type="button" role="tab"
                                     aria-selected="false">Nosotros</button>
                             </li>
                         </ul>
                     </div>
-
+                    <input type="hidden" id="serverTab" value="{{ $tab }}">
                     <div id="default-styled-tab-content" class="xl:px-24 py-5">
                         {{-- Información general (visible por defecto) --}}
                         <div id="styled-profile" role="tabpanel" aria-labelledby="profile-styled-tab"
@@ -131,7 +131,6 @@
 
                 if (t === tab) {
                     t.setAttribute('aria-selected', 'true');
-                    // aplicar clases activas / quitar inactivas
                     applyClasses(t, inactiveClasses, true);
                     applyClasses(t, activeClasses, false);
                     if (panel) panel.classList.remove('hidden');
@@ -144,22 +143,19 @@
             });
         }
 
-        // click handlers
         tabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                const current = document.querySelector('[role="tab"][aria-selected="true"]');
-                if (this !== current) setActiveTab(this);
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+                const baseUrl = window.location.pathname;
+                history.replaceState(null, '', baseUrl + '?tab=' + tabName);
             });
         });
 
-        // Inicializar: establecer Profile como tab por defecto sin hacer .click() (evita focus/outline)
-        const defaultTab = document.getElementById('profile-styled-tab');
-        if (defaultTab) {
-            setActiveTab(defaultTab);
-        } else if (tabs.length) {
-            // fallback al primero si no existe profile
-            setActiveTab(tabs[0]);
-        }
+        const serverTab = document.getElementById('serverTab')?.value;
+
+        const matchingTab = tabs.find(t => t.dataset.tab === serverTab);
+        const tabToActivate = matchingTab || tabs[0];
+
+        setActiveTab(tabToActivate);
     });
 </script>
