@@ -9,4 +9,17 @@
 /* Preline UI */
 @import '../node_modules/preline/variants.css';
 
+/* Admin Sidebar Styles */
+.sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 transition;
+}
+
+.sidebar-item.active {
+    @apply text-red-600 bg-red-50 border-l-4 border-red-600 pl-3;
+}
+
+/* Sidebar positioning */
+#sidebar.absolute {
+    @apply left-0 top-0;
+}
 

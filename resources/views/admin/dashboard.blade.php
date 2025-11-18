@@ -1,7 +1,8 @@
 <x-admin-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    <div class="p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Dashboard</h1>
+        <div class="bg-white rounded-lg shadow p-6">
+            <p class="text-gray-600">Bienvenido al panel de administración.</p>
+        </div>
+    </div>
 </x-admin-layout>
