@@ -12,7 +12,7 @@
     @livewireStyles
 </head>
 
-<body class="bg-neutral-100 h-screen flex flex-col overflow-hidden">
+<body class="h-screen flex flex-col overflow-hidden">
 
     <header class="w-full bg-brand text-white shadow flex items-center justify-between px-4 py-3">
         <div class="flex items-center space-x-3">
@@ -31,7 +31,7 @@
         <livewire:layout.navigation />
     </header>
 
-    <div class="flex-1 flex overflow-hidden bg-white relative" style="min-height: 0;">
+    <div class="flex-1 flex overflow-hidden relative" style="min-height: 0;">
         <!-- Overlay para mobile -->
         <div id="overlay" class="hidden fixed inset-0 bg-black/40 z-30 lg:hidden transition-opacity duration-300"></div>
 
@@ -39,7 +39,7 @@
         @include('admin.partials.sidebar')
 
         <!-- Contenido principal -->
-        <main id="content" class="flex-1 overflow-y-auto transition-all duration-300 bg-neutral-300" style="min-width: 0;">
+        <main id="content" class="flex-1 overflow-y-auto transition-all duration-300 bg-neutral-50" style="min-width: 0;">
             {{ $slot ?? '' }}
         </main>
     </div>
@@ -49,96 +49,47 @@
     <script>
         (function() {
             'use strict';
-            
             const DESKTOP = 1024;
-            let sidebar = null;
-            let overlay = null;
+            let sidebar, overlay;
             
-            function isMobile() {
-                return window.innerWidth < DESKTOP;
-            }
+            const isMobile = () => window.innerWidth < DESKTOP;
+            const getState = () => sidebar && (isMobile() ? !sidebar.classList.contains("-translate-x-full") : !sidebar.classList.contains("hidden"));
             
-            function getSidebarState() {
-                if (!sidebar) return false;
-                if (isMobile()) {
-                    return !sidebar.classList.contains("-translate-x-full");
+            function toggle() {
+                if (!sidebar) return;
+                const open = getState();
+                const mobile = isMobile();
+                
+                if (mobile) {
+                    sidebar.classList.toggle("-translate-x-full", open);
+                    if (overlay) overlay.classList.toggle("hidden", open);
                 } else {
-                    return !sidebar.classList.contains("hidden");
+                    sidebar.classList.toggle("hidden", open);
                 }
             }
             
-            function initSidebar() {
+            function init() {
                 sidebar = document.getElementById("sidebar");
                 overlay = document.getElementById("overlay");
                 
                 if (!sidebar) {
-                    console.error('Sidebar no encontrado');
-                    return false;
+                    setTimeout(init, 100);
+                    return;
                 }
                 
-                if (overlay) overlay.classList.add("hidden");
-                
-                return true;
-            }
-            
-            function toggleSidebar() {
-                if (!sidebar) return;
-                
-                const isOpen = getSidebarState();
-                const mobile = isMobile();
-                
-                console.log('Toggle - Estado:', isOpen, 'Mobile:', mobile);
-                
-                if (mobile) {
-                    // En mobile, usar translate para mostrar/ocultar
-                    if (isOpen) {
-                        // Cerrar: agregar translate
-                        sidebar.classList.add("-translate-x-full");
-                        if (overlay) overlay.classList.add("hidden");
-                    } else {
-                        // Abrir: quitar translate
-                        sidebar.classList.remove("-translate-x-full");
-                        if (overlay) overlay.classList.remove("hidden");
-                    }
-                } else {
-                    // En desktop, usar hidden para mostrar/ocultar
-                    if (isOpen) {
-                        // Cerrar: agregar hidden
-                        sidebar.classList.add("hidden");
-                    } else {
-                        // Abrir: quitar hidden
-                        sidebar.classList.remove("hidden");
-                    }
-                }
-            }
-            
-            // Event listener directo y simple
-            function setupToggle() {
                 const btn = document.getElementById("toggleSidebar");
                 if (btn) {
-                    // Remover listeners anteriores si existen
                     const newBtn = btn.cloneNode(true);
-                    btn.parentNode.replaceChild(newBtn, btn);
-                    
-                    newBtn.addEventListener('click', function(e) {
+                    btn.replaceWith(newBtn);
+                    newBtn.addEventListener('click', (e) => {
                         e.preventDefault();
-                        e.stopPropagation();
-                        console.log('Botón clickeado');
-                        toggleSidebar();
+                        toggle();
                     });
-                    
-                    console.log('Toggle button configurado');
-                } else {
-                    console.error('Botón toggle no encontrado');
                 }
-            }
-            
-            // Overlay click
-            function setupOverlay() {
+                
                 if (overlay) {
-                    overlay.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        if (isMobile()) {
+                    overlay.addEventListener('click', () => {
+                        if (isMobile() && sidebar) {
                             sidebar.classList.add("-translate-x-full");
                             overlay.classList.add("hidden");
                         }
@@ -146,61 +97,30 @@
                 }
             }
             
-            // Inicializar cuando todo esté listo
-            function init() {
-                if (initSidebar()) {
-                    setupToggle();
-                    setupOverlay();
-                    console.log('Sidebar inicializado correctamente');
+            const start = () => {
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => setTimeout(init, 100));
                 } else {
                     setTimeout(init, 100);
                 }
-            }
+            };
             
-            // Iniciar
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(init, 100);
-                });
-            } else {
-                setTimeout(init, 200);
-            }
+            start();
+            document.addEventListener("livewire:navigated", () => setTimeout(init, 100));
+            document.addEventListener("livewire:load", () => setTimeout(init, 100));
             
-            // Reinicializar después de Livewire
-            document.addEventListener("livewire:navigated", function() {
-                setTimeout(init, 200);
-            });
-            
-            document.addEventListener("livewire:load", function() {
-                setTimeout(init, 200);
-            });
-            
-            // Resize handler
             let resizeTimer;
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
+                resizeTimer = setTimeout(() => {
                     if (!sidebar) return;
-                    
                     const mobile = isMobile();
-                    const wasOpen = getSidebarState();
+                    const wasOpen = getState();
                     
                     if (mobile) {
-                        // Cambió a mobile: asegurar que esté en modo absolute
-                        // Las clases lg:* se encargan de desktop, solo necesitamos verificar mobile
-                        if (wasOpen) {
-                            sidebar.classList.remove("-translate-x-full");
-                        } else {
-                            sidebar.classList.add("-translate-x-full");
-                        }
+                        sidebar.classList.toggle("-translate-x-full", wasOpen);
                     } else {
-                        // Cambió a desktop: las clases lg:* ya manejan el posicionamiento
-                        // Solo manejar hidden si es necesario
-                        if (wasOpen) {
-                            sidebar.classList.remove("hidden");
-                        } else {
-                            sidebar.classList.add("hidden");
-                        }
+                        sidebar.classList.toggle("hidden", wasOpen);
                     }
                 }, 150);
             });
@@ -208,5 +128,4 @@
     </script>
 
 </body>
-
 </html>

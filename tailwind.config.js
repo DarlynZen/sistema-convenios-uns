@@ -22,8 +22,9 @@ export default {
                     100: "#FFCED1", // claro
                     200: "#F8A3AA", // tono medio claro
                     500: "#D42340", // saturado (hover)
-                    600: "#A32033", // más oscuro (texto, énfasis)
-                    700: "#72101F", // muy oscuro
+                    600:"#D9324D",
+                    700: "#A32033", // más oscuro (texto, énfasis)
+                    800: "#72101F", // muy oscuro
                     DEFAULT: "#D82F4B",
                 },
 
