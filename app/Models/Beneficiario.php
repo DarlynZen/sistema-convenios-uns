@@ -24,4 +24,12 @@ class Beneficiario extends Model
     {
         return $this->belongsToMany(Convenio::class);
     }
+
+    /**
+     * Obtiene todos los beneficiarios
+     */
+    public static function getAll()
+    {
+        return self::all();
+    }
 }

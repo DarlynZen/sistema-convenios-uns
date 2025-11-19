@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CmsSeccion extends Model
 {
-    protected $table = 'cms_secciones';
+    protected $table = 'cms_seccion';
 
     protected $fillable = [
         'slug',
@@ -26,4 +26,20 @@ class CmsSeccion extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * Obtiene todas las secciones
+     */
+    public static function getAll()
+    {
+        return self::latest()->get();
+    }
+
+    /**
+     * Busca una sección por slug
+     */
+    public static function findBySlug(string $slug)
+    {
+        return self::where('slug', $slug)->first();
+    }
 }

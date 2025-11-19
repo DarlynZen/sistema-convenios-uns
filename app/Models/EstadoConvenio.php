@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EstadoConvenio extends Model
 {
-    protected $table = 'estado_convenios';
+    protected $table = 'estados_convenio';
 
     protected $fillable = [
         'nombre',
@@ -22,5 +22,21 @@ class EstadoConvenio extends Model
     public function convenios(): HasMany
     {
         return $this->hasMany(Convenio::class);
+    }
+
+    /**
+     * Obtiene todos los estados de convenio
+     */
+    public static function getAll()
+    {
+        return self::all();
+    }
+
+    /**
+     * Verifica si puede ser eliminado
+     */
+    public function canBeDeleted(): bool
+    {
+        return $this->convenios()->count() === 0;
     }
 }

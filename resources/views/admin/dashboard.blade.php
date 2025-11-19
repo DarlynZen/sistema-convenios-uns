@@ -1,7 +1,6 @@
 <x-admin-layout>
-    <div class="p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Dashboard</h1>
-        <div class="bg-white rounded-lg shadow p-6">
+    <div class="p-8">
+        <div class="bg-white rounded p-4 border border-neutral-400">
             <p class="text-gray-600">Bienvenido al panel de administración.</p>
         </div>
     </div>

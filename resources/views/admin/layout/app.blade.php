@@ -8,6 +8,12 @@
 
     <title>{{ config('app.name', 'Panel de Administración') }}</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-uns-rojo.png') }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
@@ -17,7 +23,7 @@
     <header class="w-full bg-brand text-white shadow flex items-center justify-between px-4 py-3">
         <div class="flex items-center space-x-3">
             <button id="toggleSidebar" type="button"
-                class="p-2 rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-300"
+                class="p-2 rounded-lg hover:bg-brand-700"
                 aria-label="Toggle sidebar">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
@@ -51,15 +57,15 @@
             'use strict';
             const DESKTOP = 1024;
             let sidebar, overlay;
-            
+
             const isMobile = () => window.innerWidth < DESKTOP;
             const getState = () => sidebar && (isMobile() ? !sidebar.classList.contains("-translate-x-full") : !sidebar.classList.contains("hidden"));
-            
+
             function toggle() {
                 if (!sidebar) return;
                 const open = getState();
                 const mobile = isMobile();
-                
+
                 if (mobile) {
                     sidebar.classList.toggle("-translate-x-full", open);
                     if (overlay) overlay.classList.toggle("hidden", open);
@@ -67,16 +73,16 @@
                     sidebar.classList.toggle("hidden", open);
                 }
             }
-            
+
             function init() {
                 sidebar = document.getElementById("sidebar");
                 overlay = document.getElementById("overlay");
-                
+
                 if (!sidebar) {
                     setTimeout(init, 100);
                     return;
                 }
-                
+
                 const btn = document.getElementById("toggleSidebar");
                 if (btn) {
                     const newBtn = btn.cloneNode(true);
@@ -86,7 +92,7 @@
                         toggle();
                     });
                 }
-                
+
                 if (overlay) {
                     overlay.addEventListener('click', () => {
                         if (isMobile() && sidebar) {
@@ -96,7 +102,7 @@
                     });
                 }
             }
-            
+
             const start = () => {
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', () => setTimeout(init, 100));
@@ -104,11 +110,11 @@
                     setTimeout(init, 100);
                 }
             };
-            
+
             start();
             document.addEventListener("livewire:navigated", () => setTimeout(init, 100));
             document.addEventListener("livewire:load", () => setTimeout(init, 100));
-            
+
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
@@ -116,7 +122,7 @@
                     if (!sidebar) return;
                     const mobile = isMobile();
                     const wasOpen = getState();
-                    
+
                     if (mobile) {
                         sidebar.classList.toggle("-translate-x-full", wasOpen);
                     } else {
@@ -128,4 +134,5 @@
     </script>
 
 </body>
+
 </html>

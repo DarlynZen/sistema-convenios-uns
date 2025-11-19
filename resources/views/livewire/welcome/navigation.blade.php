@@ -1,7 +1,7 @@
 <nav class="flex flex-1 justify-end">
     @auth
         <a
-            href="{{ url('/dashboard') }}"
+            href="{{ url('/admin/dashboard') }}"
             class="rounded-md px-3 py-2 text-white ring-1 ring-transparent transition hover:text-white/70"
         >
             Dashboard

@@ -89,4 +89,104 @@ class Convenio extends Model
         return $this->belongsToMany(Beneficiario::class);
     }
 
+    public function observaciones(): HasMany
+    {
+        return $this->hasMany(Observacion::class);
+    }
+
+    // Métodos de negocio - Lógica de acceso a datos
+
+    /**
+     * Obtiene todos los convenios con sus relaciones principales
+     */
+    public static function getAllWithRelations()
+    {
+        return self::with(['tipoConvenio', 'ambito', 'estadoConvenio'])
+            ->latest()
+            ->paginate(15);
+    }
+
+    /**
+     * Obtiene un convenio con todas sus relaciones
+     */
+    public function loadAllRelations()
+    {
+        return $this->load([
+            'tipoConvenio',
+            'ambito',
+            'estadoConvenio',
+            'beneficiario',
+            'documento',
+            'convenioAnterior'
+        ]);
+    }
+
+    /**
+     * Crea un convenio con sus beneficiarios asociados
+     */
+    public static function createWithBeneficiarios(array $data, ?array $beneficiarios = null)
+    {
+        $convenio = self::create($data);
+        
+        if ($beneficiarios) {
+            $convenio->beneficiario()->sync($beneficiarios);
+        }
+        
+        return $convenio;
+    }
+
+    /**
+     * Actualiza un convenio y sus beneficiarios
+     */
+    public function updateWithBeneficiarios(array $data, ?array $beneficiarios = null)
+    {
+        $this->update($data);
+        
+        if ($beneficiarios !== null) {
+            $this->beneficiario()->sync($beneficiarios);
+        } else {
+            $this->beneficiario()->detach();
+        }
+        
+        return $this->fresh();
+    }
+
+    /**
+     * Elimina un convenio y limpia sus relaciones
+     */
+    public function deleteWithRelations()
+    {
+        $this->beneficiario()->detach();
+        return $this->delete();
+    }
+
+    // Scopes para consultas comunes
+
+    public function scopeActivos($query)
+    {
+        return $query->whereHas('estadoConvenio', function($q) {
+            $q->where('nombre', 'like', '%activo%');
+        });
+    }
+
+    public function scopeRecientes($query, int $limit = 5)
+    {
+        return $query->with(['tipoConvenio', 'estadoConvenio'])
+            ->latest()
+            ->limit($limit);
+    }
+
+    /**
+     * Obtiene estadísticas para el dashboard
+     */
+    public static function getDashboardStats(): array
+    {
+        return [
+            'total_convenios' => self::count(),
+            'convenios_activos' => self::activos()->count(),
+            'tipos_convenio' => TipoConvenio::count(),
+            'ambitos' => Ambito::count(),
+            'recientes' => self::recientes(5)->get(),
+        ];
+    }
 }
