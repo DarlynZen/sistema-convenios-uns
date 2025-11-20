@@ -45,7 +45,7 @@
         @include('admin.partials.sidebar')
 
         <!-- Contenido principal -->
-        <main id="content" class="flex-1 overflow-y-auto transition-all duration-300 bg-neutral-50" style="min-width: 0;">
+        <main id="content" class="flex-1 p-8 overflow-y-auto transition-all duration-300 bg-neutral-50" style="min-width: 0;">
             {{ $slot ?? '' }}
         </main>
     </div>

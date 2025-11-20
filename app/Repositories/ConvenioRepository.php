@@ -96,5 +96,13 @@ class ConvenioRepository
     {
         return Convenio::with('beneficiario')->findOrFail($id);
     }
+
+    /**
+     * Obtiene los convenios más recientes
+     */
+    public function getRecent(int $limit = 5)
+    {
+        return Convenio::recientes($limit)->get();
+    }
 }
 

@@ -2,28 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Convenio;
-use App\Models\TipoConvenio;
-use App\Models\Ambito;
-use App\Models\CmsSeccion;
+use App\Services\DashboardService;
+use App\Repositories\ConvenioRepository;
+use App\Repositories\CmsSeccionRepository;
 
 class AdminController extends Controller
 {
+    public function __construct(
+        private DashboardService $dashboardService,
+        private ConvenioRepository $convenioRepository,
+        private CmsSeccionRepository $cmsSeccionRepository
+    ) {}
+
     public function dashboard()
     {
-        $stats = Convenio::getDashboardStats();
+        $stats = $this->dashboardService->getStats();
         return view('admin.dashboard', compact('stats'));
     }
 
     public function convenios()
     {
-        $convenios = Convenio::getAllWithRelations();
+        $convenios = $this->convenioRepository->getAllWithRelations();
         return view('admin.gestion-convenios', compact('convenios'));
     }
 
     public function cms()
     {
-        $secciones = CmsSeccion::getAll();
+        $secciones = $this->cmsSeccionRepository->getAll();
         return view('admin.editor-contenido', compact('secciones'));
     }
 
