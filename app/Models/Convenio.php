@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Carbon\Carbon;
 
 class Convenio extends Model
 {
@@ -86,13 +87,21 @@ class Convenio extends Model
 
     public function beneficiario(): BelongsToMany
     {
-        return $this->belongsToMany(Beneficiario::class);
+        return $this->belongsToMany(Beneficiario::class, 'convenios_beneficiarios', 'convenio_id', 'beneficiario_id');
     }
 
     public function observaciones(): HasMany
     {
         return $this->hasMany(Observacion::class);
     }
+
+    public function getDuracionAttribute()
+    {
+        return $this->fecha_inicio
+            ->locale('es')
+            ->diffForHumans($this->fecha_fin, true);
+    }
+
 
     // Métodos de negocio - Lógica de acceso a datos
 
@@ -127,11 +136,11 @@ class Convenio extends Model
     public static function createWithBeneficiarios(array $data, ?array $beneficiarios = null)
     {
         $convenio = self::create($data);
-        
+
         if ($beneficiarios) {
             $convenio->beneficiario()->sync($beneficiarios);
         }
-        
+
         return $convenio;
     }
 
@@ -141,13 +150,13 @@ class Convenio extends Model
     public function updateWithBeneficiarios(array $data, ?array $beneficiarios = null)
     {
         $this->update($data);
-        
+
         if ($beneficiarios !== null) {
             $this->beneficiario()->sync($beneficiarios);
         } else {
             $this->beneficiario()->detach();
         }
-        
+
         return $this->fresh();
     }
 
@@ -164,7 +173,7 @@ class Convenio extends Model
 
     public function scopeActivos($query)
     {
-        return $query->whereHas('estadoConvenio', function($q) {
+        return $query->whereHas('estadoConvenio', function ($q) {
             $q->where('nombre', 'like', '%activo%');
         });
     }
