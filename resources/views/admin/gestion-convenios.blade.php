@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="space-y-4">
-        <div class="bg-white rounded p-4 border border-neutral-400 flex flex-row mx-auto w-full justify-between">
+        <x-admin.block>
             <div class="flex flex-col gap-2">
                 <h1 class="text-neutral-600 text-2xl font-bold">Gestión de Convenios</h1>
                 <p class="text-neutral-600 text-sm">Administra todos los convenios y alianzas de la Universidad Nacional
@@ -18,7 +18,7 @@
                 </x-admin.modal>
                 <!-- <x-admin.export-button>Exportar</x-admin.export-button> -->
             </div>
-        </div>
+        </x-admin.block>
         <!-- <div class="bg-white rounded p-4 border border-neutral-400 flex flex-row mx-auto w-full justify-between">
             
         </div> -->
@@ -65,44 +65,46 @@
                         </thead>
                         <tbody>
                             @foreach ($convenios as $convenio)
-                            <tr
-                                class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
-                                <td class="px-6 py-4">
-                                    {{ $convenio->resolucion }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->resolucion }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->entidad_nombre }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->tipoConvenio->nombre }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->estadoConvenio->nombre }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->ambito->nombre }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ $convenio->duracion }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    @foreach ($convenio->beneficiario as $b)
-                                    {{ $b->codigo_beneficiario }}<b r>
-                                    @endforeach
-                                </td>
+                                <tr
+                                    class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->resolucion }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->resolucion }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->entidad_nombre }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->tipoConvenio->nombre }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->estadoConvenio->nombre }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->ambito->nombre }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $convenio->duracion }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @foreach ($convenio->beneficiario as $b)
+                                            {{ $b->codigo_beneficiario }}<b r>
+                                        @endforeach
+                                    </td>
 
-                                <td class="px-6 py-4">
-                                    <div class="flex flex-col">
-                                        <a href="#" class="font-medium text-fg-brand hover:underline">Editar</a>
-                                        <a href="#" class="font-medium text-fg-brand hover:underline">Ver
-                                            Detalle</a>
-                                        <a href="#" class="font-medium text-fg-brand hover:underline">Eliminar</a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col">
+                                            <a href="#"
+                                                class="font-medium text-fg-brand hover:underline">Editar</a>
+                                            <a href="#" class="font-medium text-fg-brand hover:underline">Ver
+                                                Detalle</a>
+                                            <a href="#"
+                                                class="font-medium text-fg-brand hover:underline">Eliminar</a>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
