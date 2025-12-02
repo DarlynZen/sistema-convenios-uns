@@ -1,6 +1,6 @@
 <div class="text-neutral-600 h-full">
 
-    {{--     Convenios para nuestra educación --}}
+    {{-- Convenios para nuestra educación --}}
     <div class="flex flex-col sm:flex-row sm:space-x-5 items-center py-2 w-full h-full">
         <!-- Imagen -->
         <div
@@ -23,15 +23,18 @@
                 Perú y del extranjero, fortaleciendo nuestra misión educativa y potenciando el desarrollo regional
             </p>
 
+
             <!-- Enlace -->
-            <div class="flex flex-row items-center gap-1 mt-2">
-                <span class="font-normal text-base leading-5 text-[#D9324D]">
-                    Descubre nuestros convenios
-                </span>
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#D9324D" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10" />
-                </svg>
-            </div>
+            <a href="{{ url('/inicio') }}?tab=nuestros-convenios" style="text-decoration: none;">
+                <div class="flex flex-row items-center gap-1 mt-2">
+                    <span class="font-normal text-base leading-5 text-[#D9324D]">
+                        Descubre nuestros convenios
+                    </span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="#D9324D" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10" />
+                    </svg>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -474,33 +477,28 @@
     });
 
 
-
-    <
-    script >
-        document.addEventListener('DOMContentLoaded', function() {
-            const dataMap = new Datamap({
-                element: document.querySelector('#hs-users-datamap'),
-                projection: 'mercator',
-                responsive: true,
-                fills: {
-                    defaultFill: '#d1d5db',
-                    MAJOR: '#9ca3af',
+    document.addEventListener('DOMContentLoaded', function() {
+        const dataMap = new Datamap({
+            element: document.querySelector('#hs-users-datamap'),
+            projection: 'mercator',
+            responsive: true,
+            fills: {
+                defaultFill: '#d1d5db',
+                MAJOR: '#9ca3af',
+            },
+            data: {
+                USA: {
+                    fillKey: 'MAJOR'
                 },
-                data: {
-                    USA: {
-                        fillKey: 'MAJOR'
-                    },
-                    BRA: {
-                        fillKey: 'MAJOR'
-                    },
+                BRA: {
+                    fillKey: 'MAJOR'
                 },
-            });
+            },
         });
+    });
 </script>
 
 
-
-</script>
 
 <style>
     /* Sobrescribir estilos de Flowbite */

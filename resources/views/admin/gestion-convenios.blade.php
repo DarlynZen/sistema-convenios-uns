@@ -8,8 +8,12 @@
             </div>
             <div class="flex flex-row items-center gap-2">
                 <x-admin.primary-button-create
-                    class="data-modal-target='crud-modal' data-modal-toggle='crud-modal'">Nuevo
+                    class="data-modal-target='crud-modal' data-modal-toggle='crud-modal'" x-on:click="$dispatch('open-modal', info)" >Nuevo
                     Convenio</x-admin.primary-button-create>
+                <x-modal name="info" :show="false">
+                    <p>hola</p>
+                </x-modal>
+
                 <x-admin.modal name="crud-modal" show="false">
                     <div class="space-y-4">
                         <h2 class="text-neutral-600 text-lg font-bold">Nuevo Convenio</h2>
@@ -64,48 +68,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($convenios as $convenio)
-                                <tr
-                                    class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->resolucion }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->resolucion }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->entidad_nombre }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->tipoConvenio->nombre }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->estadoConvenio->nombre }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->ambito->nombre }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $convenio->duracion }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        @foreach ($convenio->beneficiario as $b)
-                                            {{ $b->codigo_beneficiario }}<b r>
+                            @forelse ($convenios as $convenio)
+                            <tr
+                                class="bg-neutral-primary-soft border-b border-default hover:bg-neutral-secondary-medium">
+                                <td class="px-6 py-4">
+                                    {{ $convenio->resolucion }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->resolucion }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->entidad_nombre }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->tipoConvenio->nombre }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->estadoConvenio->nombre }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->ambito->nombre }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ $convenio->duracion }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    @foreach ($convenio->beneficiario as $b)
+                                    {{ $b->codigo_beneficiario }}<b r>
                                         @endforeach
-                                    </td>
+                                </td>
 
-                                    <td class="px-6 py-4">
-                                        <div class="flex flex-col">
-                                            <a href="#"
-                                                class="font-medium text-fg-brand hover:underline">Editar</a>
-                                            <a href="#" class="font-medium text-fg-brand hover:underline">Ver
-                                                Detalle</a>
-                                            <a href="#"
-                                                class="font-medium text-fg-brand hover:underline">Eliminar</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col">
+                                        <a href="#"
+                                            class="font-medium text-fg-brand hover:underline">Editar</a>
+                                        <a href="#" class="font-medium text-fg-brand hover:underline">Ver
+                                            Detalle</a>
+                                        <a href="#"
+                                            class="font-medium text-fg-brand hover:underline">Eliminar</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-gray-500">
+                                    No hay convenios registrados.
+                                </td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                     <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4"
