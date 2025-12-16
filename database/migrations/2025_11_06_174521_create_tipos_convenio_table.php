@@ -19,11 +19,6 @@ return new class extends Migration
             $table->boolean('activo')->default(true);
             $table->timestamps();
         });
-
-        DB::table('tipos_convenio')->insert([
-            ['nombre' => 'Marco', 'descripcion' => 'Convenios marco para establecer relaciones generales.'],
-            ['nombre' => 'Específico', 'descripcion' => 'Convenios para proyectos específicos o colaboraciones puntuales.'],
-        ]);
     }
 
     /**

@@ -2,16 +2,17 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class EstadosConvenioSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        //
+        DB::table('estados_convenio')->insert([
+            ['id' => 1, 'nombre' => 'Activo', 'descripcion' => 'El convenio está activo.'],
+            ['id' => 2, 'nombre' => 'Vencido', 'descripcion' => 'El convenio ha vencido.'],
+            ['id' => 3, 'nombre' => 'En Revisión', 'descripcion' => 'El convenio está en revisión.'],
+        ]);
     }
 }

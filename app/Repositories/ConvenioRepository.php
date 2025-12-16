@@ -2,107 +2,104 @@
 
 namespace App\Repositories;
 
+use App\Models\Ambito;
 use App\Models\Convenio;
+use App\Models\TipoConvenio;
+use App\Enums\EstadoConvenio;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class ConvenioRepository
 {
-    /**
-     * Obtiene todos los convenios con sus relaciones principales paginados
-     */
-    public function getAllWithRelations(): LengthAwarePaginator
+
+    protected Convenio $modelo;
+
+    public function __construct(Convenio $convenio)
     {
-        return Convenio::with(['tipoConvenio', 'ambito', 'estadoConvenio'])
-            ->latest()
-            ->paginate(15);
+        $this->modelo = $convenio;
     }
 
-    /**
-     * Obtiene un convenio con todas sus relaciones cargadas
-     */
-    public function findWithAllRelations(int $id): Convenio
+    public function obtenerPorId($id)
     {
-        return Convenio::with([
+        return $this->modelo->findOrFail($id);
+    }
+
+    public function obtenerTodoConRelaciones()
+    {
+        return $this->modelo->with([
             'tipoConvenio',
             'ambito',
             'estadoConvenio',
             'beneficiario',
             'documento',
             'convenioAnterior'
-        ])->findOrFail($id);
+        ])->get();
     }
 
-    /**
-     * Carga todas las relaciones en un convenio existente
-     */
-    public function loadAllRelations(Convenio $convenio): Convenio
+    public function obtenerIdConRelaciones(int $id)
     {
-        return $convenio->load([
+        return $this->modelo->with([
             'tipoConvenio',
             'ambito',
             'estadoConvenio',
             'beneficiario',
             'documento',
             'convenioAnterior'
-        ]);
+        ])->find($id);
     }
 
-    /**
-     * Crea un convenio con sus beneficiarios asociados
-     */
-    public function createWithBeneficiarios(array $data, ?array $beneficiarios = null): Convenio
+    public function crear(array $data, ?array $beneficiarios = null)
     {
-        $convenio = Convenio::create($data);
-        
+        $convenio = $this->modelo->create($data);
+
         if ($beneficiarios) {
             $convenio->beneficiario()->sync($beneficiarios);
         }
-        
         return $convenio;
     }
 
-    /**
-     * Actualiza un convenio y sus beneficiarios asociados
-     */
-    public function updateWithBeneficiarios(
-        Convenio $convenio, 
-        array $data, 
-        ?array $beneficiarios = null
-    ): Convenio {
+    public function actualizar(int $id, array $data, ?array $beneficiarios = null)
+    {
+        $convenio = $this->modelo->findOrFail($id);
+
         $convenio->update($data);
-        
-        if ($beneficiarios !== null) {
+
+        if ($beneficiarios) {
             $convenio->beneficiario()->sync($beneficiarios);
-        } else {
-            $convenio->beneficiario()->detach();
         }
-        
-        return $convenio->fresh();
+
+        return $convenio;
     }
 
-    /**
-     * Elimina un convenio y limpia sus relaciones many-to-many
-     */
-    public function deleteWithRelations(Convenio $convenio): bool
+    public function eliminar(int $id): bool
     {
-        $convenio->beneficiario()->detach();
-        return $convenio->delete();
+        $convenio = $this->modelo->findOrFail($id);
+        return (bool) $convenio->delete();
     }
 
-    /**
-     * Obtiene un convenio con la relación de beneficiarios cargada
-     */
-    public function findWithBeneficiarios(int $id): Convenio
+    public function obtenerConveniosActivos(): Builder
     {
-        return Convenio::with('beneficiario')->findOrFail($id);
+        return $this->modelo->where('estado_convenio_id', EstadoConvenio::ACTIVO->value);
     }
 
-    /**
-     * Obtiene los convenios más recientes
-     */
-    public function getRecent(int $limit = 5)
+    /*
+    public function scopeRecientes($query, int $limit = 5)
     {
-        return Convenio::recientes($limit)->get();
+        return $query->with(['tipoConvenio', 'estadoConvenio'])
+            ->latest()
+            ->limit($limit);
     }
+
+    public static function getDashboardStats(): array
+    {
+        return [
+            'total_convenios' => self::count(),
+            'convenios_activos' => self::activos()->count(),
+            'tipos_convenio' => TipoConvenio::count(),
+            'ambitos' => Ambito::count(),
+            'recientes' => self::recientes(5)->get(),
+        ];
+    }*/
 }
-

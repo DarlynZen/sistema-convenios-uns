@@ -16,6 +16,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/convenios', [AdminController::class, 'convenios'])->name('convenios');
     Route::get('/contenido', [AdminController::class, 'cms'])->name('cms');
+    Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo');
 });
 
 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');

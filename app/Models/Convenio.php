@@ -6,8 +6,63 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Carbon\Carbon;
 
+/**
+ * @property int $id
+ * @property int $tipo_convenio_id
+ * @property int $ambito_id
+ * @property int $estado_convenio_id
+ * @property string $resolucion
+ * @property string $titulo
+ * @property string|null $objetivo_personalizado
+ * @property \Illuminate\Support\Carbon $fecha_inicio
+ * @property \Illuminate\Support\Carbon $fecha_fin
+ * @property int $plazo_prorroga_valor
+ * @property string $plazo_prorroga_unidad
+ * @property string $entidad_nombre
+ * @property string $entidad_logo
+ * @property string $entidad_tipo
+ * @property string $nacionalidad
+ * @property array<array-key, mixed>|null $detalles_coordinadores_json
+ * @property int|null $convenio_renovado_de
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Ambito $ambito
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Beneficiario> $beneficiario
+ * @property-read int|null $beneficiario_count
+ * @property-read Convenio|null $convenioAnterior
+ * @property-read Convenio|null $convenioRenovado
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DocumentoConvenio> $documento
+ * @property-read int|null $documento_count
+ * @property-read \App\Models\Estado $estadoConvenio
+ * @property-read mixed $duracion
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Observacion> $observaciones
+ * @property-read int|null $observaciones_count
+ * @property-read \App\Models\TipoConvenio $tipoConvenio
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereAmbitoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereConvenioRenovadoDe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereDetallesCoordinadoresJson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereEntidadLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereEntidadNombre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereEntidadTipo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereEstadoConvenioId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereFechaFin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereFechaInicio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereNacionalidad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereObjetivoPersonalizado($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio wherePlazoProrrogaUnidad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio wherePlazoProrrogaValor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereResolucion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereTipoConvenioId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereTitulo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Convenio whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Convenio extends Model
 {
     protected $table = 'convenios';
@@ -67,7 +122,7 @@ class Convenio extends Model
 
     public function estadoConvenio(): BelongsTo
     {
-        return $this->belongsTo(EstadoConvenio::class, 'estado_convenio_id');
+        return $this->belongsTo(Estado::class, 'estado_convenio_id');
     }
 
     public function documento(): HasMany
@@ -100,102 +155,5 @@ class Convenio extends Model
         return $this->fecha_inicio
             ->locale('es')
             ->diffForHumans($this->fecha_fin, true);
-    }
-
-
-    // Métodos de negocio - Lógica de acceso a datos
-
-    /**
-     * Obtiene todos los convenios con sus relaciones principales
-     */
-    public static function getAllWithRelations()
-    {
-        return self::with(['tipoConvenio', 'ambito', 'estadoConvenio'])
-            ->latest()
-            ->paginate(15);
-    }
-
-    /**
-     * Obtiene un convenio con todas sus relaciones
-     */
-    public function loadAllRelations()
-    {
-        return $this->load([
-            'tipoConvenio',
-            'ambito',
-            'estadoConvenio',
-            'beneficiario',
-            'documento',
-            'convenioAnterior'
-        ]);
-    }
-
-    /**
-     * Crea un convenio con sus beneficiarios asociados
-     */
-    public static function createWithBeneficiarios(array $data, ?array $beneficiarios = null)
-    {
-        $convenio = self::create($data);
-
-        if ($beneficiarios) {
-            $convenio->beneficiario()->sync($beneficiarios);
-        }
-
-        return $convenio;
-    }
-
-    /**
-     * Actualiza un convenio y sus beneficiarios
-     */
-    public function updateWithBeneficiarios(array $data, ?array $beneficiarios = null)
-    {
-        $this->update($data);
-
-        if ($beneficiarios !== null) {
-            $this->beneficiario()->sync($beneficiarios);
-        } else {
-            $this->beneficiario()->detach();
-        }
-
-        return $this->fresh();
-    }
-
-    /**
-     * Elimina un convenio y limpia sus relaciones
-     */
-    public function deleteWithRelations()
-    {
-        $this->beneficiario()->detach();
-        return $this->delete();
-    }
-
-    // Scopes para consultas comunes
-
-    public function scopeActivos($query)
-    {
-        return $query->whereHas('estadoConvenio', function ($q) {
-            $q->where('nombre', 'like', '%activo%');
-        });
-    }
-
-    public function scopeRecientes($query, int $limit = 5)
-    {
-        return $query->with(['tipoConvenio', 'estadoConvenio'])
-            ->latest()
-            ->limit($limit);
-    }
-
-    /**
-     * Obtiene estadísticas para el dashboard
-     */
-    public static function getDashboardStats(): array
-    {
-        return [
-            'total_convenios' => self::count(),
-            'convenios_activos' => self::activos()->count(),
-            'tipos_convenio' => TipoConvenio::count(),
-            'ambitos' => Ambito::count(),
-            'recientes' => self::recientes(5)->get(),
-        ];
     }
 }

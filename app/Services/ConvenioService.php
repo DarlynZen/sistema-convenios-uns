@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Convenio;
-use App\Models\TipoConvenio;
-use App\Models\Ambito;
-use App\Models\EstadoConvenio;
-use App\Models\Beneficiario;
+use App\Enums\EstadoConvenio;
 use App\Repositories\ConvenioRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class ConvenioService
@@ -16,65 +13,54 @@ class ConvenioService
         private ConvenioRepository $repository
     ) {}
 
-    /**
-     * Crea un convenio con sus beneficiarios en una transacción
-     */
-    public function create(array $data): Convenio
+    public function obtenerPorId($id)
     {
-        return DB::transaction(function () use ($data) {
-            $beneficiarios = $data['beneficiarios'] ?? null;
-            unset($data['beneficiarios']);
-            
-            return $this->repository->createWithBeneficiarios($data, $beneficiarios);
-        });
+        return $this->repository->obtenerPorId($id);
     }
 
-    /**
-     * Actualiza un convenio con sus beneficiarios en una transacción
-     */
-    public function update(Convenio $convenio, array $data): Convenio
-    {
-        return DB::transaction(function () use ($convenio, $data) {
-            $beneficiarios = $data['beneficiarios'] ?? null;
-            unset($data['beneficiarios']);
-            
-            return $this->repository->updateWithBeneficiarios($convenio, $data, $beneficiarios);
-        });
+    public function obtenerTodoConRelaciones(){
+        return $this->repository->obtenerTodoConRelaciones();
     }
 
-    /**
-     * Elimina un convenio y limpia sus relaciones
-     */
-    public function delete(Convenio $convenio): void
+    public function crear(array $data, ?array $beneficiarios = null)
     {
-        $this->repository->deleteWithRelations($convenio);
+        return $this->repository->crear($data, $beneficiarios);
     }
 
-    /**
-     * Obtiene los datos necesarios para el formulario de creación
-     */
-    public function getCreateFormData(): array
+    public function actualizar(int $id, array $data, ?array $beneficiarios = null)
+    {
+        return $this->repository->actualizar($id, $data, $beneficiarios);
+    }
+
+    public function eliminar(int $id): bool
+    {
+        return $this->repository->eliminar($id);
+    }
+
+    public function obtenerConveniosActivos(): Builder
+    {
+        return $this->repository->obtenerConveniosActivos();
+    }
+
+    public function obtenerListado(): array
     {
         return [
             'tiposConvenio' => TipoConvenio::all(),
             'ambitos' => Ambito::all(),
-            'estadosConvenio' => EstadoConvenio::all(),
+            'estadosConvenio' => Estado::all(),
             'beneficiarios' => Beneficiario::all(),
         ];
     }
 
-    /**
-     * Obtiene los datos necesarios para el formulario de edición
-     */
     public function getEditFormData(Convenio $convenio): array
     {
         $convenio->load('beneficiario');
-        
+
         return [
             'convenio' => $convenio,
             'tiposConvenio' => TipoConvenio::all(),
             'ambitos' => Ambito::all(),
-            'estadosConvenio' => EstadoConvenio::all(),
+            'estadosConvenio' => Estado::all(),
             'beneficiarios' => Beneficiario::all(),
         ];
     }

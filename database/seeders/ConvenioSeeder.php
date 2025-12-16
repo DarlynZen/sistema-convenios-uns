@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +21,7 @@ class ConvenioSeeder extends Seeder
                 'resolucion'            => 'Resolución Rectoral N° 123-2024-UNS',
                 'titulo'                => 'Convenio Marco con la Escuela de Ingeniería de Sistemas e Informática',
                 'objetivo_personalizado'=> 'Fomentar actividades académicas, investigación y prácticas profesionales.',
-                
+
                 'fecha_inicio'          => '2024-01-01',
                 'fecha_fin'             => '2027-01-01',
 

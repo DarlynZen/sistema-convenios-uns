@@ -17,3 +17,4 @@ class BeneficiarioConvenioSeeder extends Seeder
         ]);
     }
 }
+

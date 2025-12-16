@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Convenio;
 use App\Services\ConvenioService;
 use App\Repositories\ConvenioRepository;
-use App\Http\Requests\StoreConvenioRequest;
-use App\Http\Requests\UpdateConvenioRequest;
 
 class ConvenioController extends Controller
 {
@@ -31,7 +29,7 @@ class ConvenioController extends Controller
     {
         try {
             $this->convenioService->create($request->validated());
-            
+
             return redirect()->route('admin.convenios')
                 ->with('success', 'Convenio creado exitosamente.');
         } catch (\Exception $e) {
@@ -56,7 +54,7 @@ class ConvenioController extends Controller
     {
         try {
             $this->convenioService->update($convenio, $request->validated());
-            
+
             return redirect()->route('admin.convenios')
                 ->with('success', 'Convenio actualizado exitosamente.');
         } catch (\Exception $e) {

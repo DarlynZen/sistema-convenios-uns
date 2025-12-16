@@ -5,6 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property string $nombre
+ * @property string|null $descripcion
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Convenio> $convenios
+ * @property-read int|null $convenios_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito whereDescripcion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito whereNombre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Ambito whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Ambito extends Model
 {
     protected $table = 'ambitos';
@@ -22,21 +40,5 @@ class Ambito extends Model
     public function convenios(): HasMany
     {
         return $this->hasMany(Convenio::class);
-    }
-
-    /**
-     * Obtiene todos los ámbitos
-     */
-    public static function getAll()
-    {
-        return self::all();
-    }
-
-    /**
-     * Verifica si puede ser eliminado
-     */
-    public function canBeDeleted(): bool
-    {
-        return $this->convenios()->count() === 0;
     }
 }

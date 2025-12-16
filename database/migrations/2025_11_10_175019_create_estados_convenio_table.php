@@ -18,12 +18,6 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->timestamps();
         });
-
-        DB::table('estados_convenio')->insert([
-            ['nombre' => 'Vigente', 'descripcion' => 'El convenio está vigente.'],
-            ['nombre' => 'Próximo a vencer', 'descripcion' => 'El convenio está próximo a vencer.'],
-            ['nombre' => 'Finalizado', 'descripcion' => 'El convenio ha cumplido su término y ha finalizado.'],
-        ]);
     }
 
     /**

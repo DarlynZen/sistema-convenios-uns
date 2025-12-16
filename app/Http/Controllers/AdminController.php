@@ -16,13 +16,13 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $stats = $this->dashboardService->getStats();
-        return view('admin.dashboard', compact('stats'));
+        /*$stats = $this->dashboardService->getStats();*/
+        return view('admin.dashboard');
     }
 
     public function convenios()
     {
-        $convenios = $this->convenioRepository->getAllWithRelations();
+        $convenios = $this->convenioRepository->obtenerTodoConRelaciones();
         return view('admin.gestion-convenios', compact('convenios'));
     }
 
@@ -30,6 +30,11 @@ class AdminController extends Controller
     {
         $secciones = $this->cmsSeccionRepository->getAll();
         return view('admin.editor-contenido', compact('secciones'));
+    }
+
+    public function catalogo()
+    {
+        return view('admin.catalogo');
     }
 
     public function profile()

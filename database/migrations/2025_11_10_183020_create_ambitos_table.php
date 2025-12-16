@@ -18,11 +18,6 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
             $table->timestamps();
         });
-
-        DB::table('ambitos')->insert([
-            ['nombre' => 'Nacional', 'descripcion' => 'Convenios que se aplican en todo el país.'],
-            ['nombre' => 'Internacional', 'descripcion' => 'Convenios que involucran a múltiples países.'],
-        ]);
     }
 
     /**
