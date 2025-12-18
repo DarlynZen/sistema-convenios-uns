@@ -206,7 +206,7 @@ class AdminController extends Controller
     public function cms()
     {
         $secciones = CmsSeccion::getAll();
-        return view('admin.editor-contenido', compact('secciones'));
+        return view('admin.contenido-contenido', compact('secciones'));
     }
 
     public function profile()
@@ -250,7 +250,7 @@ class AdminController extends Controller
     public function cms()
     {
         $secciones = $this->cmsSeccionRepository->getAll();
-        return view('admin.editor-contenido', compact('secciones'));
+        return view('admin.contenido-contenido', compact('secciones'));
     }
 
     public function profile()

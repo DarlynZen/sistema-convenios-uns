@@ -29,8 +29,8 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.convenios') }}"
-               class="sidebar-item flex flex-row {{ request()->routeIs('admin.convenios') ? 'active' : '' }}">
+            <a href="{{ route('admin.convenios.index') }}"
+               class="sidebar-item flex flex-row {{ request()->routeIs('admin.convenios.index') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                      viewBox="0 0 256 256">
                     <path
@@ -40,8 +40,8 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.cms') }}"
-               class="sidebar-item flex flex-row {{ request()->routeIs('admin.cms') ? 'active' : '' }}">
+            <a href="{{ route('admin.contenido.index') }}"
+               class="sidebar-item flex flex-row {{ request()->routeIs('admin.contenido.index') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                      viewBox="0 0 256 256">
                     <path
@@ -51,8 +51,8 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.catalogo') }}"
-               class="sidebar-item flex flex-row {{ request()->routeIs('admin.catalogo') ? 'active' : '' }}">
+            <a href="{{ route('admin.catalogo.index') }}"
+               class="sidebar-item flex flex-row {{ request()->routeIs('admin.catalogo.index') ? 'active' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                      viewBox="0 0 256 256">
                     <path

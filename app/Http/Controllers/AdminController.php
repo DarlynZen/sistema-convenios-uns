@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Services\DashboardService;
-use App\Repositories\ConvenioRepository;
+use App\Services\ConvenioService;
 use App\Repositories\CmsSeccionRepository;
 
 class AdminController extends Controller
 {
     public function __construct(
         private DashboardService $dashboardService,
-        private ConvenioRepository $convenioRepository,
         private CmsSeccionRepository $cmsSeccionRepository
     ) {}
 
@@ -20,21 +19,15 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-    public function convenios()
-    {
-        $convenios = $this->convenioRepository->obtenerTodoConRelaciones();
-        return view('admin.gestion-convenios', compact('convenios'));
-    }
-
-    public function cms()
+    public function contenido()
     {
         $secciones = $this->cmsSeccionRepository->getAll();
-        return view('admin.editor-contenido', compact('secciones'));
+        return view('admin.contenido.index', compact('secciones'));
     }
 
     public function catalogo()
     {
-        return view('admin.catalogo');
+        return view('admin.catalogo.index');
     }
 
     public function profile()

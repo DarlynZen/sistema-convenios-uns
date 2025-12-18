@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Convenio;
 
 class ConvenioSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class ConvenioSeeder extends Seeder
      */
     public function run(): void
     {
+        /*Convenio::factory(3)->create();*/
+
         DB::table('convenios')->insert([
             [
                 'tipo_convenio_id'      => 1,

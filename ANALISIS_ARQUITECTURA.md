@@ -521,7 +521,7 @@ class AdminController extends Controller
     public function cms()
     {
         $secciones = app(CmsSeccionRepository::class)->getAll();
-        return view('admin.editor-contenido', compact('secciones'));
+        return view('admin.contenido-contenido', compact('secciones'));
     }
 
     public function profile()

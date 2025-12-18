@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\EstadoConvenio;
+use App\Models\Convenio;
 use App\Repositories\ConvenioRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
@@ -11,23 +12,43 @@ class ConvenioService
 {
     public function __construct(
         private ConvenioRepository $repository
-    ) {}
+    )
+    {
+    }
 
-    public function obtenerPorId($id)
+    public function obtenerPorId(int $id): Convenio
     {
         return $this->repository->obtenerPorId($id);
     }
 
-    public function obtenerTodoConRelaciones(){
+    /*obtenerTodoConRelaciones*/
+    public function listarConvenios()
+    {
         return $this->repository->obtenerTodoConRelaciones();
     }
 
-    public function crear(array $data, ?array $beneficiarios = null)
+    public function obtenerConveniosActivos(): Builder
     {
-        return $this->repository->crear($data, $beneficiarios);
+        return $this->repository->obtenerConveniosActivos();
     }
 
-    public function actualizar(int $id, array $data, ?array $beneficiarios = null)
+    /**
+     * @throws \Throwable
+     */
+    public function crear(array $data, ?array $beneficiarios = null): Convenio
+    {
+        return DB::transaction(function () use ($data, $beneficiarios) {
+
+            $convenio = $this->repository->crear($data);
+
+            if (!empty($beneficiarios)) {
+                $convenio->beneficiario()->sync($beneficiarios);
+            }
+            return $convenio;
+        });
+    }
+
+    public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
     {
         return $this->repository->actualizar($id, $data, $beneficiarios);
     }
@@ -37,32 +58,26 @@ class ConvenioService
         return $this->repository->eliminar($id);
     }
 
-    public function obtenerConveniosActivos(): Builder
+    public function obtenerCatalogos(): array
     {
-        return $this->repository->obtenerConveniosActivos();
+        return $this->repository->obtenerCatalogos();
     }
 
-    public function obtenerListado(): array
+    public function obtenerDatosIndex(): array
     {
-        return [
-            'tiposConvenio' => TipoConvenio::all(),
-            'ambitos' => Ambito::all(),
-            'estadosConvenio' => Estado::all(),
-            'beneficiarios' => Beneficiario::all(),
-        ];
+        return array_merge(
+            ['convenios' => $this->listarConvenios()],
+            $this->obtenerCatalogos()
+        );
     }
 
     public function getEditFormData(Convenio $convenio): array
     {
         $convenio->load('beneficiario');
 
-        return [
+        return array_merge([
             'convenio' => $convenio,
-            'tiposConvenio' => TipoConvenio::all(),
-            'ambitos' => Ambito::all(),
-            'estadosConvenio' => Estado::all(),
-            'beneficiarios' => Beneficiario::all(),
-        ];
+        ], $this->obtenerCatalogos());
     }
 }
 

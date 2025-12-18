@@ -11,6 +11,7 @@
         'lg' => 'sm:max-w-lg',
         'xl' => 'sm:max-w-xl',
         '2xl' => 'sm:max-w-4xl',
+        '4xl' => 'sm:max-w-6xl',
     ][$maxWidth];
 @endphp
 
@@ -60,7 +61,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
     >
-        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
     </div>
 
     <div
@@ -74,8 +75,18 @@
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
     >
         @if (isset($title))
-            <div class="px-5 py-3 border-b border-neutral bg-white">
+            <div class="px-5 py-3 border-b border-neutral bg-white flex items-center justify-between gap-3">
                 {{ $title }}
+                <button
+                    type="button"
+                    class="text-slate-500 hover:text-slate-700"
+                    aria-label="Cerrar modal"
+                    x-on:click="show = false"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#828181" viewBox="0 0 256 256">
+                        <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                    </svg>
+                </button>
             </div>
         @endif
 

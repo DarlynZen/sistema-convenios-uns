@@ -6,7 +6,6 @@ use App\Repositories\ConvenioRepository;
 use App\Models\TipoConvenio;
 use App\Models\Ambito;
 use App\Models\Convenio;
-
 class DashboardService
 {
     public function __construct(

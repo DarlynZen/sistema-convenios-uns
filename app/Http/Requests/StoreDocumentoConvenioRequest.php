@@ -20,13 +20,12 @@ class StoreDocumentoConvenioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tipo_documento' => 'required|string|max:100',
+            'tipo_documento' => 'required|string|in:RESOLUCION,CONVENIO',
             'nombre_documento' => 'required|string|max:255',
-            'documento' => 'required|file|mimes:pdf,doc,docx|max:10240',
+            'documento' => 'required|file|mimes:pdf|max:10240',
             'version' => 'nullable|integer|min:1',
             'activo' => 'nullable|boolean',
             'observaciones' => 'nullable|string',
         ];
     }
 }
-

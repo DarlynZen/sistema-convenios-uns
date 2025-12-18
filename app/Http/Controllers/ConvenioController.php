@@ -2,38 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreConvenioRequest;
 use App\Models\Convenio;
 use App\Services\ConvenioService;
 use App\Repositories\ConvenioRepository;
+use App\Services\DocumentoConvenioService;
 
 class ConvenioController extends Controller
 {
     public function __construct(
         private ConvenioService $convenioService,
-        private ConvenioRepository $convenioRepository
+        private ConvenioRepository $convenioRepository,
+        private DocumentoConvenioService $documentoConvenioService,
     ) {}
 
     public function index()
     {
-        $convenios = $this->convenioRepository->getAllWithRelations();
-        return view('admin.gestion-convenios', compact('convenios'));
+        return view('admin.convenios.index', $this->convenioService->obtenerDatosIndex());
     }
 
-    public function create()
+    /*public function create()
     {
-        $data = $this->convenioService->getCreateFormData();
+        $data = $this->convenioService->obtenerListado();
         return view('admin.convenios.create', $data);
-    }
+    }*/
 
     public function store(StoreConvenioRequest $request)
     {
         try {
-            $this->convenioService->create($request->validated());
+            $data = $request->validated();
 
-            return redirect()->route('admin.convenios')
+            $beneficiarios = $data['beneficiarios'] ?? null;
+            unset($data['beneficiarios']);
+
+            // Crear convenio principal
+            $convenio = $this->convenioService->crear($data, $beneficiarios);
+
+            // Crear documentos asociados si se enviaron archivos
+            if ($request->hasFile('archivo_uno')) {
+                $this->documentoConvenioService->create($convenio, [
+                    'documento'        => $request->file('archivo_uno'),
+                    'nombre_documento' => 'Resolución 1',
+                ]);
+            }
+
+            if ($request->hasFile('archivo_dos')) {
+                $this->documentoConvenioService->create($convenio, [
+                    'documento'        => $request->file('archivo_dos'),
+                    'nombre_documento' => 'Resolución 2',
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.convenios.index')
                 ->with('success', 'Convenio creado exitosamente.');
-        } catch (\Exception $e) {
-            return back()->withInput()
+        } catch (\Throwable $e) {
+            return back()
+                ->withInput()
                 ->with('error', 'Error al crear el convenio: ' . $e->getMessage());
         }
     }

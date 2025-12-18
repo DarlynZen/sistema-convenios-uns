@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Models\Ambito;
 use App\Models\Convenio;
 use App\Models\TipoConvenio;
+use App\Models\Estado;
+use App\Models\Beneficiario;
 use App\Enums\EstadoConvenio;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +23,7 @@ class ConvenioRepository
         $this->modelo = $convenio;
     }
 
-    public function obtenerPorId($id)
+    public function obtenerPorId(int $id): Convenio
     {
         return $this->modelo->findOrFail($id);
     }
@@ -50,23 +52,18 @@ class ConvenioRepository
         ])->find($id);
     }
 
-    public function crear(array $data, ?array $beneficiarios = null)
+    public function crear(array $data): Convenio
     {
-        $convenio = $this->modelo->create($data);
-
-        if ($beneficiarios) {
-            $convenio->beneficiario()->sync($beneficiarios);
-        }
-        return $convenio;
+        return $this->modelo->create($data);
     }
 
-    public function actualizar(int $id, array $data, ?array $beneficiarios = null)
+    public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
     {
         $convenio = $this->modelo->findOrFail($id);
 
         $convenio->update($data);
 
-        if ($beneficiarios) {
+        if (!empty($beneficiarios)) {
             $convenio->beneficiario()->sync($beneficiarios);
         }
 
@@ -75,13 +72,22 @@ class ConvenioRepository
 
     public function eliminar(int $id): bool
     {
-        $convenio = $this->modelo->findOrFail($id);
-        return (bool) $convenio->delete();
+        return (bool)$this->modelo->findOrFail($id)->delete();
     }
 
     public function obtenerConveniosActivos(): Builder
     {
         return $this->modelo->where('estado_convenio_id', EstadoConvenio::ACTIVO->value);
+    }
+
+    public function obtenerCatalogos(): array
+    {
+        return [
+            'tiposConvenio' => TipoConvenio::all(),
+            'ambitos' => Ambito::all(),
+            'estadosConvenio' => Estado::all(),
+            'beneficiarios' => Beneficiario::all(),
+        ];
     }
 
     /*

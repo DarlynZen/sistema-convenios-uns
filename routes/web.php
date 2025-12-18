@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\SiteController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConvenioController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
 //auth - admin
@@ -13,15 +13,15 @@ Route::view('admin/convenios', 'admin.gestion-convenios')->middleware(['auth'])-
  */
 
 Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
+    Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/convenios', [AdminController::class, 'convenios'])->name('convenios');
-    Route::get('/contenido', [AdminController::class, 'cms'])->name('cms');
-    Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo');
+    Route::get('/convenios', [ConvenioController::class, 'index'])->name('convenios.index');
+    Route::post('/convenios', [ConvenioController::class, 'store'])->name('convenios.store');
+    Route::get('/contenido', [AdminController::class, 'contenido'])->name('contenido.index');
+    Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo.index');
 });
 
 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
-
-require __DIR__ . '/auth.php';
 
 //public
 /* Route::view('/', 'site/convenios/welcome');
@@ -32,3 +32,5 @@ Route::redirect('/', '/inicio');
 Route::get('/inicio', [SiteController::class, 'inicio']);
 /* Route::redirect('/nosotros', '/inicio?tab=nosotros');
 Route::redirect('/nuestros-convenios', '/inicio?tab=nuestros-convenios'); */
+
+require __DIR__ . '/auth.php';
