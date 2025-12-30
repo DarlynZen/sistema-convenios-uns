@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\TipoDocumentoConvenio;
 
 class StoreDocumentoConvenioRequest extends FormRequest
 {
@@ -20,7 +21,11 @@ class StoreDocumentoConvenioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'tipo_documento' => 'required|string|in:RESOLUCION,CONVENIO',
+            'tipo_documento' => [
+                'required',
+                'string',
+                Rule::in(TipoDocumentoConvenio::values()),
+            ],
             'nombre_documento' => 'required|string|max:255',
             'documento' => 'required|file|mimes:pdf|max:10240',
             'version' => 'nullable|integer|min:1',
