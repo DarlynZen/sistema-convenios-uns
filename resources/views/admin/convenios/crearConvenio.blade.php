@@ -9,12 +9,102 @@
         action="{{ route('admin.convenios.store') }}"
         enctype="multipart/form-data"
         class="space-y-4"
-        x-data="{ step: 1 }"
-        x-on:step-changed.window="step = $event.detail.step"
+        x-data="{
+            step: 1,
+            maxStep: 3,
+            notice: '',
+            noticeTimeout: null,
+
+            setStep(to) {
+                const next = Math.min(this.maxStep, Math.max(1, to));
+                this.step = next;
+                this.$dispatch('step-changed', { step: next });
+            },
+
+            showNotice(message) {
+                this.notice = message;
+                if (this.noticeTimeout) clearTimeout(this.noticeTimeout);
+                this.noticeTimeout = setTimeout(() => { this.notice = ''; }, 3500);
+            },
+
+            validateStep(stepIndex) {
+                const section = this.$el.querySelector(`[data-step-section='${stepIndex}']`);
+                if (!section) return true;
+
+                const elements = Array.from(section.querySelectorAll('input, select, textarea'))
+                    .filter((el) => !el.disabled)
+                    .filter((el) => el.type !== 'hidden');
+
+                for (const el of elements) {
+                    if (!el.checkValidity()) {
+                        el.reportValidity();
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+
+            handleStepRequested(event) {
+                const to = Number(event.detail?.step);
+                if (!Number.isFinite(to)) return;
+
+                // Ir hacia atrás siempre está permitido
+                if (to <= this.step) {
+                    this.setStep(to);
+                    return;
+                }
+
+                // Hacia adelante: solo se permite avanzar 1 paso y si el actual es válido
+                if (to !== this.step + 1) {
+                    this.showNotice('Debes completar el paso actual antes de saltar. Avanza en secuencia (1 → 2 → 3).');
+                    return;
+                }
+                if (!this.validateStep(this.step)) {
+                    this.showNotice('Hay campos pendientes en este paso. Completa lo requerido para continuar.');
+                    return;
+                }
+
+                this.setStep(to);
+            },
+
+            next() {
+                this.handleStepRequested({ detail: { step: this.step + 1 } });
+            },
+
+            prev() {
+                this.setStep(this.step - 1);
+            },
+
+            validateAllAndSubmit() {
+                for (let i = 1; i <= this.maxStep; i++) {
+                    if (!this.validateStep(i)) {
+                        this.setStep(i);
+                        this.showNotice('Completa los campos requeridos antes de crear el convenio.');
+                        return;
+                    }
+                }
+
+                this.$el.submit();
+            },
+        }"
+        x-on:step-requested.window="handleStepRequested($event)"
+        x-on:wizard-next.window="next()"
+        x-on:wizard-prev.window="prev()"
+        x-on:open-modal.window="if ($event.detail === 'crearConvenio') { notice=''; setStep(1); }"
+        x-on:submit.prevent="validateAllAndSubmit()"
     >
         @csrf
+
+        <div
+            x-show="notice"
+            x-transition
+            x-cloak
+            class="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"
+            x-text="notice"
+        ></div>
         {{-- Sección: Información básica del convenio (Paso 1) --}}
-        <section class="space-y-3 mb-4" x-show="step === 1" x-cloak>
+        <section class="space-y-3 mb-4" x-show="step === 1" x-cloak data-step-section="1">
             <div class="border border-red-100 rounded-lg bg-red-50/40">
                 <header class="flex items-center gap-2 px-4 py-3 border-b border-red-100 bg-red-50">
                     <span
@@ -30,8 +120,9 @@
                             id="titulo"
                             name="titulo"
                             type="text"
-                            class="mt-1 block w-full"
-                            placeholder="Título del convenio"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                            placeholder="Nombre del título del convenio"
+                            required
                             :value="old('titulo')"
                         />
                         <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
@@ -43,8 +134,8 @@
                             id="resolucion"
                             name="resolucion"
                             type="text"
-                            class="mt-1 block w-full"
-                            placeholder="Nombre de la Institución"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                            placeholder="Nro. de transcripción"
                             :value="old('resolucion')"
                         />
                         <x-input-error :messages="$errors->get('resolucion')" class="mt-1"/>
@@ -57,7 +148,8 @@
                             <select
                                 id="tipo_convenio_id"
                                 name="tipo_convenio_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 text-sm focus:border-red-500 focus:ring-red-500"
+                                required
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             >
                                 <option value="">Seleccionar tipo</option>
                                 @foreach($tiposConvenio as $tipo)
@@ -77,7 +169,8 @@
                             <select
                                 id="ambito_id"
                                 name="ambito_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 text-sm focus:border-red-500 focus:ring-red-500"
+                                required
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             >
                                 <option value="">Seleccionar ámbito</option>
                                 @foreach($ambitos as $ambito)
@@ -100,8 +193,9 @@
                             id="entidad_nombre"
                             name="entidad_nombre"
                             type="text"
-                            class="mt-1 block w-full"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             placeholder="Nombre de la Institución"
+                            required
                             :value="old('entidad_nombre')"
                         />
                         <x-input-error :messages="$errors->get('entidad_nombre')" class="mt-1"/>
@@ -115,7 +209,7 @@
                                 id="nacionalidad"
                                 name="nacionalidad"
                                 type="text"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                 placeholder="Nombre del país"
                                 :value="old('nacionalidad')"
                             />
@@ -127,7 +221,8 @@
                             <select
                                 id="estado_convenio_id"
                                 name="estado_convenio_id"
-                                class="mt-1 block w-full rounded-md border-gray-300 text-sm focus:border-red-500 focus:ring-red-500"
+                                required
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             >
                                 <option value="">Seleccionar estado</option>
                                 @foreach($estadosConvenio as $estado)
@@ -147,7 +242,7 @@
         </section>
 
         {{-- Detalles del Convenio (Paso 2) --}}
-        <section class="space-y-3 mb-4" x-show="step === 2" x-cloak>
+        <section class="space-y-3 mb-4" x-show="step === 2" x-cloak data-step-section="2">
             <div class="border border-red-100 rounded-lg bg-red-50/40">
                 <header class="flex items-center gap-2 px-4 py-3 border-b border-red-100 bg-red-50">
                     <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600 text-sm font-semibold">2</span>
@@ -163,7 +258,7 @@
                                 id="beneficiarios"
                                 name="beneficiarios[]"
                                 multiple
-                                class="mt-1 block w-full rounded-md border-gray-300 text-sm focus:border-red-500 focus:ring-red-500"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             >
                                 @foreach($beneficiarios as $beneficiario)
                                     <option
@@ -184,7 +279,8 @@
                                 id="fecha_inicio"
                                 name="fecha_inicio"
                                 type="date"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                required
                                 :value="old('fecha_inicio')"
                             />
                             <x-input-error :messages="$errors->get('fecha_inicio')" class="mt-1" />
@@ -197,7 +293,7 @@
                                 id="fecha_fin"
                                 name="fecha_fin"
                                 type="date"
-                                class="mt-1 block w-full"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                 :value="old('fecha_fin')"
                             />
                             <x-input-error :messages="$errors->get('fecha_fin')" class="mt-1" />
@@ -211,7 +307,7 @@
                             id="objetivo_personalizado"
                             name="objetivo_personalizado"
                             rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 text-sm focus:border-red-500 focus:ring-red-500"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                             placeholder="Describe el objetivo del convenio específico."
                         >{{ old('objetivo_personalizado') }}</textarea>
                         <x-input-error :messages="$errors->get('objetivo_personalizado')" class="mt-1" />
@@ -221,7 +317,7 @@
         </section>
 
         {{-- Sección: Archivos PDF / Documentos (Paso 3) --}}
-        <section class="space-y-3" x-show="step === 3" x-cloak>
+        <section class="space-y-3" x-show="step === 3" x-cloak data-step-section="3">
             <div class="border border-neutral-200 rounded-lg bg-white">
                 <header
                     class="flex items-center gap-2 px-4 py-3 border-b border-neutral-200 bg-neutral-50 rounded-t-lg">

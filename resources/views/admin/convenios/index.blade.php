@@ -64,8 +64,35 @@
         @include('admin.convenios.crearConvenio')
 
         <x-slot name="footer">
-            <x-admin.cancel-button @click="$dispatch('close-modal', 'crearConvenio')">Cancelar</x-admin.cancel-button>
-            <x-admin.confirm-button type="submit" form="form-crear-convenio">Crear convenio</x-admin.confirm-button>
+            <div x-data="{ step: 1, maxStep: 3 }" x-on:step-changed.window="step = $event.detail.step" class="flex flex-row items-center gap-2">
+                <x-admin.cancel-button @click="$dispatch('close-modal', 'crearConvenio')">Cancelar</x-admin.cancel-button>
+
+                <x-admin.cancel-button
+                    @click="$dispatch('wizard-prev')"
+                    x-bind:disabled="step === 1"
+                    class="disabled:opacity-50 disabled:pointer-events-none"
+                >
+                    Anterior
+                </x-admin.cancel-button>
+
+                <x-admin.confirm-button
+                    @click="$dispatch('wizard-next')"
+                    x-bind:disabled="step === maxStep"
+                    class="disabled:opacity-50 disabled:pointer-events-none"
+                >
+                    Siguiente
+                </x-admin.confirm-button>
+
+                <x-admin.confirm-button
+                    type="submit"
+                    form="form-crear-convenio"
+                    x-bind:disabled="step !== maxStep"
+                    x-bind:title="step !== maxStep ? 'Completa los pasos para habilitar este botón' : ''"
+                    class="disabled:opacity-50 disabled:pointer-events-none"
+                >
+                    Crear convenio
+                </x-admin.confirm-button>
+            </div>
         </x-slot>
     </x-modal>
 

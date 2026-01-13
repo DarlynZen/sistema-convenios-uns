@@ -14,7 +14,7 @@
 >
     {{-- Header de tabs --}}
     <div class="rounded bg-neutral-50 px-2 py-1 border border-neutral-400">
-        <div class="flex flex-row gap-1 overflow-x-auto">
+        <div class="flex w-full items-stretch justify-center gap-1">
             @foreach($tabs as $id => $tab)
                 @php
                     $label = is_array($tab) ? ($tab['label'] ?? $id) : $tab;
@@ -22,7 +22,7 @@
                 @endphp
                 <button
                     type="button"
-                    class="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-neutral-500 transition
+                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-neutral-500 transition
                            border border-transparent
                            hover:text-primary-600 hover:bg-white"
                     :class="active === @js($id)

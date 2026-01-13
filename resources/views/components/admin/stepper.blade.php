@@ -6,8 +6,9 @@
 <div
     x-data="{
         step: {{ (int) $current }},
-        selectStep(i){ this.step = i; $dispatch('step-changed', { step: i }); }
+        requestStep(i){ $dispatch('step-requested', { step: i }); }
     }"
+    x-on:step-changed.window="step = $event.detail.step"
     class="flex flex-col sm:flex-row gap-4 sm:gap-6 max-h-[540px]"
 >
     {{-- Sidebar de secciones --}}
@@ -18,13 +19,13 @@
                 @php $i = $index + 1; @endphp
                 <li class="shrink-0">
                     <button type="button"
-                            @click="selectStep({{ $i }})"
+                            @click="requestStep({{ $i }})"
                             class="w-full inline-flex items-center gap-3 text-left px-3 py-2.5 rounded-lg transition-colors"
-                            :class="step === {{ $i }} ? 'bg-primary/100 ring-1 ring-primary/20' : 'hover:bg-neutral-100'">
+                            :class="step === {{ $i }} ? 'bg-primary/100' : 'hover:bg-neutral-100'">
                         <span
                             class="inline-flex h-7 w-7 items-center justify-center rounded-full border text-xs font-semibold flex-none"
                             :class="step === {{ $i }}
-                                ? 'border-primary bg-primary text-neutral-700'
+                                ? 'bg-primary text-neutral-700'
                                 : 'border-neutral-300 bg-white text-neutral-700'"
                         >
                             {{ $i }}
