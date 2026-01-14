@@ -31,7 +31,8 @@
                 ],
             ]'>
                 <x-slot name="slot_hero">
-                    <div class="space-y-4" x-data="{ previewUrl: null }">
+                    <form class="space-y-4" x-data="{ previewUrl: @js($heroImagenUrl ?? null) }" method="POST" action="{{ route('admin.contenido.hero.save') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <x-input-label for="hero_titulo" value="Título del hero" />
@@ -41,6 +42,7 @@
                                     type="text"
                                     class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                     placeholder="Escribe el título principal"
+                                    value="{{ old('hero_titulo', $heroTitulo ?? '') }}"
                                 />
                             </div>
 
@@ -52,6 +54,7 @@
                                     type="text"
                                     class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                     placeholder="Escribe un subtítulo o descripción corta"
+                                    value="{{ old('hero_subtitulo', $heroSubtitulo ?? '') }}"
                                 />
                             </div>
                         </div>
@@ -84,9 +87,9 @@
                         </div>
 
                         <div class="flex justify-end pt-1">
-                            <x-admin.confirm-button type="button">Guardar</x-admin.confirm-button>
+                            <x-admin.confirm-button type="submit">Guardar</x-admin.confirm-button>
                         </div>
-                    </div>
+                    </form>
                 </x-slot>
 
                 <x-slot name="slot_nosotros">

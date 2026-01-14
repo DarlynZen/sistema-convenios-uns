@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CmsSeccion;
+use App\Repositories\CmsSeccionRepository;
 use Illuminate\Http\Request;
 
 class CmsSeccionController extends Controller
 {
+    public function __construct(
+        private CmsSeccionRepository $repository
+    ) {
+    }
+
     public function index()
     {
-        $secciones = CmsSeccion::latest()->paginate(15);
-        return response()->json($secciones);
+        return response()->json($this->repository->paginateArray(15));
     }
 
     public function store(Request $request)
@@ -22,18 +26,24 @@ class CmsSeccionController extends Controller
             'contenido_json' => 'nullable|array',
         ]);
 
-        $seccion = CmsSeccion::create($validated);
+        $seccion = $this->repository->createArray($validated);
         return response()->json($seccion, 201);
     }
 
-    public function show(CmsSeccion $cmsSeccion)
+    public function show(int $id)
     {
-        return response()->json($cmsSeccion);
+        $seccion = $this->repository->findArrayById($id);
+
+        if (!$seccion) {
+            return response()->json(['error' => 'Sección no encontrada.'], 404);
+        }
+
+        return response()->json($seccion);
     }
 
     public function showBySlug(string $slug)
     {
-        $seccion = CmsSeccion::findBySlug($slug);
+        $seccion = $this->repository->findArrayBySlug($slug);
         
         if (!$seccion) {
             return response()->json(['error' => 'Sección no encontrada.'], 404);
@@ -42,22 +52,30 @@ class CmsSeccionController extends Controller
         return response()->json($seccion);
     }
 
-    public function update(Request $request, CmsSeccion $cmsSeccion)
+    public function update(Request $request, int $id)
     {
         $validated = $request->validate([
-            'slug' => 'required|string|max:255|unique:cms_seccion,slug,' . $cmsSeccion->id,
+            'slug' => 'required|string|max:255|unique:cms_seccion,slug,' . $id,
             'titulo' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'contenido_json' => 'nullable|array',
         ]);
 
-        $cmsSeccion->update($validated);
-        return response()->json($cmsSeccion);
+        $seccion = $this->repository->updateById($id, $validated);
+        if (!$seccion) {
+            return response()->json(['error' => 'Sección no encontrada.'], 404);
+        }
+
+        return response()->json($seccion);
     }
 
-    public function destroy(CmsSeccion $cmsSeccion)
+    public function destroy(int $id)
     {
-        $cmsSeccion->delete();
+        $deleted = $this->repository->deleteById($id);
+        if (!$deleted) {
+            return response()->json(['error' => 'Sección no encontrada.'], 404);
+        }
+
         return response()->json(['message' => 'Sección eliminada exitosamente.'], 200);
     }
 }

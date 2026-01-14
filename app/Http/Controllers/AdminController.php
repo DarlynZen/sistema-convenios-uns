@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Services\DashboardService;
 use App\Services\ConvenioService;
-use App\Repositories\CmsSeccionRepository;
+use App\Services\CmsSeccionService;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function __construct(
         private DashboardService $dashboardService,
-        private CmsSeccionRepository $cmsSeccionRepository
+        private CmsSeccionService $cmsSeccionService
     ) {}
 
     public function dashboard()
@@ -21,8 +22,27 @@ class AdminController extends Controller
 
     public function contenido()
     {
-        $secciones = $this->cmsSeccionRepository->getAll();
-        return view('admin.contenido.index', compact('secciones'));
+        $heroViewData = $this->cmsSeccionService->getHeroAdminViewData();
+        return view('admin.contenido.index', $heroViewData);
+    }
+
+    public function guardarHero(Request $request)
+    {
+        $validated = $request->validate([
+            'hero_titulo' => 'required|string|max:255',
+            'hero_subtitulo' => 'nullable|string|max:255',
+            'hero_imagen' => 'nullable|image|max:4096',
+        ]);
+
+        $this->cmsSeccionService->upsertHero(
+            titulo: $validated['hero_titulo'],
+            subtitulo: $validated['hero_subtitulo'] ?? null,
+            imagen: $request->file('hero_imagen')
+        );
+
+        return redirect()
+            ->route('admin.contenido.index')
+            ->with('status', 'Sección Hero actualizada.');
     }
 
     public function catalogo()
