@@ -10,7 +10,7 @@
         </div>
 
         <!-- Contenedor de texto -->
-        <div class="flex flex-col justify-center gap-4 md:gap-[15px] md:w-2/3 h-auto md:h-[140px] mt-4 md:mt-0">
+        <div class="flex flex-col justify-center gap-4 md:gap-3 md:w-2/3 h-auto md:h-[140px] mt-4 md:mt-0">
             <!-- Título -->
             <h2 class="font-extrabold text-xl leading-5">
                 Convenios para nuestra educación

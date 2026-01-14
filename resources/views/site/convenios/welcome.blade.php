@@ -7,7 +7,7 @@
 
         <div class="w-full h-full">
             <div class="relative h-72 h-sm-80 overflow-hidden">
-                <div class="absolute inset-0 z-10 flex flex-col justify-end items-start py-10 md:px-28 px-3">
+                <div class="absolute inset-0 z-10 flex flex-col justify-end items-start py-10 lg:px-28 px-3">
                     <p class="text-2xl font-bold text-neutral-50">
                         {{ $heroTitulo ?? 'Convenios y Alianzas' }}
                     </p>
