@@ -158,7 +158,19 @@
             <h2 class="font-extrabold text-xl">Tenemos convenios en</h2>
         </div>
 
-        <div id="hs-users-datamap" style="width: 100%; height: 500px;"></div>
+        <div class="flex gap-2 mb-3">
+            <button id="btn-world" type="button"
+                class="py-2 px-3 text-sm font-medium rounded-lg border bg-white hover:bg-gray-50">
+                Ver mundo
+            </button>
+
+            <button id="btn-latam" type="button"
+                class="py-2 px-3 text-sm font-medium rounded-lg border bg-white hover:bg-gray-50">
+                Ver LATAM
+            </button>
+        </div>
+
+        <div id="hs-users-datamap" style="height:420px; width:100%;"></div>
     </div>
 
     {{-- Pasos --}}
@@ -471,27 +483,6 @@
             }
 
             options.onToggle(item);
-        });
-    });
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const dataMap = new Datamap({
-            element: document.querySelector('#hs-users-datamap'),
-            projection: 'mercator',
-            responsive: true,
-            fills: {
-                defaultFill: '#d1d5db',
-                MAJOR: '#9ca3af',
-            },
-            data: {
-                USA: {
-                    fillKey: 'MAJOR'
-                },
-                BRA: {
-                    fillKey: 'MAJOR'
-                },
-            },
         });
     });
 </script>

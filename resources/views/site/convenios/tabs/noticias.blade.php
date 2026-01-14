@@ -6,5 +6,7 @@
                 Mantente informado sobre las últimas novedades en convenios de la Universidad Nacional del Santa.
             </p>
         </div>
+        
+
     </div>
 </div>
