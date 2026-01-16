@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ConvenioRepository;
-use App\Models\TipoConvenio;
-use App\Models\Ambito;
-use App\Models\Convenio;
+
 class DashboardService
 {
     public function __construct(
@@ -17,12 +15,25 @@ class DashboardService
      */
     public function getStats(): array
     {
+        $stats = $this->convenioRepository->getDashboardStats();
+
+        $recientes = collect($stats['recientes'] ?? [])->map(function ($convenio) {
+            return [
+                'id' => $convenio->id ?? null,
+                'titulo' => $convenio->titulo ?? null,
+                'resolucion' => $convenio->resolucion ?? null,
+                'tipo' => $convenio->tipoConvenio->nombre ?? null,
+                'estado_id' => $convenio->estado_convenio_id ?? null,
+                'estado' => $convenio->estadoConvenio->nombre ?? null,
+            ];
+        })->all();
+
         return [
-            'total_convenios' => Convenio::count(),
-            'convenios_activos' => Convenio::activos()->count(),
-            'tipos_convenio' => TipoConvenio::count(),
-            'ambitos' => Ambito::count(),
-            'recientes' => $this->convenioRepository->getRecent(5),
+            'total_convenios' => (int) ($stats['total_convenios'] ?? 0),
+            'convenios_activos' => (int) ($stats['convenios_activos'] ?? 0),
+            'tipos_convenio' => (int) ($stats['tipos_convenio'] ?? 0),
+            'ambitos' => (int) ($stats['ambitos'] ?? 0),
+            'recientes' => $recientes,
         ];
     }
 }

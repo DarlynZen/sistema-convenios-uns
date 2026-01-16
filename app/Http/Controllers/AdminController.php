@@ -16,8 +16,8 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        /*$stats = $this->dashboardService->getStats();*/
-        return view('admin.dashboard');
+        $stats = $this->dashboardService->getStats();
+        return view('admin.dashboard', $stats);
     }
 
     public function contenido()
@@ -41,7 +41,7 @@ class AdminController extends Controller
         );
 
         return redirect()
-            ->route('admin.contenido.index')
+            ->route('admin.contenido.tab.informacion-general')
             ->with('status', 'Sección Hero actualizada.');
     }
 

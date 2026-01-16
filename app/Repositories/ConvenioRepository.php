@@ -90,7 +90,6 @@ class ConvenioRepository
         ];
     }
 
-    /*
     public function scopeRecientes($query, int $limit = 5)
     {
         return $query->with(['tipoConvenio', 'estadoConvenio'])
@@ -101,11 +100,14 @@ class ConvenioRepository
     public static function getDashboardStats(): array
     {
         return [
-            'total_convenios' => self::count(),
-            'convenios_activos' => self::activos()->count(),
+            'total_convenios' => Convenio::count(),
+            'convenios_activos' => Convenio::where('estado_convenio_id', EstadoConvenio::ACTIVO->value)->count(),
             'tipos_convenio' => TipoConvenio::count(),
             'ambitos' => Ambito::count(),
-            'recientes' => self::recientes(5)->get(),
+            'recientes' => Convenio::with(['tipoConvenio', 'estadoConvenio'])
+                ->latest()
+                ->limit(5)
+                ->get(),
         ];
-    }*/
+    }
 }
