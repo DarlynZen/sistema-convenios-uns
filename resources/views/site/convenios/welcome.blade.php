@@ -103,7 +103,19 @@
                         <div class="flex items-center justify-center md:col-span-1 md:justify-start">
                             <div class="text-xs">
                                 <span class="block font-bold uppercase">Administración</span>
-                                <span class="block">Acceso administrativo</span>
+                                @guest
+                                    @if (Route::has('login'))
+                                        <a
+                                            href="{{ route('login') }}"
+                                            class="mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-white/10 px-4 py-2 text-xs font-bold text-white ring-1 ring-white/20 transition hover:bg-white/15 hover:ring-white/30 focus:outline-none focus:ring-2 focus:ring-white/30"
+                                        >
+                                            Acceso administrativo
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10" />
+                                            </svg>
+                                        </a>
+                                    @endif
+                                @endguest
                             </div>
                         </div>
                     </div>

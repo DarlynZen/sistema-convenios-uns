@@ -26,9 +26,7 @@
             <div class="flex justify-start">
                 <img class="ml-3 w-auto h-11" src="{{ asset('assets/images/logo-uns.png') }}" alt="Logo UNS" />
             </div>
-            @if (Route::has('login'))
             <livewire:welcome.navigation />
-            @endif
         </header>
         @endif
 
@@ -206,5 +204,4 @@
     </script>
 
 </body>
-
 </html>

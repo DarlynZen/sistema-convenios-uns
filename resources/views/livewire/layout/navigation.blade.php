@@ -1,15 +1,9 @@
 <?php
 
-use App\Livewire\Actions\Logout;
 use Livewire\Volt\Component;
 
 new class extends Component
 {
-    public function logout(Logout $logout): void
-    {
-        $logout();
-        $this->redirect('/', navigate: true);
-    }
 }; ?>
 
 <div x-data="{ open: false }" class="relative">
@@ -44,11 +38,14 @@ new class extends Component
         >
             {{ __('Profile') }}
         </a>
-        <button 
-            wire:click="logout" 
-            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-        >
-            {{ __('Log Out') }}
-        </button>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button
+                type="submit"
+                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+                {{ __('Log Out') }}
+            </button>
+        </form>
     </div>
 </div>
