@@ -79,39 +79,44 @@
             </div>
 
             <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
-                <div class="grid grid-cols-3 text-center text-xs text-white w-full md:px-24 px-3 py-6">
-                    <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1 gap-3">
-                        <img class="h-24 w-auto" src="{{ asset('assets/images/logo-uns.png') }}" alt="Logo UNS" />
-                        <div class="text-xs text-left">
-                            <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
-                            <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
-                                DCTIA</span>
+                <div class="w-full px-3 py-6 md:px-24">
+                    <div class="grid grid-cols-1 gap-6 text-center text-xs text-white md:grid-cols-4 md:text-left">
+                        <div class="flex flex-col items-center justify-center gap-3 md:col-span-2 md:flex-row md:items-center md:justify-start">
+                            <img class="h-16 w-auto sm:h-20 md:h-24" src="{{ asset('assets/images/logo-uns.png') }}" alt="Logo UNS" />
+                            <div class="text-xs">
+                                <span class="block font-bold uppercase">UNIVERSIDAD NACIONAL DEL SANTA</span>
+                                <span class="block">Dirección de Cooperación Técnica e Intercambio Académico -
+                                    DCTIA</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                        <div class="text-xs">
-                            <span class="block font-bold uppercase">PARA MAYOR INFORMACIÓN</span>
-                            <span class="block">Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS. Rectorado
-                                1er piso</span>
-                            <span class="block">(+51) 123 456 189</span>
-                            <span class="block">oficinaconvenios@uns.edu.pe</span>
+
+                        <div class="flex items-center justify-center md:col-span-1 md:justify-start">
+                            <div class="text-xs">
+                                <span class="block font-bold uppercase">PARA MAYOR INFORMACIÓN</span>
+                                <span class="block">Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS. Rectorado
+                                    1er piso</span>
+                                <span class="block">(+51) 123 456 189</span>
+                                <span class="block">oficinaconvenios@uns.edu.pe</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="flex flex-row items-center justify-center row-span-3 md:row-span-1">
-                        <div class="text-xs">
-                            <span class="block font-bold uppercase">Administración</span>
-                            <span class="block">Acceso administrativo</span>
+
+                        <div class="flex items-center justify-center md:col-span-1 md:justify-start">
+                            <div class="text-xs">
+                                <span class="block font-bold uppercase">Administración</span>
+                                <span class="block">Acceso administrativo</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div
-                    class="p-6 text-center text-xs text-white w-full border-t-[0.1px] border-[#8a8888] md:px-28 px-3 py-6">
-                    &copy; {{ date('Y') }} Dirección de Cooperación Técnica e Intercambio Académico -
-                    Universidad Nacional del Santa.
+
+                <div class="w-full border-t-[0.1px] border-[#8a8888]">
+                    <div class="px-3 py-6 text-center text-xs text-white md:px-28">
+                        &copy; {{ date('Y') }} Dirección de Cooperación Técnica e Intercambio Académico -
+                        Universidad Nacional del Santa.
+                    </div>
                 </div>
             </footer>
         </div>
-
     </div>
 </div>
 @endcomponent
