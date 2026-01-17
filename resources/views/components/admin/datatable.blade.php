@@ -25,7 +25,9 @@
                             </th>
                         @endforeach
                         @if($actions)
-                            <th class="px-4 py-3 text-right font-bold bg-neutral-50/95">Acciones</th>
+                            <th
+                                class="sticky right-0 px-4 py-3 text-right font-bold bg-neutral-50/95 z-30 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-4 before:bg-gradient-to-r before:from-neutral-200/70 before:to-transparent"
+                            >Acciones</th>
                         @endif
                     </tr>
                     </thead>
@@ -68,7 +70,9 @@
                             @endforeach
 
                             @if($actions)
-                                <td class="px-4 py-3 align-top text-xs md:text-sm">
+                                <td
+                                    class="sticky right-0 px-4 py-3 align-top text-xs md:text-sm bg-white group-hover:bg-slate-50 z-10 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-gradient-to-r before:from-neutral-200/80 before:to-transparent"
+                                >
                                     <div class="flex flex-wrap items-center justify-end gap-2">
                                         @if(is_string($actions))
                                             @includeIf($actions, ['row' => $row])

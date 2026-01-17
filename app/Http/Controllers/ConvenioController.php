@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreConvenioRequest;
+use App\Http\Requests\UpdateConvenioRequest;
 use App\Models\Convenio;
 use App\Services\ConvenioService;
 use App\Repositories\ConvenioRepository;
@@ -12,7 +13,6 @@ class ConvenioController extends Controller
 {
     public function __construct(
         private ConvenioService $convenioService,
-        private ConvenioRepository $convenioRepository,
         private DocumentoConvenioService $documentoConvenioService,
     ) {}
 
@@ -65,7 +65,7 @@ class ConvenioController extends Controller
 
     public function show(Convenio $convenio)
     {
-        $convenio = $this->convenioRepository->loadAllRelations($convenio);
+        $convenio = $this->convenioService->listarConvenios();
         return view('admin.convenios.show', compact('convenio'));
     }
 

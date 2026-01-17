@@ -15,7 +15,7 @@
                 'image' => asset('assets/images/portada.jpg'),
                 'category' => 'Becas',
                 'title' => 'Convocatoria Abierta: Becas de Intercambio 2025',
-                'excerpt' => 'Se encuentra abierta la convocatoria para becas de intercambio estudiantil para el año académico 2025. Conoce los requisitos y destinos disponibles.',
+                'excerpt' => 'Se encuentra abierta la convocatoria para becas de intercambio estudiantil para el año académico 2025. Conoce los requisitos y destinos disponibles. Aplica ahora y amplía tus horizontes académicos.',
                 'date' => '10 de julio de 2024',
                 'author' => 'Dra. Ana Martínez',
                 'tags' => ['Intercambio', 'Becas'],

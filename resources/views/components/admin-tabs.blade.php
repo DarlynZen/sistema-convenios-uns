@@ -13,8 +13,30 @@
     class="w-full"
 >
     {{-- Header de tabs --}}
-    <div class="rounded bg-neutral-50 px-2 py-1 border border-neutral-400">
-        <div class="flex w-full items-stretch justify-center gap-1">
+    <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+        {{-- Mobile: dropdown --}}
+        <div class="md:hidden">
+            <label class="sr-only" for="admin-tabs-select">Sección</label>
+            <select
+                id="admin-tabs-select"
+                x-model="active"
+                class="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-semibold text-neutral-700 shadow-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand-200"
+            >
+                @foreach($tabs as $id => $tab)
+                    @php
+                        $label = is_array($tab) ? ($tab['label'] ?? $id) : $tab;
+                    @endphp
+                    <option value="{{ $id }}">{{ $label }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Desktop: pill tabs (scrollable if needed) --}}
+        <div
+            class="hidden md:flex md:flex-nowrap md:items-stretch md:gap-1 md:overflow-x-auto"
+            role="tablist"
+            aria-label="Secciones"
+        >
             @foreach($tabs as $id => $tab)
                 @php
                     $label = is_array($tab) ? ($tab['label'] ?? $id) : $tab;
@@ -22,20 +44,22 @@
                 @endphp
                 <button
                     type="button"
-                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-neutral-500 transition
+                    role="tab"
+                    :aria-selected="active === @js($id)"
+                    class="flex-none inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-neutral-600 transition
                            border border-transparent
-                           hover:text-primary-600 hover:bg-white"
+                           hover:bg-white hover:text-brand-700 focus:outline-none"
                     :class="active === @js($id)
-                        ? 'bg-white text-primary-700 border-primary-200 shadow-sm'
+                        ? 'bg-white text-brand-700 border-brand-200 shadow-sm'
                         : ''"
                     @click="active = @js($id)"
                 >
                     @if($icon)
-                        <span class="text-primary-500" aria-hidden="true">
+                        <span class="text-brand-600" aria-hidden="true">
                             {!! $icon !!}
                         </span>
                     @endif
-                    <span>{{ $label }}</span>
+                    <span class="whitespace-nowrap">{{ $label }}</span>
                 </button>
             @endforeach
         </div>
@@ -44,7 +68,7 @@
     {{-- Contenido --}}
     <div class="mt-4">
         @foreach($tabs as $id => $tab)
-            <div x-show="active === @js($id)" x-cloak>
+            <div x-show="active === @js($id)" x-cloak role="tabpanel">
                 {{ ${"slot_$id"} ?? '' }}
             </div>
         @endforeach
