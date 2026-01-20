@@ -39,6 +39,7 @@
 	x-data="{
 		isModalOpen: false,
 		mode: 'create',
+		maxExcerptWords: 50,
 		form: {
 			category: '',
 			date: '',
@@ -46,8 +47,42 @@
 			excerpt: '',
 			author: '',
 			href: '',
-			image: '',
+			imageFile: null,
+			imageFileName: '',
+			imagePreviewUrl: '',
 			tags: ''
+		},
+		countWords(text) {
+			if (!text) return 0;
+			return text
+				.trim()
+				.split(/\s+/)
+				.filter(Boolean).length;
+		},
+		trimToMaxWords(text, maxWords) {
+			if (!text) return '';
+			const words = text.trim().split(/\s+/).filter(Boolean);
+			if (words.length <= maxWords) return text;
+			return words.slice(0, maxWords).join(' ');
+		},
+		onExcerptInput(e) {
+			const raw = e?.target?.value ?? '';
+			const trimmed = this.trimToMaxWords(raw, this.maxExcerptWords);
+			this.form.excerpt = trimmed;
+			e.target.value = trimmed;
+		},
+		get excerptWordsCount() {
+			return this.countWords(this.form.excerpt);
+		},
+		onImageChange(e) {
+			const file = e?.target?.files?.[0] ?? null;
+			this.form.imageFile = file;
+			this.form.imageFileName = file?.name ?? '';
+
+			if (this.form.imagePreviewUrl && this.form.imagePreviewUrl.startsWith('blob:')) {
+				URL.revokeObjectURL(this.form.imagePreviewUrl);
+			}
+			this.form.imagePreviewUrl = file ? URL.createObjectURL(file) : '';
 		},
 		openCreate() {
 			this.mode = 'create';
@@ -58,7 +93,9 @@
 				excerpt: '',
 				author: '',
 				href: '',
-				image: '',
+				imageFile: null,
+				imageFileName: '',
+				imagePreviewUrl: '',
 				tags: ''
 			};
 			this.isModalOpen = true;
@@ -69,15 +106,20 @@
 				category: item.category || '',
 				date: item.date || '',
 				title: item.title || '',
-				excerpt: item.excerpt || '',
+				excerpt: this.trimToMaxWords(item.excerpt || '', this.maxExcerptWords),
 				author: item.author || '',
 				href: item.href || '',
-				image: item.image || '',
+				imageFile: null,
+				imageFileName: '',
+				imagePreviewUrl: item.image || '',
 				tags: (item.tags || []).join(', ')
 			};
 			this.isModalOpen = true;
 		},
 		closeModal() {
+			if (this.form?.imagePreviewUrl && this.form.imagePreviewUrl.startsWith('blob:')) {
+				URL.revokeObjectURL(this.form.imagePreviewUrl);
+			}
 			this.isModalOpen = false;
 		}
 	}"
@@ -221,7 +263,7 @@
 				</button>
 			</div>
 
-			<form class="space-y-4 px-4 py-4" action="#" method="POST" onsubmit="return false">
+			<form class="space-y-4 px-4 py-4" action="#" method="POST" enctype="multipart/form-data" onsubmit="return false">
 				@csrf
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
@@ -241,8 +283,10 @@
 							id="modal_news_date"
 							x-model="form.date"
 							type="text"
-							class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
-							placeholder="Ej: 10 de julio de 2024"
+							readonly
+							class="hs-datepicker mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+							data-hs-datepicker='{"mode":"custom-select","dateFormat":"YYYY-MM-DD","dateLocale":"es-ES"}'
+							placeholder="YYYY-MM-DD"
 						/>
 					</div>
 				</div>
@@ -263,10 +307,17 @@
 					<textarea
 						id="modal_news_excerpt"
 						x-model="form.excerpt"
+						@input="onExcerptInput($event)"
 						rows="4"
 						class="mt-1 block w-full resize-y rounded-lg border border-neutral-200 px-3 py-2 text-[13px] text-neutral-800 placeholder:text-neutral-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
 						placeholder="Breve descripción..."
 					></textarea>
+					<div class="mt-1 flex items-start justify-between gap-3 text-xs text-neutral-500">
+						<p>Solo admite como máximo 50 palabras.</p>
+						<p class="shrink-0" :class="excerptWordsCount >= maxExcerptWords ? 'font-semibold text-neutral-700' : ''">
+							<span x-text="excerptWordsCount"></span>/<span x-text="maxExcerptWords"></span> palabras
+						</p>
+					</div>
 				</div>
 
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -295,14 +346,22 @@
 
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<div>
-						<x-input-label for="modal_news_image" value="Imagen (URL por ahora)" />
-						<input
-							id="modal_news_image"
-							x-model="form.image"
-							type="text"
-							class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
-							placeholder="{{ asset('assets/images/portada.jpg') }}"
-						/>
+						<x-input-label for="modal_news_image" value="Imagen (subir archivo)" />
+						<div class="mt-1 space-y-2">
+							<input
+								id="modal_news_image"
+								type="file"
+								accept="image/*"
+								@change="onImageChange($event)"
+								class="block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-700 file:mr-3 file:rounded-md file:border-0 file:bg-neutral-100 file:px-3 file:py-2 file:text-[12px] file:font-semibold file:text-neutral-700 hover:file:bg-neutral-200 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+							/>
+							<p class="text-xs text-neutral-500" x-show="form.imageFileName" x-text="form.imageFileName"></p>
+
+							<div class="h-24 w-full overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50" x-show="form.imagePreviewUrl">
+								<img :src="form.imagePreviewUrl" alt="Previsualización" class="h-full w-full object-cover" />
+							</div>
+							<p class="text-xs text-neutral-500" x-show="!form.imagePreviewUrl">Aún no se ha seleccionado una imagen.</p>
+						</div>
 					</div>
 
 					<div>
