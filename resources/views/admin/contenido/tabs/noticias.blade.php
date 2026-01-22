@@ -248,7 +248,7 @@
 		role="dialog"
 		@keydown.escape.window="closeModal()"
 	>
-		<div class="absolute inset-0 bg-black/40" @click="closeModal()"></div>
+		<div class="fixed inset-0 bg-black/40" @click="closeModal()"></div>
 
 		<div class="relative w-full max-w-2xl rounded-xl border border-neutral-200 bg-white shadow-xl">
 			<div class="flex items-start justify-between gap-3 border-b border-neutral-200 px-4 py-3">
