@@ -41,7 +41,7 @@ class AdminController extends Controller
         );
 
         return redirect()
-            ->route('admin.contenido.tab.informacion-general')
+            ->route('admin.contenido.index', ['tab' => 'infogeneral'])
             ->with('status', 'Sección Hero actualizada.');
     }
 
