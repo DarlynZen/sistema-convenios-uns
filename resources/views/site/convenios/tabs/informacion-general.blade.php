@@ -237,7 +237,7 @@
                 <div class="flex flex-col items-start w-full max-w-80 mb-2 gap-2">
 
                     <div>
-                        <h3 class="font-bold text-base text-neutral-600 mb-2">
+                        <h3 class="font-bold text-base text-neutral-600">
                             Convenio en Revisión
                         </h3>
                         <p class="font-normal text-sm text-neutral-600">
@@ -281,7 +281,7 @@
                 <div class="flex flex-col items-start w-full max-w-80 mb-2 gap-2">
 
                     <div>
-                        <h3 class="font-bold text-base text-neutral-600 mb-2">
+                        <h3 class="font-bold text-base text-neutral-600">
                             Convenio Listo
                         </h3>
                         <p class="font-normal text-sm text-neutral-600">

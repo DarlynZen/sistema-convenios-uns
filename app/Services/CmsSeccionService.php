@@ -92,4 +92,85 @@ class CmsSeccionService
 
         return $this->repository->upsertBySlug('hero', $data);
     }
+
+    /**
+     * Datos listos para el formulario de Contacto en el panel admin.
+     *
+     * @return array{contactoNombreDireccion:string, contactoUbicacion:string, contactoTelefono:string, contactoCorreo:string}
+     */
+    public function getContactoAdminViewData(): array
+    {
+        $contacto = $this->repository->findArrayBySlug('contacto');
+        $contactoJson = is_array($contacto['contenido_json'] ?? null) ? $contacto['contenido_json'] : [];
+
+        $contactoNombreDireccion = is_string($contactoJson['nombre_direccion'] ?? null) ? $contactoJson['nombre_direccion'] : '';
+        $contactoUbicacion = is_string($contactoJson['ubicacion'] ?? null) ? $contactoJson['ubicacion'] : '';
+        $contactoTelefono = is_string($contactoJson['telefono'] ?? null) ? $contactoJson['telefono'] : '';
+        $contactoCorreo = is_string($contactoJson['correo'] ?? null) ? $contactoJson['correo'] : '';
+
+        return compact('contactoNombreDireccion', 'contactoUbicacion', 'contactoTelefono', 'contactoCorreo');
+    }
+
+    /**
+     * Datos listos para renderizar Contacto en el sitio público.
+     *
+     * @return array{contactoNombreDireccion:string, contactoUbicacion:string, contactoTelefono:string, contactoCorreo:string}
+     */
+    public function getContactoPublicViewData(): array
+    {
+        $contacto = $this->repository->findArrayBySlug('contacto');
+        $contactoJson = is_array($contacto['contenido_json'] ?? null) ? $contacto['contenido_json'] : [];
+
+        $contactoNombreDireccion = (is_string($contactoJson['nombre_direccion'] ?? null) && trim($contactoJson['nombre_direccion']) !== '')
+            ? $contactoJson['nombre_direccion']
+            : 'Rectorado - 1er piso';
+
+        $contactoUbicacion = (is_string($contactoJson['ubicacion'] ?? null) && trim($contactoJson['ubicacion']) !== '')
+            ? $contactoJson['ubicacion']
+            : 'Av. Universitaria S/N - Nuevo Chimbote - Campus I - UNS.';
+
+        $contactoTelefono = (is_string($contactoJson['telefono'] ?? null) && trim($contactoJson['telefono']) !== '')
+            ? $contactoJson['telefono']
+            : '(+51) 123 456 189';
+
+        $contactoCorreo = (is_string($contactoJson['correo'] ?? null) && trim($contactoJson['correo']) !== '')
+            ? $contactoJson['correo']
+            : 'oficinaconvenios@uns.edu.pe';
+
+        return compact('contactoNombreDireccion', 'contactoUbicacion', 'contactoTelefono', 'contactoCorreo');
+    }
+
+    /**
+     * Crea o actualiza la sección de Contacto.
+     */
+    public function upsertContacto(?string $nombreDireccion, ?string $ubicacion, ?string $telefono, ?string $correo): array
+    {
+        $seccion = $this->repository->findArrayBySlug('contacto');
+        $contenido = is_array($seccion['contenido_json'] ?? null) ? $seccion['contenido_json'] : [];
+
+        if ($nombreDireccion !== null) {
+            $contenido['nombre_direccion'] = $nombreDireccion;
+        }
+
+        if ($ubicacion !== null) {
+            $contenido['ubicacion'] = $ubicacion;
+        }
+
+        if ($telefono !== null) {
+            $contenido['telefono'] = $telefono;
+        }
+
+        if ($correo !== null) {
+            $contenido['correo'] = $correo;
+        }
+
+        $data = [
+            'slug' => 'contacto',
+            'titulo' => 'Contacto',
+            'descripcion' => 'Información de contacto mostrada en el footer del sitio.',
+            'contenido_json' => $contenido,
+        ];
+
+        return $this->repository->upsertBySlug('contacto', $data);
+    }
 }

@@ -78,10 +78,22 @@
                                             @includeIf($actions, ['row' => $row])
                                         @elseif(is_array($actions))
                                             @foreach($actions as $act)
-                                                <button type="button"
-                                                        class="px-2 py-1 text-[11px] md:text-xs font-medium uppercase tracking-wide text-slate-500 hover:text-slate-700 border border-slate-200 rounded-full"
-                                                        @click.prevent>
-                                                    {{ $act['label'] ?? 'Acción' }}
+                                                @php
+                                                    $label = $act['label'] ?? 'Acción';
+                                                    $icon = $act['icon'] ?? null;
+                                                    $btnClasses = $act['classes']
+                                                        ?? ($icon
+                                                            ? 'inline-flex items-center justify-center h-8 w-8 rounded-full border border-slate-200 bg-white text-slate-600 hover:text-slate-800 hover:bg-slate-50'
+                                                            : 'px-2 py-1 text-[11px] md:text-xs font-medium uppercase tracking-wide text-slate-500 hover:text-slate-700 border border-slate-200 rounded-full');
+                                                @endphp
+
+                                                <button type="button" class="{{ $btnClasses }}" @click.prevent>
+                                                    @if($icon)
+                                                        <span class="sr-only">{{ $label }}</span>
+                                                        {!! $icon !!}
+                                                    @else
+                                                        {{ $label }}
+                                                    @endif
                                                 </button>
                                             @endforeach
                                         @else
