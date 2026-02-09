@@ -121,6 +121,27 @@
                 };
             };
 
+            const highlightFill = "#F8A3AA";
+            const highlightBorder = "#D82F4B";
+
+            const getCountryFillColor = (iso3) => {
+                const fillKey = dataForMap[iso3]?.fillKey ?? "NONE";
+                return fills[fillKey] ?? fills.defaultFill;
+            };
+
+            const buildTooltipHtml = (geo, data) => {
+                const agreements = data?.agreements ?? 0;
+                return `
+            <div style="background:#fff;border-radius:12px;padding:12px;min-width:180px;box-shadow:0 10px 30px rgba(0,0,0,.12);">
+              <div style="font-size:14px;font-weight:600;color:#111827;">${geo.properties.name}</div>
+              <div style="font-size:14px;color:#374151;margin-top:4px;">
+                Convenios: <span style="font-weight:600;">${agreements}</span>
+              </div>
+              <div style="font-size:12px;color:#6B7280;">${geo.id}</div>
+            </div>
+          `;
+            };
+
             MAP_INSTANCE = new Datamap({
                 element: el,
                 responsive: true,
@@ -132,25 +153,53 @@
                     borderColor: "rgba(0,0,0,.10)",
                     highlightFillColor: "#F8A3AA",
                     highlightBorderColor: "#D82F4B",
-                    popupTemplate: function(geo, data) {
-                        const iso3 = geo.id; // ISO-3
-                        const isLatam = LATAM.has(iso3);
+                    highlightOnHover: false,
+                    popupOnHover: false,
+                },
+                done: function(map) {
+                    const existing = document.getElementById("datamap-tooltip");
+                    if (existing) existing.remove();
 
-                        // Si estás en modo LATAM, puedes “desincentivar” hover fuera de LATAM
-                        if (mode === "latam" && !isLatam) return null;
+                    const tooltip = d3.select("body")
+                        .append("div")
+                        .attr("id", "datamap-tooltip")
+                        .style("position", "absolute")
+                        .style("z-index", 50)
+                        .style("display", "none")
+                        .style("pointer-events", "none");
 
-                        const agreements = data?.agreements ?? 0;
+                    map.svg.selectAll(".datamaps-subunit")
+                        .on("mouseover", function(geo) {
+                            const iso3 = geo.id;
+                            const isLatam = LATAM.has(iso3);
 
-                        return `
-            <div class="bg-white rounded-xl shadow-xl p-3 min-w-[180px]">
-              <div class="text-sm font-semibold">${geo.properties.name}</div>
-              <div class="text-sm text-gray-700 mt-1">
-                Convenios: <span class="font-semibold">${agreements}</span>
-              </div>
-              <div class="text-xs text-gray-500">${iso3}</div>
-            </div>
-          `;
-                    }
+                            if (mode === "latam" && !isLatam) {
+                                tooltip.style("display", "none");
+                                return;
+                            }
+
+                            d3.select(this)
+                                .style("fill", highlightFill)
+                                .style("stroke", highlightBorder)
+                                .style("stroke-width", 1);
+
+                            tooltip
+                                .html(buildTooltipHtml(geo, dataForMap[iso3]))
+                                .style("display", "block");
+                        })
+                        .on("mousemove", function() {
+                            tooltip
+                                .style("left", (d3.event.pageX + 12) + "px")
+                                .style("top", (d3.event.pageY + 12) + "px");
+                        })
+                        .on("mouseout", function(geo) {
+                            const iso3 = geo.id;
+                            d3.select(this)
+                                .style("fill", getCountryFillColor(iso3))
+                                .style("stroke", "rgba(0,0,0,.10)")
+                                .style("stroke-width", null);
+                            tooltip.style("display", "none");
+                        });
                 }
             });
 

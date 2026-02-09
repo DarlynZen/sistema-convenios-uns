@@ -79,7 +79,7 @@
             </div>
 
             <footer class="bg-[#393939] inset-x-0 bottom-0 w-full">
-                <div class="w-full px-3 py-6 md:px-24">
+                <div class="w-full px-3 py-6 md:px-12 lg:px-24">
                     <div class="grid grid-cols-1 gap-6 text-center text-xs text-white md:grid-cols-4 md:text-left">
                         <div class="flex flex-col items-center justify-center gap-3 md:col-span-2 md:flex-row md:items-center md:justify-start">
                             <img class="h-16 w-auto sm:h-20 md:h-24" src="{{ asset('assets/images/logo-uns.png') }}" alt="Logo UNS" />

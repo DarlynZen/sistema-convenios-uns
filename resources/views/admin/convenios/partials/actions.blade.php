@@ -13,7 +13,7 @@
         Ver detalle
     </a>
 
-    {{-- Botón Eliminar (UI) --}}
+    {{-- Botón Eliminar --}}
     <button
         type="button"
         class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 hover:text-red-700"

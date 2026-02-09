@@ -86,7 +86,171 @@
             </svg>
             <h2 class="text-sm font-bold text-neutral-700">Sección de Mapa y Estadísticas</h2>
         </div>
-        <div class="p-4"></div>
+        <div class="p-4">
+            <div
+                class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                x-data="{
+                    query: '',
+                    selectedCountry: '',
+                    convenioCount: '',
+                    items: [
+                        { country: 'Perú', count: 12 },
+                        { country: 'Chile', count: 4 },
+                    ],
+                    countries: [
+                        'Afganistán','Albania','Alemania','Andorra','Angola','Antigua y Barbuda','Arabia Saudita','Argelia','Argentina','Armenia','Australia','Austria','Azerbaiyán',
+                        'Bahamas','Bangladés','Barbados','Baréin','Bélgica','Belice','Benín','Bielorrusia','Birmania (Myanmar)','Bolivia','Bosnia y Herzegovina','Botsuana','Brasil','Brunéi','Bulgaria','Burkina Faso','Burundi',
+                        'Cabo Verde','Camboya','Camerún','Canadá','Catar','Chad','Chile','China','Chipre','Colombia','Comoras','Congo','Congo (Rep. Dem.)','Corea del Norte','Corea del Sur','Costa de Marfil','Costa Rica','Croacia','Cuba','Dinamarca','Dominica','Ecuador','Egipto','El Salvador','Emiratos Árabes Unidos','Eritrea','Eslovaquia','Eslovenia','España','Estados Unidos','Estonia','Etiopía',
+                        'Fiyi','Filipinas','Finlandia','Francia','Gabón','Gambia','Georgia','Ghana','Granada','Grecia','Guatemala','Guinea','Guinea-Bisáu','Guinea Ecuatorial','Guyana',
+                        'Haití','Honduras','Hungría','India','Indonesia','Irak','Irán','Irlanda','Islandia','Islas Marshall','Islas Salomón','Israel','Italia','Jamaica','Japón','Jordania',
+                        'Kazajistán','Kenia','Kirguistán','Kiribati','Kuwait','Laos','Lesoto','Letonia','Líbano','Liberia','Libia','Liechtenstein','Lituania','Luxemburgo',
+                        'Madagascar','Malasia','Malaui','Maldivas','Malí','Malta','Marruecos','Mauricio','Mauritania','México','Micronesia','Moldavia','Mónaco','Mongolia','Montenegro','Mozambique',
+                        'Namibia','Nauru','Nepal','Nicaragua','Níger','Nigeria','Noruega','Nueva Zelanda','Omán',
+                        'Países Bajos','Pakistán','Palaos','Panamá','Papúa Nueva Guinea','Paraguay','Perú','Polonia','Portugal','Reino Unido','República Centroafricana','República Checa','República Dominicana','Ruanda','Rumanía','Rusia',
+                        'Samoa','San Cristóbal y Nieves','San Marino','San Vicente y las Granadinas','Santa Lucía','Santo Tomé y Príncipe','Senegal','Serbia','Seychelles','Sierra Leona','Singapur','Siria','Somalia','Sri Lanka','Suazilandia (Esuatini)','Sudáfrica','Sudán','Sudán del Sur','Suecia','Suiza','Surinam',
+                        'Tailandia','Tanzania','Tayikistán','Timor Oriental','Togo','Tonga','Trinidad y Tobago','Túnez','Turkmenistán','Turquía','Tuvalu',
+                        'Ucrania','Uganda','Uruguay','Uzbekistán','Vanuatu','Vaticano','Venezuela','Vietnam','Yemen','Yibuti','Zambia','Zimbabue'
+                    ].sort(),
+                    filteredCountries() {
+                        const q = (this.query || '').trim().toLowerCase();
+                        if (!q) return this.countries;
+                        return this.countries.filter(c => c.toLowerCase().includes(q));
+                    },
+                    addItem() {
+                        const country = (this.selectedCountry || '').trim();
+                        const count = Number(this.convenioCount);
+                        if (!country || !Number.isFinite(count) || count < 0) return;
+
+                        const existingIndex = this.items.findIndex(i => i.country === country);
+                        if (existingIndex >= 0) {
+                            this.items[existingIndex].count = count;
+                        } else {
+                            this.items.push({ country, count });
+                        }
+
+                        this.items.sort((a, b) => a.country.localeCompare(b.country, 'es'));
+                        this.selectedCountry = '';
+                        this.convenioCount = '';
+                    },
+                    removeItem(country) {
+                        this.items = this.items.filter(i => i.country !== country);
+                    }
+                }"
+            >
+                <div class="rounded-lg border border-neutral-200 bg-white p-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-semibold text-neutral-800">Convenios por país</h3>
+                            <p class="mt-1 text-xs text-neutral-500">Diseño preliminar: esto aún no guarda en la base de datos.</p>
+                        </div>
+                        <span class="inline-flex items-center rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-semibold text-neutral-600">Borrador</span>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-neutral-700">Buscar país</label>
+                            <input
+                                type="text"
+                                x-model="query"
+                                placeholder="Escribe para filtrar…"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                            />
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+                            <div class="md:col-span-3">
+                                <label class="block text-xs font-semibold text-neutral-700">País</label>
+                                <select
+                                    x-model="selectedCountry"
+                                    class="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                                >
+                                    <option value="">Selecciona un país</option>
+                                    <template x-for="country in filteredCountries()" :key="country">
+                                        <option :value="country" x-text="country"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <div class="md:col-span-1">
+                                <label class="block text-xs font-semibold text-neutral-700">Cantidad</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    x-model="convenioCount"
+                                    placeholder="0"
+                                    class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                                />
+                            </div>
+
+                            <div class="md:col-span-1">
+                                <button
+                                    type="button"
+                                    @click="addItem()"
+                                    class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-3 py-2 text-[13px] font-semibold text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
+                                        <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                                    </svg>
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-xs font-semibold text-neutral-700">Tip</p>
+                                <p class="text-xs text-neutral-600">Si un país ya existe, “Agregar” lo actualiza.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-lg border border-neutral-200 bg-white p-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-neutral-800">Listado</h3>
+                        <p class="text-xs text-neutral-500" x-text="items.length + ' país(es)'">0 país(es)</p>
+                    </div>
+
+                    <div class="mt-3 overflow-hidden rounded-lg border border-neutral-200">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-neutral-50">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-[11px] font-bold text-neutral-600">País</th>
+                                    <th class="px-3 py-2 text-right text-[11px] font-bold text-neutral-600">Convenios</th>
+                                    <th class="px-3 py-2 text-center text-[11px] font-bold text-neutral-600 w-16">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-neutral-200">
+                                <template x-if="items.length === 0">
+                                    <tr>
+                                        <td colspan="3" class="px-3 py-6 text-center text-xs text-neutral-500">
+                                            Aún no agregas países. Selecciona uno y coloca su cantidad.
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                <template x-for="row in items" :key="row.country">
+                                    <tr class="hover:bg-neutral-50">
+                                        <td class="px-3 py-2 text-[13px] text-neutral-800" x-text="row.country"></td>
+                                        <td class="px-3 py-2 text-right text-[13px] font-semibold text-neutral-800" x-text="row.count"></td>
+                                        <td class="px-3 py-2 text-center">
+                                            <button
+                                                type="button"
+                                                @click="removeItem(row.country)"
+                                                class="inline-flex items-center justify-center rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold text-neutral-700 hover:bg-neutral-100"
+                                            >
+                                                Quitar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="rounded-lg border border-neutral-200 bg-neutral-50/60">
