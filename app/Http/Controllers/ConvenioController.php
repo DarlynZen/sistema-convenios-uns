@@ -78,7 +78,7 @@ class ConvenioController extends Controller
     public function update(UpdateConvenioRequest $request, Convenio $convenio)
     {
         try {
-            $this->convenioService->update($convenio, $request->validated());
+            $this->convenioService->actualizar($convenio->id, $request->validated(), $request->input('beneficiarios', []));
 
             return redirect()->route('admin.convenios')
                 ->with('success', 'Convenio actualizado exitosamente.');
@@ -91,7 +91,7 @@ class ConvenioController extends Controller
     public function destroy(Convenio $convenio)
     {
         try {
-            $this->convenioService->delete($convenio);
+            $this->convenioService->eliminar($convenio->id);
             return redirect()->route('admin.convenios')
                 ->with('success', 'Convenio eliminado exitosamente.');
         } catch (\Exception $e) {

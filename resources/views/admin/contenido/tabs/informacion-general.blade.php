@@ -88,9 +88,8 @@
         </div>
         <div class="p-4">
             <div
-                class="grid grid-cols-1 lg:grid-cols-2 gap-4"
+                class="space-y-4"
                 x-data="{
-                    query: '',
                     selectedCountry: '',
                     convenioCount: '',
                     items: [
@@ -111,11 +110,6 @@
                         'Tailandia','Tanzania','Tayikistán','Timor Oriental','Togo','Tonga','Trinidad y Tobago','Túnez','Turkmenistán','Turquía','Tuvalu',
                         'Ucrania','Uganda','Uruguay','Uzbekistán','Vanuatu','Vaticano','Venezuela','Vietnam','Yemen','Yibuti','Zambia','Zimbabue'
                     ].sort(),
-                    filteredCountries() {
-                        const q = (this.query || '').trim().toLowerCase();
-                        if (!q) return this.countries;
-                        return this.countries.filter(c => c.toLowerCase().includes(q));
-                    },
                     addItem() {
                         const country = (this.selectedCountry || '').trim();
                         const count = Number(this.convenioCount);
@@ -135,119 +129,75 @@
                     removeItem(country) {
                         this.items = this.items.filter(i => i.country !== country);
                     }
-                }"
-            >
-                <div class="rounded-lg border border-neutral-200 bg-white p-4">
-                    <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <h3 class="text-sm font-semibold text-neutral-800">Convenios por país</h3>
-                            <p class="mt-1 text-xs text-neutral-500">Diseño preliminar: esto aún no guarda en la base de datos.</p>
-                        </div>
-                        <span class="inline-flex items-center rounded-full bg-neutral-100 px-2 py-1 text-[11px] font-semibold text-neutral-600">Borrador</span>
+                }">
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                    <div class="md:col-span-7">
+                        <label class="block text-xs font-semibold text-neutral-700">País</label>
+                        <select
+                            x-model="selectedCountry"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                            <option value="">Selecciona un país</option>
+                            <template x-for="country in countries" :key="country">
+                                <option :value="country" x-text="country"></option>
+                            </template>
+                        </select>
                     </div>
 
-                    <div class="mt-4 grid grid-cols-1 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-neutral-700">Buscar país</label>
-                            <input
-                                type="text"
-                                x-model="query"
-                                placeholder="Escribe para filtrar…"
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-                            />
-                        </div>
+                    <div class="md:col-span-3">
+                        <label class="block text-xs font-semibold text-neutral-700">Cantidad</label>
+                        <input
+                            type="number"
+                            min="0"
+                            step="1"
+                            x-model="convenioCount"
+                            placeholder="0"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
-                            <div class="md:col-span-3">
-                                <label class="block text-xs font-semibold text-neutral-700">País</label>
-                                <select
-                                    x-model="selectedCountry"
-                                    class="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-                                >
-                                    <option value="">Selecciona un país</option>
-                                    <template x-for="country in filteredCountries()" :key="country">
-                                        <option :value="country" x-text="country"></option>
-                                    </template>
-                                </select>
-                            </div>
-
-                            <div class="md:col-span-1">
-                                <label class="block text-xs font-semibold text-neutral-700">Cantidad</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    step="1"
-                                    x-model="convenioCount"
-                                    placeholder="0"
-                                    class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
-                                />
-                            </div>
-
-                            <div class="md:col-span-1">
-                                <button
-                                    type="button"
-                                    @click="addItem()"
-                                    class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-3 py-2 text-[13px] font-semibold text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
-                                        <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
-                                    </svg>
-                                    Agregar
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
-                            <div class="flex items-center justify-between gap-3">
-                                <p class="text-xs font-semibold text-neutral-700">Tip</p>
-                                <p class="text-xs text-neutral-600">Si un país ya existe, “Agregar” lo actualiza.</p>
-                            </div>
-                        </div>
+                    <div class="md:col-span-2">
+                        <button
+                            type="button"
+                            @click="addItem()"
+                            class="w-full inline-flex items-center justify-center rounded-lg bg-brand-600 px-3 py-2 text-[13px] font-semibold text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200">
+                            Agregar
+                        </button>
                     </div>
                 </div>
 
-                <div class="rounded-lg border border-neutral-200 bg-white p-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-semibold text-neutral-800">Listado</h3>
-                        <p class="text-xs text-neutral-500" x-text="items.length + ' país(es)'">0 país(es)</p>
-                    </div>
-
-                    <div class="mt-3 overflow-hidden rounded-lg border border-neutral-200">
-                        <table class="min-w-full bg-white">
-                            <thead class="bg-neutral-50">
+                <div class="mt-4 overflow-hidden rounded-lg border border-neutral-200">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-neutral-50">
+                            <tr>
+                                <th class="px-3 py-2 text-left text-[11px] font-bold text-neutral-600">País</th>
+                                <th class="px-3 py-2 text-right text-[11px] font-bold text-neutral-600">Convenios</th>
+                                <th class="px-3 py-2 text-center text-[11px] font-bold text-neutral-600 w-20">Quitar</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-neutral-200">
+                            <template x-if="items.length === 0">
                                 <tr>
-                                    <th class="px-3 py-2 text-left text-[11px] font-bold text-neutral-600">País</th>
-                                    <th class="px-3 py-2 text-right text-[11px] font-bold text-neutral-600">Convenios</th>
-                                    <th class="px-3 py-2 text-center text-[11px] font-bold text-neutral-600 w-16">Acción</th>
+                                    <td colspan="3" class="px-3 py-6 text-center text-xs text-neutral-500">
+                                        Aún no agregas países.
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody class="divide-y divide-neutral-200">
-                                <template x-if="items.length === 0">
-                                    <tr>
-                                        <td colspan="3" class="px-3 py-6 text-center text-xs text-neutral-500">
-                                            Aún no agregas países. Selecciona uno y coloca su cantidad.
-                                        </td>
-                                    </tr>
-                                </template>
+                            </template>
 
-                                <template x-for="row in items" :key="row.country">
-                                    <tr class="hover:bg-neutral-50">
-                                        <td class="px-3 py-2 text-[13px] text-neutral-800" x-text="row.country"></td>
-                                        <td class="px-3 py-2 text-right text-[13px] font-semibold text-neutral-800" x-text="row.count"></td>
-                                        <td class="px-3 py-2 text-center">
-                                            <button
-                                                type="button"
-                                                @click="removeItem(row.country)"
-                                                class="inline-flex items-center justify-center rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold text-neutral-700 hover:bg-neutral-100"
-                                            >
-                                                Quitar
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
+                            <template x-for="row in items" :key="row.country">
+                                <tr class="hover:bg-neutral-50">
+                                    <td class="px-3 py-2 text-[13px] text-neutral-800" x-text="row.country"></td>
+                                    <td class="px-3 py-2 text-right text-[13px] font-semibold text-neutral-800" x-text="row.count"></td>
+                                    <td class="px-3 py-2 text-center">
+                                        <button
+                                            type="button"
+                                            @click="removeItem(row.country)"
+                                            class="inline-flex items-center justify-center rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold text-neutral-700 hover:bg-neutral-100">
+                                            Quitar
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -261,6 +211,102 @@
             </svg>
             <h2 class="text-sm font-bold text-neutral-700">Sección de Preguntas Frecuentes</h2>
         </div>
-        <div class="p-4"></div>
+        <div class="p-4">
+            <div class="flex items-center justify-between gap-3">
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-brand-100"
+                >
+                    <span class="inline-flex h-5 w-5 items-center justify-center rounded border border-neutral-200 bg-white text-neutral-700">+</span>
+                    Nueva FAQ
+                </button>
+            </div>
+
+            <div class="mt-4 space-y-3">
+                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-start justify-between gap-4">
+                        <h4 class="text-sm font-semibold text-neutral-900">¿Cómo puedo proponer un convenio con una institución?</h4>
+                        <div class="flex items-center gap-3">
+                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                        Puedes enviar tu propuesta a través del correo <span class="font-medium text-neutral-700">convenios@universidad.edu.pe</span> incluyendo información detallada sobre la institución y los objetivos del convenio.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-start justify-between gap-4">
+                        <h4 class="text-sm font-semibold text-neutral-900">¿Qué tipos de convenios maneja la universidad?</h4>
+                        <div class="flex items-center gap-3">
+                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                        Manejamos dos tipos principales: Convenios Marco (establecen bases generales de cooperación) y Convenios Específicos (definen actividades concretas).
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-start justify-between gap-4">
+                        <h4 class="text-sm font-semibold text-neutral-900">¿Cuánto demora el proceso de formalización?</h4>
+                        <div class="flex items-center gap-3">
+                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                        El proceso puede tomar entre 3 a 6 meses dependiendo de la complejidad del convenio y los procedimientos internos de ambas instituciones.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-start justify-between gap-4">
+                        <h4 class="text-sm font-semibold text-neutral-900">¿Los convenios tienen costo?</h4>
+                        <div class="flex items-center gap-3">
+                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
+                        Los convenios en sí no tienen costo; sin embargo, cada actividad específica desarrollada bajo el marco del convenio puede tener costos asociados que se definen por separado.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

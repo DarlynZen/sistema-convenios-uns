@@ -12,8 +12,7 @@ class ConvenioService
 {
     public function __construct(
         private ConvenioRepository $repository
-    )
-    {}
+    ){}
 
     public function obtenerPorId(int $id): Convenio
     {

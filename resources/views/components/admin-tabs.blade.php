@@ -48,9 +48,9 @@
                     :aria-selected="active === @js($id)"
                     class="flex-none inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-neutral-600 transition
                            border border-transparent
-                           hover:bg-white hover:text-brand-700 focus:outline-none"
+                           hover:bg-white hover:text-brand-600 focus:outline-none"
                     :class="active === @js($id)
-                        ? 'bg-white text-brand-700 border-brand-200 shadow-sm'
+                        ? 'bg-white text-brand-600 border-brand-200 shadow-sm'
                         : ''"
                     @click="active = @js($id)"
                 >
