@@ -67,7 +67,7 @@
     </div>
 
     {{--Modal Crear Convenio--}}
-    <x-modal name="crearConvenio" :show="false" maxWidth="4xl">
+    <x-modal name="crearConvenio" :show="false" maxWidth="2xl">
         <x-slot name="title">
             <div class="font-bold text-base text-neutral-700">Crear nuevo convenio</div>
         </x-slot>
