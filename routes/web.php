@@ -20,6 +20,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::get('/contenido', [AdminController::class, 'contenido'])->name('contenido.index');
     Route::post('/contenido/hero', [AdminController::class, 'guardarHero'])->name(name: 'contenido.hero.save');
     Route::post('/contenido/contacto', [AdminController::class, 'guardarContacto'])->name(name: 'contenido.contacto.save');
+    Route::post('/contenido/faq', [AdminController::class, 'guardarFaq'])->name(name: 'contenido.faq.save');
     Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo.index');
 });
 

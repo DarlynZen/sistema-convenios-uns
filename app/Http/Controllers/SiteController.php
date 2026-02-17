@@ -17,7 +17,8 @@ class SiteController extends Controller
         $tab = $request->query('tab', 'inicio');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();
-        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData));
+        $faqViewData = $this->cmsSeccionService->getFaqPublicViewData();
+        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData, $faqViewData));
     }
 
     public function nuestrosConvenios(Request $request)
@@ -25,7 +26,8 @@ class SiteController extends Controller
         $tab = $request->query('tab', 'nuestros-convenios');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();
-        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData));
+        $faqViewData = $this->cmsSeccionService->getFaqPublicViewData();
+        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData, $faqViewData));
     }
 
     public function nosotros(Request $request)
@@ -33,6 +35,7 @@ class SiteController extends Controller
         $tab = $request->query('tab', 'nosotros');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();
-        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData));
+        $faqViewData = $this->cmsSeccionService->getFaqPublicViewData();
+        return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData, $faqViewData));
     }
 }

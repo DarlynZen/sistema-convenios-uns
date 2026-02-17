@@ -24,7 +24,8 @@ class AdminController extends Controller
     {
         $heroViewData = $this->cmsSeccionService->getHeroAdminViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoAdminViewData();
-        return view('admin.contenido.index', array_merge($heroViewData, $contactoViewData));
+        $faqViewData = $this->cmsSeccionService->getFaqAdminViewData();
+        return view('admin.contenido.index', array_merge($heroViewData, $contactoViewData, $faqViewData));
     }
 
     public function guardarHero(Request $request)
@@ -65,6 +66,34 @@ class AdminController extends Controller
         return redirect()
             ->route('admin.contenido.index', ['tab' => 'contacto'])
             ->with('status', 'Información de contacto actualizada.');
+    }
+
+    public function guardarFaq(Request $request)
+    {
+        $validated = $request->validate([
+            'faq_question' => 'required|string|max:255',
+            'faq_answer' => [
+                'required',
+                'string',
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    $text = is_string($value) ? trim($value) : '';
+                    $words = preg_split('/\s+/u', strip_tags($text), -1, PREG_SPLIT_NO_EMPTY);
+                    $count = is_array($words) ? count($words) : 0;
+                    if ($count > 500) {
+                        $fail('La respuesta debe tener como máximo 500 palabras.');
+                    }
+                },
+            ],
+        ]);
+
+        $this->cmsSeccionService->addFaq(
+            question: $validated['faq_question'],
+            answer: $validated['faq_answer'],
+        );
+
+        return redirect()
+            ->route('admin.contenido.index', ['tab' => 'infogeneral'])
+            ->with('status', 'FAQ creada correctamente.');
     }
 
     public function catalogo()

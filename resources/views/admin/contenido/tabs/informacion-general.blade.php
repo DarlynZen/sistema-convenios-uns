@@ -212,100 +212,92 @@
             <h2 class="text-sm font-bold text-neutral-700">Sección de Preguntas Frecuentes</h2>
         </div>
         <div class="p-4">
-            <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center justify-between gap-3 place-self-end">
                 <button
                     type="button"
-                    class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-brand-100"
-                >
-                    <span class="inline-flex h-5 w-5 items-center justify-center rounded border border-neutral-200 bg-white text-neutral-700">+</span>
-                    Nueva FAQ
+                    @click="$dispatch('open-modal', 'crearFAQ')"
+                    class="inline-flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-brand-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
+                        <path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"></path>
+                    </svg>
+                    Crear nueva FAQ
                 </button>
             </div>
 
-            <div class="mt-4 space-y-3">
-                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <h4 class="text-sm font-semibold text-neutral-900">¿Cómo puedo proponer un convenio con una institución?</h4>
-                        <div class="flex items-center gap-3">
-                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
-                        Puedes enviar tu propuesta a través del correo <span class="font-medium text-neutral-700">convenios@universidad.edu.pe</span> incluyendo información detallada sobre la institución y los objetivos del convenio.
-                    </p>
-                </div>
+            <x-modal name="crearFAQ" :show="$errors->has('faq_question') || $errors->has('faq_answer')" maxWidth="md">
+                <x-slot name="title">
+                    <div class="font-bold text-base text-neutral-700">Crear FAQ</div>
+                </x-slot>
 
-                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <h4 class="text-sm font-semibold text-neutral-900">¿Qué tipos de convenios maneja la universidad?</h4>
-                        <div class="flex items-center gap-3">
-                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
-                        Manejamos dos tipos principales: Convenios Marco (establecen bases generales de cooperación) y Convenios Específicos (definen actividades concretas).
-                    </p>
-                </div>
+                <form
+                    method="POST"
+                    action="{{ route('admin.contenido.faq.save') }}"
+                    class="p-5 space-y-4"
+                    x-data="{
+                        answer: @js(old('faq_answer', '')),
+                        wordCount() {
+                            const text = (this.answer || '').trim();
+                            if (!text) return 0;
+                            return text.split(/\s+/).filter(Boolean).length;
+                        },
+                    }">
+                    @csrf
 
-                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <h4 class="text-sm font-semibold text-neutral-900">¿Cuánto demora el proceso de formalización?</h4>
-                        <div class="flex items-center gap-3">
-                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
-                                </svg>
-                            </button>
-                        </div>
+                    <div>
+                        <x-input-label for="faq_question" value="Título de la pregunta" />
+                        <x-text-input
+                            id="faq_question"
+                            name="faq_question"
+                            type="text"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                            placeholder="Escribe la pregunta"
+                            required
+                            value="{{ old('faq_question') }}" />
+                        <x-input-error :messages="$errors->get('faq_question')" class="mt-1" />
                     </div>
-                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
-                        El proceso puede tomar entre 3 a 6 meses dependiendo de la complejidad del convenio y los procedimientos internos de ambas instituciones.
-                    </p>
-                </div>
 
-                <div class="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <h4 class="text-sm font-semibold text-neutral-900">¿Los convenios tienen costo?</h4>
-                        <div class="flex items-center gap-3">
-                            <button type="button" class="text-neutral-600 hover:text-neutral-900" aria-label="Editar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M227.31,73.37l-44.68-44.68a16,16,0,0,0-22.63,0L36.69,152a15.86,15.86,0,0,0-4.69,11.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96A16,16,0,0,0,227.31,73.37ZM92.69,208H48V163.31l96-96L188.69,112ZM200,100.69,155.31,56l16-16L216,84.69Z"></path>
-                                </svg>
-                            </button>
-                            <button type="button" class="text-brand-600 hover:text-brand-700" aria-label="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
-                                    <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16H48V208a24,24,0,0,0,24,24H184a24,24,0,0,0,24-24V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168a8,8,0,0,1-8,8H72a8,8,0,0,1-8-8V64H192Z"></path>
-                                </svg>
-                            </button>
+                    <div>
+                        <div class="flex items-center justify-between gap-2">
+                            <x-input-label for="faq_answer" value="Respuesta" />
+                            <span class="text-xs text-neutral-500" x-text="wordCount() + ' / 500 palabras'"></span>
                         </div>
+                        <textarea
+                            id="faq_answer"
+                            name="faq_answer"
+                            rows="6"
+                            required
+                            x-model="answer"
+                            class="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                            placeholder="Escribe la respuesta (máximo 500 palabras)">{{ old('faq_answer') }}</textarea>
+                        <x-input-error :messages="$errors->get('faq_answer')" class="mt-1" />
                     </div>
-                    <p class="mt-3 text-sm leading-relaxed text-neutral-600">
-                        Los convenios en sí no tienen costo; sin embargo, cada actividad específica desarrollada bajo el marco del convenio puede tener costos asociados que se definen por separado.
-                    </p>
+
+                    <div class="flex justify-end gap-2 pt-1">
+                        <x-admin.cancel-button @click.prevent="$dispatch('close-modal', 'crearFAQ')" class="px-3 py-1.5 text-xs gap-1.5">Cancelar</x-admin.cancel-button>
+                        <x-admin.confirm-button type="submit" class="px-3 py-1.5 text-xs gap-1.5" x-bind:disabled="wordCount() > 500" x-bind:title="wordCount() > 500 ? 'Máximo 500 palabras' : ''">Guardar</x-admin.confirm-button>
+                    </div>
+                </form>
+            </x-modal>
+
+            <div class="mt-3 space-y-3">
+                @php
+                $items = is_array($faqItems ?? null) ? $faqItems : [];
+                @endphp
+
+                @if(count($items) === 0)
+                <div class="rounded-md border border-neutral-200 bg-white p-3 text-sm text-neutral-500">
+                    Aún no has creado FAQs.
                 </div>
+                @else
+                @foreach($items as $faq)
+                <div class="rounded-xl border border-neutral-200 bg-white p-3">
+                    <div class="flex items-start justify-between gap-4">
+                        <h4 class="text-sm font-semibold text-neutral-900">{{ $faq['question'] ?? '' }}</h4>
+                    </div>
+                    <p class="mt-1.5 text-sm leading-relaxed text-neutral-600">{{ $faq['answer'] ?? '' }}</p>
+                </div>
+                @endforeach
+                @endif
             </div>
         </div>
     </div>

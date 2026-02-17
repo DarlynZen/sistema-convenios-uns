@@ -332,96 +332,45 @@
         <p class="font-normal text-base  text-neutral-600">¿Tienes alguna consulta sobre nuestros convenios? En este
             apartado resuelve todas tus dudas.</p>
 
+        @php
+            $items = is_array($faqItems ?? null) ? $faqItems : [];
+        @endphp
+
         <div id="accordion-open" data-accordion="open" class="w-full space-y-2">
-            {{-- Faq 1 --}}
-            <div class="rounded-base border border-default overflow-hidden">
-                <h2 id="accordion-open-heading-1">
-                    <button
-                        class="flex items-center justify-between w-full p-4 font-medium rtl:text-right bg-neutral-100 text-body rounded-t-base border border-t-0 border-x-0 border-b-default gap-3"
-                        data-accordion-target="#accordion-open-body-1" aria-expanded="true"
-                        aria-controls="accordion-open-body-1">
-                        <div class="flex items-center space-x-3">
-                            <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0 text-brand" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m5 15 7-7 7 7" />
-                            </svg>
-                            <span class="text-left">¿Quién puede proponer y firmar un convenio en la
-                                universidad?</span>
-                        </div>
-                    </button>
-                </h2>
-                <div id="accordion-open-body-1"
-                    class="hidden border border-s-0 border-e-0 border-t-0 border-b-default"
-                    aria-labelledby="accordion-open-heading-1">
-                    <div class="p-4 md:p-5">
-                        <p class="mb-2 text-body">La propuesta de un convenio puede originarse en docentes o unidades
-                            académicas, pero solo autoridades institucionales (ej. Rectorado, Vicerrectorado o despacho
-                            legal) están facultadas para firmarlos y validarlos oficialmente.</p>
-                    </div>
-                </div>
-            </div>
+            @foreach($items as $index => $faq)
+                @php
+                    $i = (int) $index + 1;
+                    $expanded = $i === 1;
+                @endphp
 
-            {{-- Faq 2 --}}
-            <div class="rounded-base border border-default overflow-hidden">
-                <h2 id="accordion-open-heading-2">
-                    <button
-                        class="flex items-center justify-between w-full p-4 font-medium rtl:text-right bg-neutral-100 text-body rounded-t-base border border-t-0 border-x-0 border-b-default gap-3"
-                        data-accordion-target="#accordion-open-body-2" aria-expanded="true"
-                        aria-controls="accordion-open-body-1">
-                        <div class="flex items-center space-x-3">
-                            <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0 text-brand" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m5 15 7-7 7 7" />
-                            </svg>
-                            <span>¿Cuál es la duración típica de un convenio?</span>
+                <div class="rounded-base border border-default overflow-hidden">
+                    <h2 id="accordion-open-heading-{{ $i }}">
+                        <button
+                            class="flex items-center justify-between w-full p-4 font-medium rtl:text-right bg-neutral-100 text-body rounded-t-base border border-t-0 border-x-0 border-b-default gap-3"
+                            data-accordion-target="#accordion-open-body-{{ $i }}"
+                            aria-expanded="{{ $expanded ? 'true' : 'false' }}"
+                            aria-controls="accordion-open-body-{{ $i }}">
+                            <div class="flex items-center space-x-3">
+                                <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0 text-brand" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m5 15 7-7 7 7" />
+                                </svg>
+                                <span class="text-left">{{ $faq['question'] ?? '' }}</span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div
+                        id="accordion-open-body-{{ $i }}"
+                        class="{{ $expanded ? '' : 'hidden' }} border border-s-0 border-e-0 border-t-0 border-b-default"
+                        aria-labelledby="accordion-open-heading-{{ $i }}">
+                        <div class="p-4 md:p-5">
+                            <p class="mb-2 text-body">{{ $faq['answer'] ?? '' }}</p>
                         </div>
-                    </button>
-                </h2>
-                <div id="accordion-open-body-2"
-                    class="hidden border border-s-0 border-e-0 border-t-0 border-b-default"
-                    aria-labelledby="accordion-open-heading-2">
-                    <div class="p-4 md:p-5">
-                        <p class="mb-2 text-body">La duración de un convenio puede variar, según el tipo y los
-                            objetivos. Algunos tienen plazos definidos (ej. 3 a 5 años) y otros pueden ser indefinidos
-                            si así se acuerda. En normativas públicas, suele establecerse un límite máximo inicial (por
-                            ejemplo, cuatro años) con posibilidad de extensión mediante prórroga consensuada.</p>
                     </div>
                 </div>
-            </div>
-
-            {{-- Faq 3 --}}
-            <div class="rounded-base border border-default overflow-hidden">
-                <h2 id="accordion-open-heading-3">
-                    <button
-                        class="flex items-center justify-between w-full p-4 font-medium rtl:text-right bg-neutral-100 text-body rounded-t-base border border-t-0 border-x-0 border-b-default gap-3"
-                        data-accordion-target="#accordion-open-body-3" aria-expanded="true"
-                        aria-controls="accordion-open-body-3">
-                        <div class="flex items-center space-x-3">
-                            <svg data-accordion-icon class="w-5 h-5 rotate-180 shrink-0 text-brand" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m5 15 7-7 7 7" />
-                            </svg>
-                            <span>¿Cuándo es necesario tramitar un convenio?</span>
-                        </div>
-                    </button>
-                </h2>
-                <div id="accordion-open-body-3"
-                    class="hidden border border-s-0 border-e-0 border-t-0 border-b-default"
-                    aria-labelledby="accordion-open-heading-3">
-                    <div class="p-4 md:p-5">
-                        <p class="mb-2 text-body">Un convenio escrito es obligatorio para proyectos como dobles
-                            titulaciones, intercambios formales, tesis conjuntas o investigaciones institucionales. Para
-                            otros acuerdos informales, la colaboración puede realizarse sin convenio si así lo permiten
-                            las políticas internas.</p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>

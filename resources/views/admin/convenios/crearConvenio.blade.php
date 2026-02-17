@@ -1,14 +1,14 @@
 <x-admin.stepper :steps="[
-    ['key' => 'info', 'label' => 'Información básica'],
-    ['key' => 'details', 'label' => 'Detalles del Convenio'],
-    ['key' => 'docs', 'label' => 'Documentación adjunta'],
+    ['key' => 'info', 'label' => 'General'],
+    ['key' => 'details', 'label' => 'Detalles'],
+    ['key' => 'docs', 'label' => 'Documentación'],
 ]" current="1">
     <form
         id="form-crear-convenio"
         method="POST"
         action="{{ route('admin.convenios.store') }}"
         enctype="multipart/form-data"
-        class="space-y-4"
+        class="space-y-3"
         x-data="{
             step: 1,
             maxStep: 3,
@@ -104,41 +104,46 @@
             x-text="notice"
         ></div>
         {{-- Sección: Información básica del convenio (Paso 1) --}}
-        <section class="space-y-3 mb-4" x-show="step === 1" x-cloak data-step-section="1">
-            <div class="border border-red-100 rounded-lg bg-red-50/40">
-                <header class="flex items-center gap-2 px-4 py-3 border-b border-red-100 bg-red-50">
-                    <span
-                        class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600 text-sm font-semibold">1</span>
-                    <h2 class="text-sm font-semibold text-red-700">Información básica</h2>
-                </header>
-
-                <div class="p-4 space-y-4">
-                    {{-- Título del convenio --}}
+        <section class="space-y-3" x-show="step === 1" x-cloak data-step-section="1">
+            <div class="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
+                <div class="mb-4 flex items-start justify-between gap-3">
                     <div>
-                        <x-input-label for="titulo" value="Título del convenio" />
-                        <x-text-input
-                            id="titulo"
-                            name="titulo"
-                            type="text"
-                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                            placeholder="Nombre del título del convenio"
-                            required
-                            :value="old('titulo')"
-                        />
-                        <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
+                        <h2 class="text-sm font-semibold text-neutral-800">General</h2>
+                        <p class="mt-0.5 text-xs text-neutral-500">Datos generales del convenio y la entidad.</p>
                     </div>
-                    {{-- Nro. de Transcripción de Resolución --}}
-                    <div>
-                        <x-input-label for="resolucion" value="Nro. de Transcripción de Resolución"/>
-                        <x-text-input
-                            id="resolucion"
-                            name="resolucion"
-                            type="text"
-                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                            placeholder="Nro. de transcripción"
-                            :value="old('resolucion')"
-                        />
-                        <x-input-error :messages="$errors->get('resolucion')" class="mt-1"/>
+                    <span class="text-xs text-neutral-500">Paso 1 de 3</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {{-- Título del convenio --}}
+                        <div>
+                            <x-input-label for="titulo" value="Título del convenio" />
+                            <x-text-input
+                                id="titulo"
+                                name="titulo"
+                                type="text"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                placeholder="Nombre del título del convenio"
+                                required
+                                :value="old('titulo')"
+                            />
+                            <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
+                        </div>
+
+                        {{-- Nro. de Transcripción de Resolución --}}
+                        <div>
+                            <x-input-label for="resolucion" value="Nro. de Transcripción de Resolución"/>
+                            <x-text-input
+                                id="resolucion"
+                                name="resolucion"
+                                type="text"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                placeholder="Nro. de transcripción"
+                                :value="old('resolucion')"
+                            />
+                            <x-input-error :messages="$errors->get('resolucion')" class="mt-1"/>
+                        </div>
                     </div>
 
                     {{-- Tipo de convenio y Tipo de ámbito --}}
@@ -242,39 +247,128 @@
         </section>
 
         {{-- Detalles del Convenio (Paso 2) --}}
-        <section class="space-y-3 mb-4" x-show="step === 2" x-cloak data-step-section="2">
-            <div class="border border-red-100 rounded-lg bg-red-50/40">
-                <header class="flex items-center gap-2 px-4 py-3 border-b border-red-100 bg-red-50">
-                    <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-red-100 text-red-600 text-sm font-semibold">2</span>
-                    <h2 class="text-sm font-semibold text-red-700">Detalles del Convenio</h2>
-                </header>
+        <section class="space-y-3" x-show="step === 2" x-cloak data-step-section="2">
+            <div class="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm font-semibold text-neutral-800">Detalles</h2>
+                        <p class="mt-0.5 text-xs text-neutral-500">Beneficiarios, fechas y datos adicionales.</p>
+                    </div>
+                    <span class="text-xs text-neutral-500">Paso 2 de 3</span>
+                </div>
 
-                <div class="p-4 space-y-4">
+                <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {{-- Dirigido a (beneficiarios) --}}
                         <div>
                             <x-input-label for="beneficiarios" value="Dirigido a" />
-                            <select
-                                id="beneficiarios"
-                                name="beneficiarios[]"
-                                multiple
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                            @php
+                                $beneficiariosOptions = collect($beneficiarios ?? [])->map(function ($beneficiario) {
+                                    return [
+                                        'id' => $beneficiario->id,
+                                        'label' => $beneficiario->nombre
+                                            ?? $beneficiario->codigo_beneficiario
+                                            ?? ('Beneficiario ' . $beneficiario->id),
+                                    ];
+                                })->values();
+                                $beneficiariosOld = collect(old('beneficiarios', []))
+                                    ->filter(fn ($v) => $v !== null && $v !== '')
+                                    ->map(fn ($v) => (int) $v)
+                                    ->values();
+                            @endphp
+
+                            <div
+                                class="relative mt-1"
+                                x-data="{
+                                    open: false,
+                                    options: @js($beneficiariosOptions),
+                                    selected: @js($beneficiariosOld),
+
+                                    isSelected(id) { return this.selected.includes(Number(id)); },
+                                    toggle(id) {
+                                        id = Number(id);
+                                        if (this.isSelected(id)) {
+                                            this.selected = this.selected.filter((v) => v !== id);
+                                        } else {
+                                            this.selected = [...this.selected, id];
+                                        }
+                                    },
+                                    remove(id) {
+                                        id = Number(id);
+                                        this.selected = this.selected.filter((v) => v !== id);
+                                    },
+                                    labelFor(id) {
+                                        id = Number(id);
+                                        const opt = this.options.find((o) => Number(o.id) === id);
+                                        return opt ? opt.label : id;
+                                    },
+                                }"
                             >
-                                @foreach($beneficiarios as $beneficiario)
-                                    <option
-                                        value="{{ $beneficiario->id }}"
-                                        @selected(collect(old('beneficiarios'))->contains($beneficiario->id))
-                                    >
-                                        {{ $beneficiario->nombre ?? $beneficiario->codigo_beneficiario ?? 'Beneficiario '.$beneficiario->id }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                <div
+                                    id="beneficiarios"
+                                    role="combobox"
+                                    aria-haspopup="listbox"
+                                    x-bind:aria-expanded="open"
+                                    tabindex="0"
+                                    @click="open = true"
+                                    @keydown.enter.prevent="open = !open"
+                                    @keydown.escape.prevent="open = false"
+                                    class="min-h-[42px] w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-200"
+                                >
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        <template x-for="id in selected" :key="id">
+                                            <span class="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-1 text-[12px] text-neutral-700">
+                                                <span x-text="labelFor(id)"></span>
+                                                <button
+                                                    type="button"
+                                                    class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded text-neutral-500 hover:text-neutral-700"
+                                                    @click.stop="remove(id)"
+                                                    aria-label="Quitar"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </span>
+                                        </template>
+
+                                        <span x-show="selected.length === 0" class="text-neutral-400">Selecciona beneficiarios</span>
+                                    </div>
+                                </div>
+
+                                <div
+                                    x-show="open"
+                                    x-transition.origin.top
+                                    x-cloak
+                                    @click.outside="open = false"
+                                    class="absolute z-50 mt-1 w-full rounded-lg border border-neutral-200 bg-white shadow-sm"
+                                    role="listbox"
+                                >
+                                    <ul class="max-h-52 overflow-y-auto py-1">
+                                        <template x-for="opt in options" :key="opt.id">
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    class="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-neutral-50"
+                                                    :class="isSelected(opt.id) ? 'bg-red-50/50' : ''"
+                                                    @click="toggle(opt.id)"
+                                                >
+                                                    <span class="text-neutral-700" x-text="opt.label"></span>
+                                                    <span class="text-xs text-neutral-400" x-show="isSelected(opt.id)">✓</span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+
+                                <template x-for="id in selected" :key="'hidden-' + id">
+                                    <input type="hidden" name="beneficiarios[]" :value="id" />
+                                </template>
+                            </div>
                             <x-input-error :messages="$errors->get('beneficiarios')" class="mt-1" />
                         </div>
 
                         {{-- Fecha de Inicio --}}
                         <div>
-                            <x-input-label for="fecha_inicio" value="Fecha de Inicio" />
+                            <x-input-label for="fecha_inicio" value="Fecha de inicio" />
                             <x-text-input
                                 id="fecha_inicio"
                                 name="fecha_inicio"
@@ -288,7 +382,7 @@
 
                         {{-- Fecha de Vencimiento --}}
                         <div>
-                            <x-input-label for="fecha_fin" value="Fecha de Vencimiento" />
+                            <x-input-label for="fecha_fin" value="Fecha de vencimiento" />
                             <x-text-input
                                 id="fecha_fin"
                                 name="fecha_fin"
@@ -300,33 +394,38 @@
                         </div>
                     </div>
 
-                    {{-- Objetivo (Solo para Específicos) --}}
-                    <div>
-                        <x-input-label for="objetivo_personalizado" value="Objetivo (Solo para Específicos)" />
-                        <textarea
-                            id="objetivo_personalizado"
-                            name="objetivo_personalizado"
-                            rows="3"
-                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                            placeholder="Describe el objetivo del convenio específico."
-                        >{{ old('objetivo_personalizado') }}</textarea>
-                        <x-input-error :messages="$errors->get('objetivo_personalizado')" class="mt-1" />
-                    </div>
+                    <details class="rounded-lg border border-neutral-200 bg-neutral-50/60">
+                        <summary class="cursor-pointer select-none px-3 py-2 text-sm font-medium text-neutral-700">
+                            Objetivo (opcional)
+                        </summary>
+                        <div class="px-3 pb-3">
+                            <p class="text-xs text-neutral-500">Si aplica, describe el objetivo del convenio específico.</p>
+                            <textarea
+                                id="objetivo_personalizado"
+                                name="objetivo_personalizado"
+                                rows="3"
+                                class="mt-2 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                placeholder="Describe el objetivo del convenio."
+                            >{{ old('objetivo_personalizado') }}</textarea>
+                            <x-input-error :messages="$errors->get('objetivo_personalizado')" class="mt-1" />
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
 
         {{-- Sección: Archivos PDF / Documentos (Paso 3) --}}
         <section class="space-y-3" x-show="step === 3" x-cloak data-step-section="3">
-            <div class="border border-neutral-200 rounded-lg bg-white">
-                <header
-                    class="flex items-center gap-2 px-4 py-3 border-b border-neutral-200 bg-neutral-50 rounded-t-lg">
-                    <span
-                        class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-semibold">3</span>
-                    <h2 class="text-sm font-semibold text-neutral-800">Documentación adjunta</h2>
-                </header>
+            <div class="rounded-lg border border-neutral-200 bg-white p-4 sm:p-5">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm font-semibold text-neutral-800">Documentación</h2>
+                        <p class="mt-0.5 text-xs text-neutral-500">Adjunta los documentos requeridos (PDF).</p>
+                    </div>
+                    <span class="text-xs text-neutral-500">Paso 3 de 3</span>
+                </div>
 
-                <div class="p-4 space-y-4">
+                <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <x-input-label value="Archivo 1 (PDF)"/>
@@ -350,9 +449,7 @@
                             >
                         </div>
                     </div>
-                    <p class="text-sm text-gray-500">
-                        Solo archivos PDF. Máximo 5 MB cada uno.
-                    </p>
+                    <p class="text-xs text-neutral-500">Solo PDF. Máximo 5 MB por archivo.</p>
                 </div>
             </div>
         </section>

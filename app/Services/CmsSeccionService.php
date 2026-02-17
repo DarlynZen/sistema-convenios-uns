@@ -173,4 +173,92 @@ class CmsSeccionService
 
         return $this->repository->upsertBySlug('contacto', $data);
     }
+
+    /**
+     * Datos listos para la sección de FAQs en el panel admin.
+     *
+     * @return array{faqItems:array<int, array{question:string, answer:string}>}
+     */
+    public function getFaqAdminViewData(): array
+    {
+        $faq = $this->repository->findArrayBySlug('faq');
+        $faqJson = is_array($faq['contenido_json'] ?? null) ? $faq['contenido_json'] : [];
+
+        $items = $faqJson['items'] ?? [];
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        $faqItems = collect($items)
+            ->filter(fn ($row) => is_array($row))
+            ->map(function (array $row) {
+                $q = is_string($row['question'] ?? null) ? trim($row['question']) : '';
+                $a = is_string($row['answer'] ?? null) ? trim($row['answer']) : '';
+                return ['question' => $q, 'answer' => $a];
+            })
+            ->filter(fn (array $row) => $row['question'] !== '' && $row['answer'] !== '')
+            ->values()
+            ->all();
+
+        return compact('faqItems');
+    }
+
+    public function addFaq(string $question, string $answer): array
+    {
+        $question = trim($question);
+        $answer = trim($answer);
+
+        $seccion = $this->repository->findArrayBySlug('faq');
+        $contenido = is_array($seccion['contenido_json'] ?? null) ? $seccion['contenido_json'] : [];
+
+        $items = $contenido['items'] ?? [];
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        $items[] = [
+            'question' => $question,
+            'answer' => $answer,
+        ];
+
+        $contenido['items'] = $items;
+
+        $data = [
+            'slug' => 'faq',
+            'titulo' => 'FAQ',
+            'descripcion' => 'Preguntas frecuentes mostradas en la web.',
+            'contenido_json' => $contenido,
+        ];
+
+        return $this->repository->upsertBySlug('faq', $data);
+    }
+
+    /**
+     * Datos listos para renderizar FAQs en el sitio público.
+     *
+     * @return array{faqItems:array<int, array{question:string, answer:string}>}
+     */
+    public function getFaqPublicViewData(): array
+    {
+        $faqItems = $this->getFaqAdminViewData()['faqItems'] ?? [];
+
+        if (!is_array($faqItems) || count($faqItems) === 0) {
+            $faqItems = [
+                [
+                    'question' => '¿Quién puede proponer y firmar un convenio en la universidad?',
+                    'answer' => 'La propuesta de un convenio puede originarse en docentes o unidades académicas, pero solo autoridades institucionales (ej. Rectorado, Vicerrectorado o despacho legal) están facultadas para firmarlos y validarlos oficialmente.',
+                ],
+                [
+                    'question' => '¿Cuál es la duración típica de un convenio?',
+                    'answer' => 'La duración de un convenio puede variar, según el tipo y los objetivos. Algunos tienen plazos definidos (ej. 3 a 5 años) y otros pueden ser indefinidos si así se acuerda. En normativas públicas, suele establecerse un límite máximo inicial (por ejemplo, cuatro años) con posibilidad de extensión mediante prórroga consensuada.',
+                ],
+                [
+                    'question' => '¿Cuándo es necesario tramitar un convenio?',
+                    'answer' => 'Un convenio escrito es obligatorio para proyectos como dobles titulaciones, intercambios formales, tesis conjuntas o investigaciones institucionales. Para otros acuerdos informales, la colaboración puede realizarse sin convenio si así lo permiten las políticas internas.',
+                ],
+            ];
+        }
+
+        return compact('faqItems');
+    }
 }
