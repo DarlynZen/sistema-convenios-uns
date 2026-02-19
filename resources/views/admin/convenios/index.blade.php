@@ -79,7 +79,7 @@
         </x-slot>
 
         {{-- El formulario ahora incluye su propia navegación interna --}}
-        <div class="px-5">
+        <div class="px-3">
             @include('admin.convenios.crearConvenio')
         </div>
 

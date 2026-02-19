@@ -177,7 +177,7 @@ class CmsSeccionService
     /**
      * Datos listos para la sección de FAQs en el panel admin.
      *
-     * @return array{faqItems:array<int, array{question:string, answer:string}>}
+     * @return array{faqItems:array<int, array{id:int, question:string, answer:string}>}
      */
     public function getFaqAdminViewData(): array
     {
@@ -191,10 +191,15 @@ class CmsSeccionService
 
         $faqItems = collect($items)
             ->filter(fn ($row) => is_array($row))
-            ->map(function (array $row) {
+            ->map(function (array $row, int|string $index) {
                 $q = is_string($row['question'] ?? null) ? trim($row['question']) : '';
                 $a = is_string($row['answer'] ?? null) ? trim($row['answer']) : '';
-                return ['question' => $q, 'answer' => $a];
+
+                return [
+                    'id' => is_numeric($index) ? (int) $index : 0,
+                    'question' => $q,
+                    'answer' => $a,
+                ];
             })
             ->filter(fn (array $row) => $row['question'] !== '' && $row['answer'] !== '')
             ->values()
@@ -231,6 +236,67 @@ class CmsSeccionService
         ];
 
         return $this->repository->upsertBySlug('faq', $data);
+    }
+
+    public function updateFaq(int $index, string $question, string $answer): array
+    {
+        $question = trim($question);
+        $answer = trim($answer);
+
+        $seccion = $this->repository->findArrayBySlug('faq');
+        $contenido = is_array($seccion['contenido_json'] ?? null) ? $seccion['contenido_json'] : [];
+
+        $items = $contenido['items'] ?? [];
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        if (!array_key_exists($index, $items) || !is_array($items[$index] ?? null)) {
+            return $this->repository->upsertBySlug('faq', [
+                'slug' => 'faq',
+                'titulo' => 'FAQ',
+                'descripcion' => 'Preguntas frecuentes mostradas en la web.',
+                'contenido_json' => ['items' => $items],
+            ]);
+        }
+
+        $items[$index] = [
+            'question' => $question,
+            'answer' => $answer,
+        ];
+
+        $contenido['items'] = array_values($items);
+
+        return $this->repository->upsertBySlug('faq', [
+            'slug' => 'faq',
+            'titulo' => 'FAQ',
+            'descripcion' => 'Preguntas frecuentes mostradas en la web.',
+            'contenido_json' => $contenido,
+        ]);
+    }
+
+    public function deleteFaq(int $index): array
+    {
+        $seccion = $this->repository->findArrayBySlug('faq');
+        $contenido = is_array($seccion['contenido_json'] ?? null) ? $seccion['contenido_json'] : [];
+
+        $items = $contenido['items'] ?? [];
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        if (array_key_exists($index, $items)) {
+            unset($items[$index]);
+        }
+
+        $contenido['items'] = array_values($items);
+
+        return $this->repository->upsertBySlug('faq', [
+            'slug' => 'faq',
+            'titulo' => 'FAQ',
+            'descripcion' => 'Preguntas frecuentes mostradas en la web.',
+            'contenido_json' => $contenido,
+        ]);
     }
 
     /**

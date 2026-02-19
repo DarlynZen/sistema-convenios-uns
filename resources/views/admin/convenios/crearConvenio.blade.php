@@ -111,43 +111,25 @@
                         <h2 class="text-sm font-semibold text-neutral-800">General</h2>
                         <p class="mt-0.5 text-xs text-neutral-500">Datos generales del convenio y la entidad.</p>
                     </div>
-                    <span class="text-xs text-neutral-500">Paso 1 de 3</span>
                 </div>
 
                 <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {{-- Título del convenio --}}
-                        <div>
-                            <x-input-label for="titulo" value="Título del convenio" />
-                            <x-text-input
-                                id="titulo"
-                                name="titulo"
-                                type="text"
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                placeholder="Nombre del título del convenio"
-                                required
-                                :value="old('titulo')"
-                            />
-                            <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
-                        </div>
-
-                        {{-- Nro. de Transcripción de Resolución --}}
-                        <div>
-                            <x-input-label for="resolucion" value="Nro. de Transcripción de Resolución"/>
-                            <x-text-input
-                                id="resolucion"
-                                name="resolucion"
-                                type="text"
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                placeholder="Nro. de transcripción"
-                                :value="old('resolucion')"
-                            />
-                            <x-input-error :messages="$errors->get('resolucion')" class="mt-1"/>
-                        </div>
+                    {{-- Título del convenio (texto largo) --}}
+                    <div>
+                        <x-input-label for="titulo" value="Título del convenio" />
+                        <textarea
+                            id="titulo"
+                            name="titulo"
+                            rows="4"
+                            required
+                            class="mt-1 block min-h-[96px] w-full resize-y rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                            placeholder="Nombre del título del convenio"
+                        >{{ old('titulo') }}</textarea>
+                        <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
                     </div>
 
-                    {{-- Tipo de convenio y Tipo de ámbito --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {{-- Tipo de convenio, Tipo de ámbito y Nro. de Transcripción de Resolución --}}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <x-input-label for="tipo_convenio_id" value="Tipo de convenio"/>
                             <select
@@ -188,6 +170,19 @@
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('ambito_id')" class="mt-1"/>
+                        </div>
+
+                        <div>
+                            <x-input-label for="resolucion" value="Nro. de Transcripción"/>
+                            <x-text-input
+                                id="resolucion"
+                                name="resolucion"
+                                type="text"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                placeholder="Nro. de transcripción"
+                                :value="old('resolucion')"
+                            />
+                            <x-input-error :messages="$errors->get('resolucion')" class="mt-1"/>
                         </div>
                     </div>
 
@@ -254,7 +249,6 @@
                         <h2 class="text-sm font-semibold text-neutral-800">Detalles</h2>
                         <p class="mt-0.5 text-xs text-neutral-500">Beneficiarios, fechas y datos adicionales.</p>
                     </div>
-                    <span class="text-xs text-neutral-500">Paso 2 de 3</span>
                 </div>
 
                 <div class="space-y-3">
@@ -422,7 +416,6 @@
                         <h2 class="text-sm font-semibold text-neutral-800">Documentación</h2>
                         <p class="mt-0.5 text-xs text-neutral-500">Adjunta los documentos requeridos (PDF).</p>
                     </div>
-                    <span class="text-xs text-neutral-500">Paso 3 de 3</span>
                 </div>
 
                 <div class="space-y-3">

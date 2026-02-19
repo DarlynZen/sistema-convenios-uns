@@ -96,6 +96,49 @@ class AdminController extends Controller
             ->with('status', 'FAQ creada correctamente.');
     }
 
+    public function actualizarFaq(Request $request)
+    {
+        $validated = $request->validate([
+            'faq_edit_index' => 'required|integer|min:0',
+            'faq_edit_question' => 'required|string|max:255',
+            'faq_edit_answer' => [
+                'required',
+                'string',
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    $text = is_string($value) ? trim($value) : '';
+                    $words = preg_split('/\s+/u', strip_tags($text), -1, PREG_SPLIT_NO_EMPTY);
+                    $count = is_array($words) ? count($words) : 0;
+                    if ($count > 500) {
+                        $fail('La respuesta debe tener como máximo 500 palabras.');
+                    }
+                },
+            ],
+        ]);
+
+        $this->cmsSeccionService->updateFaq(
+            index: (int) $validated['faq_edit_index'],
+            question: $validated['faq_edit_question'],
+            answer: $validated['faq_edit_answer'],
+        );
+
+        return redirect()
+            ->route('admin.contenido.index', ['tab' => 'infogeneral'])
+            ->with('status', 'FAQ actualizada correctamente.');
+    }
+
+    public function eliminarFaq(Request $request)
+    {
+        $validated = $request->validate([
+            'faq_delete_index' => 'required|integer|min:0',
+        ]);
+
+        $this->cmsSeccionService->deleteFaq(index: (int) $validated['faq_delete_index']);
+
+        return redirect()
+            ->route('admin.contenido.index', ['tab' => 'infogeneral'])
+            ->with('status', 'FAQ eliminada correctamente.');
+    }
+
     public function catalogo()
     {
         return view('admin.catalogo.index');

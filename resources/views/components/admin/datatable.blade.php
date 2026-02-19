@@ -13,11 +13,11 @@
 
 <div x-data>
     <div
-        class="w-full max-w-full overflow-x-hidden rounded border border-gray-200 bg-white shadow-sm ring-1 ring-slate-900/5">
+        class="w-full max-w-full overflow-x-hidden rounded border border-gray-200 bg-white shadow-sm">
         <div class="w-full max-w-full overflow-x-auto">
             <div class="max-h-[500px] overflow-y-auto">
                 <table class="w-full table-auto bg-white text-sm text-[#393939]">
-                    <thead class="sticky top-0 z-20 bg-neutral-50 text-xs md:text-sm tracking-wide text-neutral-800">
+                    <thead class="sticky top-0 z-20 bg-neutral-50 text-xs md:text-sm tracking-wide text-neutral-700">
                     <tr class="text-left">
                         @foreach($columns as $col)
                             <th class="px-4 py-3 font-bold bg-neutral-50/95 {{ $col['classes'] ?? '' }}">

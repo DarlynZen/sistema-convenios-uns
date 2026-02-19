@@ -9,12 +9,12 @@
         requestStep(i){ $dispatch('step-requested', { step: i }); }
     }"
     x-on:step-changed.window="step = $event.detail.step"
-    class="flex min-h-full flex-col sm:flex-row gap-3 sm:gap-5"
+    class="flex min-h-full flex-col sm:flex-row gap-3"
 >
     {{-- Sidebar de secciones --}}
     <aside class="w-full sm:w-44 border-b sm:border-b-0 sm:border-r border-neutral-200 pb-3 sm:pb-0 sm:pr-4">
         <div class="sm:sticky sm:top-0 sm:bg-white sm:z-10">
-            <p class="mb-3 py-1 text-xs font-semibold text-neutral-700">Pasos</p>
+            <p class="mb-2 px-2.5 pt-4 text-xs font-semibold text-neutral-700">Pasos</p>
             <ol class="flex sm:block gap-2 sm:gap-1.5 text-sm overflow-x-auto pb-1">
                 @foreach($steps as $index => $stepDef)
                     @php $i = $index + 1; @endphp

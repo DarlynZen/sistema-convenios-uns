@@ -224,6 +224,143 @@
                 </button>
             </div>
 
+            <div
+                class="mt-3"
+                x-data="{
+                    edit: {
+                        index: @js(old('faq_edit_index', '')),
+                        question: @js(old('faq_edit_question', '')),
+                        answer: @js(old('faq_edit_answer', '')),
+                    },
+                    del: {
+                        index: @js(old('faq_delete_index', '')),
+                        question: @js(old('faq_delete_question', '')),
+                    },
+                    setEdit(faq) {
+                        this.edit.index = (faq?.id ?? '');
+                        this.edit.question = (faq?.question ?? '');
+                        this.edit.answer = (faq?.answer_full ?? faq?.answer ?? '');
+                    },
+                    setDelete(faq) {
+                        this.del.index = (faq?.id ?? '');
+                        this.del.question = (faq?.question ?? '');
+                    },
+                }"
+                x-on:faq-edit-requested.window="setEdit($event.detail.faq)"
+                x-on:faq-delete-requested.window="setDelete($event.detail.faq)"
+            >
+                @php
+                $items = is_array($faqItems ?? null) ? $faqItems : [];
+
+                $faqRows = collect($items)
+                    ->filter(fn ($r) => is_array($r))
+                    ->map(function (array $r) {
+                        $id = isset($r['id']) && is_numeric($r['id']) ? (int) $r['id'] : null;
+                        $q = is_string($r['question'] ?? null) ? $r['question'] : '';
+                        $a = is_string($r['answer'] ?? null) ? $r['answer'] : '';
+                        $preview = mb_strlen($a) > 180 ? (mb_substr($a, 0, 180) . '...') : $a;
+
+                        return [
+                            'id' => $id,
+                            'question' => $q,
+                            'answer_preview' => $preview,
+                            'answer_full' => $a,
+                        ];
+                    })
+                    ->filter(fn ($r) => ($r['id'] ?? null) !== null)
+                    ->values()
+                    ->all();
+
+                $faqColumns = [
+                    ['key' => 'question', 'label' => 'Pregunta', 'cellClasses' => 'min-w-[240px]'],
+                    ['key' => 'answer_preview', 'label' => 'Respuesta', 'cellClasses' => 'min-w-[320px]'],
+                ];
+                @endphp
+
+                <x-admin.datatable
+                    :columns="$faqColumns"
+                    :rows="$faqRows"
+                    actions="admin.contenido.partials.faq-actions"
+                    emptyState="Aún no has creado FAQs."
+                />
+
+                <x-modal name="editarFAQ" :show="$errors->has('faq_edit_question') || $errors->has('faq_edit_answer') || $errors->has('faq_edit_index')" maxWidth="md">
+                    <x-slot name="title">
+                        <div class="font-bold text-base text-neutral-700">Editar FAQ</div>
+                    </x-slot>
+
+                    <form
+                        method="POST"
+                        action="{{ route('admin.contenido.faq.update') }}"
+                        class="p-5 space-y-4"
+                    >
+                        @csrf
+
+                        <input type="hidden" name="faq_edit_index" x-bind:value="edit.index" />
+
+                        <div>
+                            <x-input-label for="faq_edit_question" value="Pregunta" />
+                            <x-text-input
+                                id="faq_edit_question"
+                                name="faq_edit_question"
+                                type="text"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                                placeholder="Escribe la pregunta"
+                                required
+                                x-model="edit.question"
+                            />
+                            <x-input-error :messages="$errors->get('faq_edit_question')" class="mt-1" />
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between gap-2">
+                                <x-input-label for="faq_edit_answer" value="Respuesta" />
+                                <span class="text-xs text-neutral-500" x-text="(edit.answer || '').trim() ? (edit.answer.trim().split(/\s+/).filter(Boolean).length + ' / 500 palabras') : '0 / 500 palabras'"></span>
+                            </div>
+                            <textarea
+                                id="faq_edit_answer"
+                                name="faq_edit_answer"
+                                rows="6"
+                                required
+                                x-model="edit.answer"
+                                class="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                                placeholder="Escribe la respuesta (máximo 500 palabras)"
+                            ></textarea>
+                            <x-input-error :messages="$errors->get('faq_edit_answer')" class="mt-1" />
+                        </div>
+
+                        <div class="flex justify-end gap-2 pt-1">
+                            <x-admin.cancel-button @click.prevent="$dispatch('close-modal', 'editarFAQ')" class="px-3 py-1.5 text-xs gap-1.5">Cancelar</x-admin.cancel-button>
+                            <x-admin.confirm-button type="submit" class="px-3 py-1.5 text-xs gap-1.5">Guardar cambios</x-admin.confirm-button>
+                        </div>
+                    </form>
+                </x-modal>
+
+                <x-modal name="eliminarFAQ" :show="$errors->has('faq_delete_index')" maxWidth="md">
+                    <x-slot name="title">
+                        <div class="font-bold text-base text-neutral-700">Eliminar FAQ</div>
+                    </x-slot>
+
+                    <form method="POST" action="{{ route('admin.contenido.faq.delete') }}" class="p-5 space-y-4">
+                        @csrf
+                        <input type="hidden" name="faq_delete_index" x-bind:value="del.index" />
+                        <input type="hidden" name="faq_delete_question" x-bind:value="del.question" />
+
+                        <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+                            <p class="text-sm text-neutral-700">¿Seguro que deseas eliminar esta FAQ?</p>
+                            <p class="mt-2 text-sm font-semibold text-neutral-900" x-text="del.question || ''"></p>
+                        </div>
+
+                        <x-input-error :messages="$errors->get('faq_delete_index')" class="mt-1" />
+
+                        <div class="flex justify-end gap-2 pt-1">
+                            <x-admin.cancel-button @click.prevent="$dispatch('close-modal', 'eliminarFAQ')" class="px-3 py-1.5 text-xs gap-1.5">Cancelar</x-admin.cancel-button>
+                            <x-admin.confirm-button type="submit" class="px-3 py-1.5 text-xs gap-1.5">Eliminar</x-admin.confirm-button>
+                        </div>
+                    </form>
+                </x-modal>
+            </div>
+
             <x-modal name="crearFAQ" :show="$errors->has('faq_question') || $errors->has('faq_answer')" maxWidth="md">
                 <x-slot name="title">
                     <div class="font-bold text-base text-neutral-700">Crear FAQ</div>
@@ -278,27 +415,6 @@
                     </div>
                 </form>
             </x-modal>
-
-            <div class="mt-3 space-y-3">
-                @php
-                $items = is_array($faqItems ?? null) ? $faqItems : [];
-                @endphp
-
-                @if(count($items) === 0)
-                <div class="rounded-md border border-neutral-200 bg-white p-3 text-sm text-neutral-500">
-                    Aún no has creado FAQs.
-                </div>
-                @else
-                @foreach($items as $faq)
-                <div class="rounded-xl border border-neutral-200 bg-white p-3">
-                    <div class="flex items-start justify-between gap-4">
-                        <h4 class="text-sm font-semibold text-neutral-900">{{ $faq['question'] ?? '' }}</h4>
-                    </div>
-                    <p class="mt-1.5 text-sm leading-relaxed text-neutral-600">{{ $faq['answer'] ?? '' }}</p>
-                </div>
-                @endforeach
-                @endif
-            </div>
         </div>
     </div>
 </div>
