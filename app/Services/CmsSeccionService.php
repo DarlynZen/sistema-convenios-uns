@@ -12,8 +12,6 @@ class CmsSeccionService
         private FileService $fileService
     ){}
 
-    
-
     /**
      * Datos listos para el formulario del Hero en el panel admin.
      * Mantiene la vista sin lógica de preparación de datos.

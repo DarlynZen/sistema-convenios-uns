@@ -7,14 +7,7 @@ use Illuminate\Http\Request;
 
 class CmsSeccionController extends Controller
 {
-    public function __construct(
-        private CmsSeccionRepository $repository
-    ) {
-    }
-
-    public function index()
-    {
-        return response()->json($this->repository->paginateArray(15));
+    public function __construct(private CmsSeccionRepository $repository) {
     }
 
     public function store(Request $request)
@@ -67,15 +60,5 @@ class CmsSeccionController extends Controller
         }
 
         return response()->json($seccion);
-    }
-
-    public function destroy(int $id)
-    {
-        $deleted = $this->repository->deleteById($id);
-        if (!$deleted) {
-            return response()->json(['error' => 'Sección no encontrada.'], 404);
-        }
-
-        return response()->json(['message' => 'Sección eliminada exitosamente.'], 200);
     }
 }
