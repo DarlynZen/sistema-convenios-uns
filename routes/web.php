@@ -16,6 +16,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/convenios', [ConvenioController::class, 'index'])->name('convenios.index');
+    Route::get('/convenios/crear', [ConvenioController::class, 'create'])->name('convenios.create');
     Route::post('/convenios', [ConvenioController::class, 'store'])->name('convenios.store');
     Route::get('/contenido', [AdminController::class, 'contenido'])->name('contenido.index');
     Route::post('/contenido/hero', [AdminController::class, 'guardarHero'])->name(name: 'contenido.hero.save');

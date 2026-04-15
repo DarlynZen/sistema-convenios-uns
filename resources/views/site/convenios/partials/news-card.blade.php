@@ -1,11 +1,11 @@
-<article class="group w-full max-w-[360px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition duration-500 ease-out hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-md">
+<article class="group w-full max-w-[360px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
 	<a href="{{ $href ?? '#' }}" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200 focus-visible:ring-offset-2">
 		<div class="relative aspect-[16/10] w-full overflow-hidden bg-neutral-200">
 			@if (!empty($image))
 				<img
 					src="{{ $image }}"
 					alt="{{ $title ?? 'Noticia' }}"
-					class="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.01]"
+					class="h-full w-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-[1.08]"
 					loading="lazy"
 				/>
 			@else
@@ -30,7 +30,7 @@
 
 		<div class="space-y-3 px-5 py-4">
 			<div class="space-y-2">
-				<h3 class="text-[15px] font-bold leading-6 tracking-tight text-neutral-800 transition-colors duration-500 ease-out group-hover:text-brand-700 sm:text-base">
+				<h3 class="text-[15px] font-bold leading-6 tracking-tight text-neutral-800 sm:text-base">
 					{{ $title ?? '' }}
 				</h3>
 
@@ -74,9 +74,9 @@
 			</div>
 
 			<div class="flex items-center justify-between pt-1">
-				<span class="text-sm font-semibold text-brand-700 transition-colors duration-500 ease-out group-hover:text-brand-800">Leer más</span>
-				<span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white ring-1 ring-neutral-200 transition-colors duration-500 ease-out group-hover:bg-brand-25 group-hover:ring-brand-200">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4 text-brand-700 transition-colors duration-500 ease-out group-hover:text-brand-800">
+				<span class="text-sm font-semibold text-brand-700">Leer más</span>
+				<span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white ring-1 ring-neutral-200">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4 text-brand-700">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M7 7h10v10" />
 					</svg>
 				</span>

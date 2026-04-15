@@ -19,7 +19,6 @@ class ConvenioService
         return $this->repository->obtenerPorId($id);
     }
 
-    /*obtenerTodoConRelaciones*/
     public function listarConvenios()
     {
         return $this->repository->obtenerTodoConRelaciones();
@@ -79,3 +78,4 @@ class ConvenioService
     }
 }
 
+ 

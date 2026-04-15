@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\CmsSeccionService;
 
-class SiteController extends Controller
-{
+class SiteController extends Controller{
     public function __construct(
         private CmsSeccionService $cmsSeccionService
-    ) {
-    }
+    ) {}
 
-    public function inicio(Request $request)
-    {
+    public function inicio(Request $request){
         $tab = $request->query('tab', 'inicio');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();
@@ -21,8 +18,7 @@ class SiteController extends Controller
         return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData, $faqViewData));
     }
 
-    public function nuestrosConvenios(Request $request)
-    {
+    public function nuestrosConvenios(Request $request){
         $tab = $request->query('tab', 'nuestros-convenios');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();
@@ -30,8 +26,7 @@ class SiteController extends Controller
         return view('site.convenios.welcome', array_merge(compact('tab'), $heroViewData, $contactoViewData, $faqViewData));
     }
 
-    public function nosotros(Request $request)
-    {
+    public function nosotros(Request $request){
         $tab = $request->query('tab', 'nosotros');
         $heroViewData = $this->cmsSeccionService->getHeroPublicViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoPublicViewData();

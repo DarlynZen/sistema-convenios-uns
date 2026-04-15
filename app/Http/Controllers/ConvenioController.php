@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreConvenioRequest;
-use App\Http\Requests\UpdateConvenioRequest;
+use App\Http\Requests\ConvenioRequest;
 use App\Models\Convenio;
 use App\Services\ConvenioService;
-use App\Repositories\ConvenioRepository;
 use App\Services\DocumentoConvenioService;
 
 class ConvenioController extends Controller
@@ -21,13 +19,13 @@ class ConvenioController extends Controller
         return view('admin.convenios.index', $this->convenioService->obtenerDatosIndex());
     }
 
-    /*public function create()
+    public function create()
     {
-        $data = $this->convenioService->obtenerListado();
+        $data = $this->convenioService->obtenerCatalogos();
         return view('admin.convenios.create', $data);
-    }*/
+    }
 
-    public function store(StoreConvenioRequest $request)
+    public function store(ConvenioRequest $request)
     {
         try {
             $data = $request->validated();
@@ -35,21 +33,19 @@ class ConvenioController extends Controller
             $beneficiarios = $data['beneficiarios'] ?? null;
             unset($data['beneficiarios']);
 
-            // Crear convenio principal
             $convenio = $this->convenioService->crear($data, $beneficiarios);
 
-            // Crear documentos asociados si se enviaron archivos
-            if ($request->hasFile('archivo_uno')) {
+            if ($request->hasFile('transcripcion_resolucion')) {
                 $this->documentoConvenioService->create($convenio, [
-                    'documento'        => $request->file('archivo_uno'),
-                    'nombre_documento' => 'Resolución 1',
+                    'documento'        => $request->file('transcripcion_resolucion'),
+                    'nombre_documento' => 'Transcripción de Resolución',
                 ]);
             }
 
-            if ($request->hasFile('archivo_dos')) {
-                $this->documentoConvenioService->create($convenio, [
-                    'documento'        => $request->file('archivo_dos'),
-                    'nombre_documento' => 'Resolución 2',
+            if ($request->hasFile('anexo_convenio')) {
+                 $this->documentoConvenioService->create($convenio, [
+                    'documento'        => $request->file('anexo_convenio'),
+                    'nombre_documento' => 'Anexo de Convenio',
                 ]);
             }
 
@@ -75,7 +71,7 @@ class ConvenioController extends Controller
         return view('admin.convenios.edit', $data);
     }
 
-    public function update(UpdateConvenioRequest $request, Convenio $convenio)
+    public function update(ConvenioRequest $request, Convenio $convenio)
     {
         try {
             $this->convenioService->actualizar($convenio->id, $request->validated(), $request->input('beneficiarios', []));

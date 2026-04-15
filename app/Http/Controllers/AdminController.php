@@ -14,22 +14,19 @@ class AdminController extends Controller
         private CmsSeccionService $cmsSeccionService
     ) {}
 
-    public function dashboard()
-    {
+    public function dashboard(){
         $stats = $this->dashboardService->getStats();
         return view('admin.dashboard', $stats);
     }
 
-    public function contenido()
-    {
+    public function contenido(){
         $heroViewData = $this->cmsSeccionService->getHeroAdminViewData();
         $contactoViewData = $this->cmsSeccionService->getContactoAdminViewData();
         $faqViewData = $this->cmsSeccionService->getFaqAdminViewData();
         return view('admin.contenido.index', array_merge($heroViewData, $contactoViewData, $faqViewData));
     }
 
-    public function guardarHero(Request $request)
-    {
+    public function guardarHero(Request $request){
         $validated = $request->validate([
             'hero_titulo' => 'required|string|max:255',
             'hero_subtitulo' => 'nullable|string|max:255',

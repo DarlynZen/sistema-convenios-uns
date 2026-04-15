@@ -9,7 +9,7 @@
         requestStep(i){ $dispatch('step-requested', { step: i }); }
     }"
     x-on:step-changed.window="step = $event.detail.step"
-    class="flex min-h-full flex-col sm:flex-row gap-3"
+    class="flex min-h-full flex-col sm:flex-row gap-3 w-full"
 >
     {{-- Sidebar de secciones --}}
     <aside class="w-full sm:w-44 border-b sm:border-b-0 sm:border-r border-neutral-200 pb-3 sm:pb-0 sm:pr-4">
@@ -46,7 +46,7 @@
         </div>
     </aside>
     {{-- Contenedor para el contenido del paso --}}
-    <div class="flex-1 pr-1 sm:pr-2 pb-1 sm:pb-2">
+    <div class="flex-1">
         {{ $slot }}
     </div>
 </div>

@@ -1,10 +1,10 @@
-<article class="group w-full max-w-[340px] overflow-hidden rounded border border-neutral-400 bg-[#393939] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+<article class="group w-full max-w-[340px] overflow-hidden rounded border border-neutral-400 bg-[#393939] shadow-sm">
 	<div class="relative aspect-[4/5] w-full overflow-hidden bg-neutral-800">
 		@if (!empty($image))
 		<img
 			src="{{ $image }}"
 			alt="Foto de {{ $name ?? 'Integrante' }}"
-			class="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.02]"
+			class="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.08]"
 			loading="lazy" />
 		@else
 		<div class="flex h-full w-full items-center justify-center">

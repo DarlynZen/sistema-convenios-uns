@@ -1,3 +1,14 @@
+<style>
+	.card-image-hover:hover img {
+		transform: scale(1.08);
+		transition: transform 0.3s ease-in-out;
+	}
+
+	.card-image-hover img {
+		transition: transform 0.3s ease-in-out;
+	}
+</style>
+
 @php
 	$objetivos = [
 		[
@@ -198,7 +209,7 @@
 						@foreach ($miembros as $member)
 							<div class="rounded-lg border border-neutral-200 bg-white p-3 shadow-sm">
 								<div class="flex items-start gap-3">
-									<div class="h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100 ring-1 ring-neutral-200">
+									<div class="card-image-hover h-16 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-100 ring-1 ring-neutral-200">
 										<img src="{{ $member['image'] }}" alt="{{ $member['name'] }}" class="h-full w-full object-cover" loading="lazy" />
 									</div>
 
