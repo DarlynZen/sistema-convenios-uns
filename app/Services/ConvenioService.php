@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Enums\EstadoConvenio;
 use App\Models\Convenio;
 use App\Repositories\ConvenioRepository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class ConvenioService
@@ -24,11 +22,6 @@ class ConvenioService
         return $this->repository->obtenerTodoConRelaciones();
     }
 
-    public function obtenerConveniosActivos(): Builder
-    {
-        return $this->repository->obtenerConveniosActivos();
-    }
-
     /**
      * @throws \Throwable
      */
@@ -38,7 +31,7 @@ class ConvenioService
 
             $convenio = $this->repository->crear($data);
 
-            if (!empty($beneficiarios)) {
+            if ($beneficiarios !== null) {
                 $convenio->beneficiario()->sync($beneficiarios);
             }
             return $convenio;
@@ -47,7 +40,16 @@ class ConvenioService
 
     public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
     {
-        return $this->repository->actualizar($id, $data, $beneficiarios);
+        return DB::transaction(function () use ($id, $data, $beneficiarios) {
+            $convenio = $this->repository->actualizar($id, $data);
+
+            if ($beneficiarios !== null) {
+                $convenio->beneficiario()->sync($beneficiarios);
+                $convenio = $convenio->fresh();
+            }
+
+            return $convenio;
+        });
     }
 
     public function eliminar(int $id): bool
@@ -70,11 +72,32 @@ class ConvenioService
 
     public function getEditFormData(Convenio $convenio): array
     {
+        return $this->getEditFormDataById($convenio->id);
+    }
+
+    public function getEditFormDataById(int $id): array
+    {
+        $convenio = $this->obtenerPorId($id);
         $convenio->load('beneficiario');
 
         return array_merge([
             'convenio' => $convenio,
         ], $this->obtenerCatalogos());
+    }
+
+    public function getShowViewData(int $id): array
+    {
+        $convenio = $this->obtenerPorId($id);
+        $convenio->load([
+            'tipoConvenio',
+            'ambito',
+            'estadoConvenio',
+            'beneficiario',
+            'documento',
+            'convenioAnterior',
+        ]);
+
+        return compact('convenio');
     }
 }
 

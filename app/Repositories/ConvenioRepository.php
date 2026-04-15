@@ -8,10 +8,6 @@ use App\Models\TipoConvenio;
 use App\Models\Estado;
 use App\Models\Beneficiario;
 use App\Enums\EstadoConvenio;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class ConvenioRepository
 {
@@ -57,27 +53,16 @@ class ConvenioRepository
         return $this->modelo->create($data);
     }
 
-    public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
+    public function actualizar(int $id, array $data): Convenio
     {
         $convenio = $this->modelo->findOrFail($id);
-
         $convenio->update($data);
-
-        if (!empty($beneficiarios)) {
-            $convenio->beneficiario()->sync($beneficiarios);
-        }
-
-        return $convenio;
+        return $convenio->fresh();
     }
 
     public function eliminar(int $id): bool
     {
         return (bool)$this->modelo->findOrFail($id)->delete();
-    }
-
-    public function obtenerConveniosActivos(): Builder
-    {
-        return $this->modelo->where('estado_convenio_id', EstadoConvenio::ACTIVO->value);
     }
 
     public function obtenerCatalogos(): array
@@ -95,19 +80,5 @@ class ConvenioRepository
         return $query->with(['tipoConvenio', 'estadoConvenio'])
             ->latest()
             ->limit($limit);
-    }
-
-    public static function getDashboardStats(): array
-    {
-        return [
-            'total_convenios' => Convenio::count(),
-            'convenios_activos' => Convenio::where('estado_convenio_id', EstadoConvenio::ACTIVO->value)->count(),
-            'tipos_convenio' => TipoConvenio::count(),
-            'ambitos' => Ambito::count(),
-            'recientes' => Convenio::with(['tipoConvenio', 'estadoConvenio'])
-                ->latest()
-                ->limit(5)
-                ->get(),
-        ];
     }
 }

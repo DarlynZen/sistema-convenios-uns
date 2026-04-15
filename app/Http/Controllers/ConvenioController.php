@@ -61,8 +61,7 @@ class ConvenioController extends Controller
 
     public function show(Convenio $convenio)
     {
-        $convenio = $this->convenioService->listarConvenios();
-        return view('admin.convenios.show', compact('convenio'));
+        return view('admin.convenios.show', $this->convenioService->getShowViewData($convenio->id));
     }
 
     public function edit(Convenio $convenio)
@@ -74,7 +73,11 @@ class ConvenioController extends Controller
     public function update(ConvenioRequest $request, Convenio $convenio)
     {
         try {
-            $this->convenioService->actualizar($convenio->id, $request->validated(), $request->input('beneficiarios', []));
+            $beneficiarios = $request->exists('beneficiarios')
+                ? $request->input('beneficiarios', [])
+                : null;
+
+            $this->convenioService->actualizar($convenio->id, $request->validated(), $beneficiarios);
 
             return redirect()->route('admin.convenios')
                 ->with('success', 'Convenio actualizado exitosamente.');
