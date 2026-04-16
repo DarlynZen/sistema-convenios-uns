@@ -28,6 +28,9 @@ class ConvenioSeeder extends Seeder
                 'fecha_inicio'          => '2024-01-01',
                 'fecha_fin'             => '2027-01-01',
 
+                'duracion_valor'        => 3,
+                'duracion_unidad'      => 'años',
+
                 'plazo_prorroga_valor'  => 12,
                 'plazo_prorroga_unidad' => 'meses',
 
@@ -59,6 +62,9 @@ class ConvenioSeeder extends Seeder
 
                 'fecha_inicio'          => '2023-05-10',
                 'fecha_fin'             => '2026-05-10',
+
+                'duracion_valor'        => 3,
+                'duracion_unidad'       => 'años',
 
                 'plazo_prorroga_valor'  => 6,
                 'plazo_prorroga_unidad' => 'meses',

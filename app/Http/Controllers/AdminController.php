@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiario;
 use App\Services\DashboardService;
-use App\Services\ConvenioService;
 use App\Services\CmsSeccionService;
 use Illuminate\Http\Request;
 
@@ -138,7 +138,28 @@ class AdminController extends Controller
 
     public function catalogo()
     {
-        return view('admin.catalogo.index');
+        return view('admin.catalogo.index', [
+            'beneficiarios' => Beneficiario::query()
+                ->orderBy('nombre')
+                ->get(),
+        ]);
+    }
+
+    public function actualizarBeneficiarioCatalogo(Request $request, Beneficiario $beneficiario)
+    {
+        $validated = $request->validate([
+            'descripcion' => 'nullable|string|max:255',
+            'estado' => 'nullable|in:0,1',
+        ]);
+
+        $beneficiario->update([
+            'descripcion' => $validated['descripcion'] ?? null,
+            'estado' => isset($validated['estado']) ? (int) $validated['estado'] : 0,
+        ]);
+
+        return redirect()
+            ->route('admin.catalogo.index')
+            ->with('success', 'Beneficiario actualizado correctamente.');
     }
 
     public function profile()

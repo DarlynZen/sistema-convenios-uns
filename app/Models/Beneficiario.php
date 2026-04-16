@@ -33,6 +33,7 @@ class Beneficiario extends Model
         'nombre',
         'codigo_beneficiario',
         'descripcion',
+        'estado',
     ];
 
     protected $hidden = [

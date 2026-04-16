@@ -22,7 +22,7 @@ class ConvenioController extends Controller
     public function create()
     {
         $data = $this->convenioService->obtenerCatalogos();
-        return view('admin.convenios.create', $data);
+        return view('admin.convenios.crearConvenio', $data);
     }
 
     public function store(ConvenioRequest $request)

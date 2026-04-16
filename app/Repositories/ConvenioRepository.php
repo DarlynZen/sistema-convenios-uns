@@ -75,10 +75,34 @@ class ConvenioRepository
         ];
     }
 
-    public function scopeRecientes($query, int $limit = 5)
+    public function contarTotal(): int { 
+        return $this->modelo->count();
+    }
+
+    public function contarActivos(): int {
+        return $this->modelo->where('estado_convenio_id', EstadoConvenio::ACTIVO->value)->count(); 
+    }
+
+    public function contarTipos(): int { 
+        return TipoConvenio::count(); 
+    }
+
+    public function contarAmbitos(): int { 
+        return Ambito::count(); 
+    }
+
+    public function contarRecientes($query, int $limit = 5)
     {
         return $query->with(['tipoConvenio', 'estadoConvenio'])
             ->latest()
             ->limit($limit);
+    }
+
+    public function recientes(int $limit = 5)
+    {
+        return $this->modelo->with(['tipoConvenio', 'estadoConvenio'])
+            ->latest()
+            ->limit($limit)
+            ->get();
     }
 }

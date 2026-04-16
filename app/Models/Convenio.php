@@ -78,6 +78,8 @@ class Convenio extends Model
         'objetivo_personalizado',
         'fecha_inicio',
         'fecha_fin',
+        'duracion_valor',
+        'duracion_unidad',
         'plazo_prorroga_valor',
         'plazo_prorroga_unidad',
         'entidad_nombre',

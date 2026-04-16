@@ -1,8 +1,24 @@
-<x-admin.stepper :steps="[
-    ['key' => 'info', 'label' => 'General'],
-    ['key' => 'details', 'label' => 'Detalles'],
-    ['key' => 'docs', 'label' => 'Documentación'],
-]" current="1">
+<x-admin-layout>
+    <div class="space-y-4">
+        @if (session('error'))
+            <div class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <x-admin.block>
+            <div class="flex flex-col gap-2">
+                <h1 class="text-neutral-600 text-2xl font-bold">Crear nuevo convenio</h1>
+                <p class="text-neutral-600 text-sm">Completa los pasos para registrar un nuevo convenio académico o de investigación</p>
+            </div>
+        </x-admin.block>
+
+        <div class="bg-white rounded border border-neutral-400">
+            <x-admin.stepper :steps="[
+                ['key' => 'info', 'label' => 'General'],
+                ['key' => 'details', 'label' => 'Detalles'],
+                ['key' => 'docs', 'label' => 'Documentación'],
+            ]" current="1">
     <form
         id="form-crear-convenio"
         method="POST"
@@ -14,11 +30,13 @@
             maxStep: 3,
             notice: '',
             noticeTimeout: null,
+            canShowFinalActions: false,
 
             setStep(to) {
                 const next = Math.min(this.maxStep, Math.max(1, to));
                 this.step = next;
                 this.$dispatch('step-changed', { step: next });
+                this.refreshFinalStepValidity();
             },
 
             showNotice(message) {
@@ -27,7 +45,7 @@
                 this.noticeTimeout = setTimeout(() => { this.notice = ''; }, 3500);
             },
 
-            validateStep(stepIndex) {
+            validateStep(stepIndex, shouldReport = true) {
                 const section = this.$el.querySelector(`[data-step-section='${stepIndex}']`);
                 if (!section) return true;
 
@@ -37,12 +55,23 @@
 
                 for (const el of elements) {
                     if (!el.checkValidity()) {
-                        el.reportValidity();
+                        if (shouldReport) {
+                            el.reportValidity();
+                        }
                         return false;
                     }
                 }
 
                 return true;
+            },
+
+            refreshFinalStepValidity() {
+                if (this.step !== this.maxStep) {
+                    this.canShowFinalActions = false;
+                    return;
+                }
+
+                this.canShowFinalActions = this.validateStep(this.maxStep, false);
             },
 
             handleStepRequested(event) {
@@ -60,7 +89,7 @@
                     this.showNotice('Debes completar el paso actual antes de saltar. Avanza en secuencia (1 → 2 → 3).');
                     return;
                 }
-                if (!this.validateStep(this.step)) {
+                if (!this.validateStep(this.step, true)) {
                     this.showNotice('Hay campos pendientes en este paso. Completa lo requerido para continuar.');
                     return;
                 }
@@ -78,7 +107,7 @@
 
             validateAllAndSubmit() {
                 for (let i = 1; i <= this.maxStep; i++) {
-                    if (!this.validateStep(i)) {
+                    if (!this.validateStep(i, true)) {
                         this.setStep(i);
                         this.showNotice('Completa los campos requeridos antes de crear el convenio.');
                         return;
@@ -88,10 +117,12 @@
                 this.$el.submit();
             },
         }"
+        x-init="$nextTick(() => refreshFinalStepValidity())"
         x-on:step-requested.window="handleStepRequested($event)"
         x-on:wizard-next.window="next()"
         x-on:wizard-prev.window="prev()"
-        x-on:open-modal.window="if ($event.detail === 'crearConvenio') { notice=''; setStep(1); }"
+        x-on:input.debounce.150ms="refreshFinalStepValidity()"
+        x-on:change="refreshFinalStepValidity()"
         x-on:submit.prevent="validateAllAndSubmit()"
     >
         @csrf
@@ -345,7 +376,7 @@
                         <x-input-error :messages="$errors->get('beneficiarios')" class="mt-1" />
                     </div>
 
-                    {{-- Fecha de suscripción, Duración y Tiempo para renovación --}}
+                    {{-- Fecha de suscripción, Duración y Plazo de prórroga --}}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <x-input-label for="fecha_inicio" value="Fecha de suscripción"/>
@@ -361,31 +392,64 @@
                         </div>
 
                         <div>
-                            <x-input-label for="duracion_anos" value="Duración (años)"/>
-                            <x-text-input
-                                id="duracion_anos"
-                                name="duracion_anos"
-                                type="number"
-                                min="1"
-                                step="1"
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                placeholder="Ej: 5"
-                                :value="old('duracion_anos')"
-                            />
-                            <x-input-error :messages="$errors->get('duracion_anos')" class="mt-1"/>
+                            <x-input-label for="duracion_valor" value="Duración"/>
+                            <div class="mt-1 grid grid-cols-2 gap-2">
+                                <x-text-input
+                                    id="duracion_valor"
+                                    name="duracion_valor"
+                                    type="number"
+                                    min="1"
+                                    step="1"
+                                    required
+                                    class="block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                    placeholder="Valor"
+                                    :value="old('duracion_valor')"
+                                />
+                                <select
+                                    id="duracion_unidad"
+                                    name="duracion_unidad"
+                                    required
+                                    class="block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                >
+                                    <option value="">Unidad</option>
+                                    <option value="dias" @selected(old('duracion_unidad') === 'dias')>Días</option>
+                                    <option value="semanas" @selected(old('duracion_unidad') === 'semanas')>Semanas</option>
+                                    <option value="meses" @selected(old('duracion_unidad') === 'meses')>Meses</option>
+                                    <option value="anios" @selected(old('duracion_unidad') === 'anios')>Años</option>
+                                </select>
+                            </div>
+                            <x-input-error :messages="$errors->get('duracion_valor')" class="mt-1"/>
+                            <x-input-error :messages="$errors->get('duracion_unidad')" class="mt-1"/>
                         </div>
 
                         <div>
-                            <x-input-label for="tiempo_renovacion" value="Tiempo para renovación"/>
-                            <x-text-input
-                                id="tiempo_renovacion"
-                                name="tiempo_renovacion"
-                                type="text"
-                                class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                placeholder="Ej: 6 meses antes"
-                                :value="old('tiempo_renovacion')"
-                            />
-                            <x-input-error :messages="$errors->get('tiempo_renovacion')" class="mt-1"/>
+                            <x-input-label for="plazo_prorroga_valor" value="Plazo de prórroga"/>
+                            <div class="mt-1 grid grid-cols-2 gap-2">
+                                <x-text-input
+                                    id="plazo_prorroga_valor"
+                                    name="plazo_prorroga_valor"
+                                    type="number"
+                                    min="1"
+                                    step="1"
+                                    required
+                                    class="block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                    placeholder="Valor"
+                                    :value="old('plazo_prorroga_valor')"
+                                />
+                                <select
+                                    id="plazo_prorroga_unidad"
+                                    name="plazo_prorroga_unidad"
+                                    required
+                                    class="block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                >
+                                    <option value="">Unidad</option>
+                                    <option value="dias" @selected(old('plazo_prorroga_unidad') === 'dias')>Días</option>
+                                    <option value="semanas" @selected(old('plazo_prorroga_unidad') === 'semanas')>Semanas</option>
+                                    <option value="meses" @selected(old('plazo_prorroga_unidad') === 'meses')>Meses</option>
+                                </select>
+                            </div>
+                            <x-input-error :messages="$errors->get('plazo_prorroga_valor')" class="mt-1"/>
+                            <x-input-error :messages="$errors->get('plazo_prorroga_unidad')" class="mt-1"/>
                         </div>
                     </div>
 
@@ -401,6 +465,7 @@
                             :value="old('fecha_fin')"
                         />
                         <p class="mt-1 text-xs text-neutral-500">Se calcula automáticamente en el servidor basándose en la fecha de suscripción y la duración.</p>
+                        <x-input-error :messages="$errors->get('fecha_fin')" class="mt-1"/>
                     </div>
 
                 </div>
@@ -595,5 +660,19 @@
                 </div>
             </div>
         </section>
+
+        <div class="flex items-center justify-end gap-2 px-4 pb-4 sm:px-5" x-show="step === maxStep && canShowFinalActions" x-cloak>
+
+            <x-admin.cancel-button onclick="window.location.href='{{ route('admin.convenios.index') }}'">
+                Cancelar
+            </x-admin.cancel-button>
+
+            <x-admin.confirm-button type="submit">
+                Guardar
+            </x-admin.confirm-button>
+        </div>
     </form>
-</x-admin.stepper>
+            </x-admin.stepper>
+        </div>
+    </div>
+</x-admin-layout>

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->text('objetivo_personalizado')->nullable();
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
+            $table->integer('duracion_valor');
+            $table->string('duracion_unidad', 50);
             $table->integer('plazo_prorroga_valor');
             $table->enum('plazo_prorroga_unidad', ['dias','semanas','meses']);
         

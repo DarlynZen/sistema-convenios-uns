@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nombre', 255);
             $table->string('codigo_beneficiario', 255)->unique();
             $table->string('descripcion', 255)->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

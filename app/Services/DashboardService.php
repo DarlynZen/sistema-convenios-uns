@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\ConvenioRepository;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardService
 {
@@ -10,14 +11,19 @@ class DashboardService
         private ConvenioRepository $convenioRepository
     ) {}
 
-    /**
-     * Obtiene las estadísticas para el dashboard del administrador
-     */
-    public function getStats(): array
+    public function getStats(int $ttlSeconds = 300): array
     {
-        $stats = $this->convenioRepository->getDashboardStats();
+        $cached = Cache::remember('dashboard_convenios', $ttlSeconds, function () {
+            return [
+                'total_convenios' => $this->convenioRepository->contarTotal(),
+                'convenios_activos' => $this->convenioRepository->contarActivos(),
+                'tipos_convenio' => $this->convenioRepository->contarTipos(),
+                'ambitos' => $this->convenioRepository->contarAmbitos(),
+                'recientes' => $this->convenioRepository->recientes(5),
+            ];
+        });
 
-        $recientes = collect($stats['recientes'] ?? [])->map(function ($convenio) {
+        $recientes = collect($cached['recientes'] ?? [])->map(function ($convenio) {
             return [
                 'id' => $convenio->id ?? null,
                 'titulo' => $convenio->titulo ?? null,
@@ -29,10 +35,10 @@ class DashboardService
         })->all();
 
         return [
-            'total_convenios' => (int) ($stats['total_convenios'] ?? 0),
-            'convenios_activos' => (int) ($stats['convenios_activos'] ?? 0),
-            'tipos_convenio' => (int) ($stats['tipos_convenio'] ?? 0),
-            'ambitos' => (int) ($stats['ambitos'] ?? 0),
+            'total_convenios' => (int) ($cached['total_convenios'] ?? 0),
+            'convenios_activos' => (int) ($cached['convenios_activos'] ?? 0),
+            'tipos_convenio' => (int) ($cached['tipos_convenio'] ?? 0),
+            'ambitos' => (int) ($cached['ambitos'] ?? 0),
             'recientes' => $recientes,
         ];
     }

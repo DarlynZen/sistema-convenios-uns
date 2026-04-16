@@ -25,6 +25,8 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::post('/contenido/faq/update', [AdminController::class, 'actualizarFaq'])->name(name: 'contenido.faq.update');
     Route::post('/contenido/faq/delete', [AdminController::class, 'eliminarFaq'])->name(name: 'contenido.faq.delete');
     Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo.index');
+    Route::patch('/catalogo/beneficiarios/{beneficiario}', [AdminController::class, 'actualizarBeneficiarioCatalogo'])
+        ->name('catalogo.beneficiarios.update');
 });
 
 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');

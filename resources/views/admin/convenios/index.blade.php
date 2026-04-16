@@ -1,5 +1,17 @@
 <x-admin-layout>
     <div class="space-y-4">
+        @if (session('success'))
+            <div class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <x-admin.block>
             <div class="flex flex-col gap-2">
                 <h1 class="text-neutral-600 text-2xl font-bold">Gestión de Convenios</h1>
@@ -77,52 +89,5 @@
             </div>
         </div>
     </div>
-
-    {{-- Modal Crear Convenio --}}
-    <x-modal name="crearConvenio" :show="false" maxWidth="4xl">
-        <x-slot name="title">
-            <div class="font-bold text-base text-neutral-700">Crear nuevo convenio</div>
-        </x-slot>
-
-        {{-- El formulario ahora incluye su propia navegación interna --}}
-        <div class="px-3 w-full">
-            @include('admin.convenios.crearConvenio')
-        </div>
-
-        <x-slot name="footer">
-            <div x-data="{ step: 1, maxStep: 3 }" x-on:step-changed.window="step = $event.detail.step"
-                class="flex flex-row items-center gap-2">
-                <x-admin.cancel-button @click="$dispatch('close-modal', 'crearConvenio')"
-                    class="px-3 py-1.5 text-xs gap-1.5">Cancelar</x-admin.cancel-button>
-
-                <x-admin.cancel-button @click="$dispatch('wizard-prev')" x-bind:disabled="step === 1"
-                    class="px-3 py-1.5 text-xs gap-1.5 disabled:opacity-50 disabled:pointer-events-none">
-                    <span class="sr-only">Anterior</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="h-4 w-4" aria-hidden="true">
-                        <path fill="currentColor"
-                            d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z">
-                        </path>
-                    </svg>
-                </x-admin.cancel-button>
-
-                <x-admin.confirm-button @click="$dispatch('wizard-next')" x-bind:disabled="step === maxStep"
-                    class="px-3 py-1.5 text-xs gap-1.5 disabled:opacity-50 disabled:pointer-events-none">
-                    <span class="sr-only">Siguiente</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="h-4 w-4" aria-hidden="true">
-                        <path fill="currentColor"
-                            d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z">
-                        </path>
-                    </svg>
-                </x-admin.confirm-button>
-
-                <template x-if="step === maxStep">
-                    <x-admin.confirm-button type="submit" form="form-crear-convenio"
-                        class="px-3 py-1.5 text-xs gap-1.5">
-                        Crear convenio
-                    </x-admin.confirm-button>
-                </template>
-            </div>
-        </x-slot>
-    </x-modal>
 
 </x-admin-layout>
