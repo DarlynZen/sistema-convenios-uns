@@ -28,12 +28,7 @@ class ConvenioController extends Controller
     public function store(ConvenioRequest $request)
     {
         try {
-            $data = $request->validated();
-
-            $beneficiarios = $data['beneficiarios'] ?? null;
-            unset($data['beneficiarios']);
-
-            $convenio = $this->convenioService->crear($data, $beneficiarios);
+            $convenio = $this->convenioService->crear($request->validated());
 
             if ($request->hasFile('transcripcion_resolucion')) {
                 $this->documentoConvenioService->create($convenio, [
@@ -51,11 +46,19 @@ class ConvenioController extends Controller
 
             return redirect()
                 ->route('admin.convenios.index')
-                ->with('success', 'Convenio creado exitosamente.');
+                ->with('toast', [
+                    'type' => 'success',
+                    'title' => 'Convenio creado',
+                    'message' => 'El convenio se creó exitosamente.',
+                ]);
         } catch (\Throwable $e) {
             return back()
                 ->withInput()
-                ->with('error', 'Error al crear el convenio: ' . $e->getMessage());
+                ->with('toast', [
+                    'type' => 'error',
+                    'title' => 'No se pudo crear',
+                    'message' => 'Error al crear el convenio: ' . $e->getMessage(),
+                ]);
         }
     }
 
@@ -73,17 +76,21 @@ class ConvenioController extends Controller
     public function update(ConvenioRequest $request, Convenio $convenio)
     {
         try {
-            $beneficiarios = $request->exists('beneficiarios')
-                ? $request->input('beneficiarios', [])
-                : null;
+            $this->convenioService->actualizar($convenio->id, $request->validated());
 
-            $this->convenioService->actualizar($convenio->id, $request->validated(), $beneficiarios);
-
-            return redirect()->route('admin.convenios')
-                ->with('success', 'Convenio actualizado exitosamente.');
+            return redirect()->route('admin.convenios.index')
+                ->with('toast', [
+                    'type' => 'success',
+                    'title' => 'Convenio actualizado',
+                    'message' => 'Los cambios del convenio se guardaron correctamente.',
+                ]);
         } catch (\Exception $e) {
             return back()->withInput()
-                ->with('error', 'Error al actualizar el convenio: ' . $e->getMessage());
+                ->with('toast', [
+                    'type' => 'error',
+                    'title' => 'No se pudo actualizar',
+                    'message' => 'Error al actualizar el convenio: ' . $e->getMessage(),
+                ]);
         }
     }
 
@@ -91,10 +98,18 @@ class ConvenioController extends Controller
     {
         try {
             $this->convenioService->eliminar($convenio->id);
-            return redirect()->route('admin.convenios')
-                ->with('success', 'Convenio eliminado exitosamente.');
+            return redirect()->route('admin.convenios.index')
+                ->with('toast', [
+                    'type' => 'success',
+                    'title' => 'Convenio eliminado',
+                    'message' => 'El convenio se eliminó exitosamente.',
+                ]);
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al eliminar el convenio: ' . $e->getMessage());
+            return back()->with('toast', [
+                'type' => 'error',
+                'title' => 'No se pudo eliminar',
+                'message' => 'Error al eliminar el convenio: ' . $e->getMessage(),
+            ]);
         }
     }
 }

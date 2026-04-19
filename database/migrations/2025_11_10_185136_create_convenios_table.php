@@ -28,7 +28,7 @@ return new class extends Migration
         
             //Datos de la entidad asociada
             $table->string('entidad_nombre', 255);
-            $table->string('entidad_logo', 255);
+            $table->string('entidad_logo', 255)->nullable();
             $table->string('entidad_tipo', 255);
             $table->string('nacionalidad', 255);
             $table->json('detalles_coordinadores_json')->nullable();

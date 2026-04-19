@@ -19,7 +19,6 @@
 </head>
 
 <body class="h-screen flex flex-col overflow-hidden">
-
     <header class="w-full bg-brand text-white shadow flex items-center justify-between px-4 py-3">
         <div class="flex items-center space-x-3">
             <button id="toggleSidebar" type="button"
@@ -49,6 +48,15 @@
             {{ $slot ?? '' }}
         </main>
     </div>
+
+    <!-- Toasts -->
+    @if(session('toast'))
+        <x-admin.toast
+            :type="session('toast.type')"
+            :title="session('toast.title')"
+            :message="session('toast.message')"
+        />
+    @endif
 
     @livewireScripts
 

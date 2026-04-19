@@ -6,9 +6,64 @@
 <div
     x-data="{
         step: {{ (int) $current }},
-        requestStep(i){ $dispatch('step-requested', { step: i }); }
+        maxStep: {{ count($steps) }},
+        validateStep(stepIndex, shouldReport = true) {
+            const section = this.$el.querySelector(`[data-step-section='${stepIndex}']`);
+            if (!section) return true;
+
+            const elements = Array.from(section.querySelectorAll('input, select, textarea'))
+                .filter((el) => !el.disabled)
+                .filter((el) => el.type !== 'hidden');
+
+            for (const el of elements) {
+                if (!el.checkValidity()) {
+                    if (shouldReport) {
+                        el.reportValidity();
+                    }
+                    return false;
+                }
+            }
+
+            return true;
+        },
+        setStep(to) {
+            const next = Math.min(this.maxStep, Math.max(1, Number(to) || 1));
+            this.step = next;
+            this.$dispatch('step-changed', { step: next });
+        },
+        handleStepRequested(to) {
+            const target = Number(to);
+            if (!Number.isFinite(target)) return;
+
+            if (target <= this.step) {
+                this.setStep(target);
+                return;
+            }
+
+            if (target !== this.step + 1) {
+                return;
+            }
+
+            if (!this.validateStep(this.step, true)) {
+                return;
+            }
+
+            this.setStep(target);
+        },
+        requestStep(i) {
+            this.handleStepRequested(i);
+        },
+        next() {
+            this.handleStepRequested(this.step + 1);
+        },
+        prev() {
+            this.setStep(this.step - 1);
+        }
     }"
-    x-on:step-changed.window="step = $event.detail.step"
+    x-init="$nextTick(() => setStep(step))"
+    x-on:step-requested.window="handleStepRequested($event.detail?.step)"
+    x-on:wizard-next.window="next()"
+    x-on:wizard-prev.window="prev()"
     class="flex min-h-full flex-col sm:flex-row gap-3 w-full"
 >
     {{-- Sidebar de secciones --}}

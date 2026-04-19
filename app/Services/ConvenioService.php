@@ -26,10 +26,10 @@ class ConvenioService
     /**
      * @throws \Throwable
      */
-    public function crear(array $data, ?array $beneficiarios = null): Convenio
+    public function crear(array $data): Convenio
     {
-        return DB::transaction(function () use ($data, $beneficiarios) {
-            $data = $this->enriquecerFechasConDuracion($data);
+        return DB::transaction(function () use ($data) {
+            [$data, $beneficiarios] = $this->normalizarDatosFormulario($data);
 
             $convenio = $this->repository->crear($data);
 
@@ -40,10 +40,10 @@ class ConvenioService
         });
     }
 
-    public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
+    public function actualizar(int $id, array $data): Convenio
     {
-        return DB::transaction(function () use ($id, $data, $beneficiarios) {
-            $data = $this->enriquecerFechasConDuracion($data);
+        return DB::transaction(function () use ($id, $data) {
+            [$data, $beneficiarios] = $this->normalizarDatosFormulario($data);
             $convenio = $this->repository->actualizar($id, $data);
 
             if ($beneficiarios !== null) {
@@ -53,6 +53,25 @@ class ConvenioService
 
             return $convenio;
         });
+    }
+
+    private function normalizarDatosFormulario(array $data): array
+    {
+        $beneficiarios = array_key_exists('beneficiarios', $data)
+            ? (array) ($data['beneficiarios'] ?? [])
+            : null;
+
+        $data = $this->enriquecerFechasConDuracion($data);
+        $data = $this->enriquecerCoordinadores($data);
+
+        unset(
+            $data['beneficiarios'],
+            $data['observacion'],
+            $data['archivo_uno'],
+            $data['archivo_dos']
+        );
+
+        return [$data, $beneficiarios];
     }
 
     private function enriquecerFechasConDuracion(array $data): array
@@ -76,9 +95,34 @@ class ConvenioService
         };
 
         $data['fecha_fin'] = $fechaFin->toDateString();
+        return $data;
+    }
 
-        // No persisten en tabla convenios; solo se usan para calcular fecha_fin
-        unset($data['duracion_valor'], $data['duracion_unidad']);
+    private function enriquecerCoordinadores(array $data): array
+    {
+        $coordinadoresUns = collect($data['coordinador_uns'] ?? [])
+            ->map(fn($value) => trim((string) $value))
+            ->filter()
+            ->values()
+            ->all();
+
+        $coordinadoresInstitucion = collect($data['coordinador_institucion'] ?? [])
+            ->map(fn($value) => trim((string) $value))
+            ->filter()
+            ->values()
+            ->all();
+
+        $noSeMenciona = !empty($data['no_se_menciona']);
+
+        if (!empty($coordinadoresUns) || !empty($coordinadoresInstitucion) || $noSeMenciona) {
+            $data['detalles_coordinadores_json'] = [
+                'coordinador_uns' => $coordinadoresUns,
+                'coordinador_institucion' => $coordinadoresInstitucion,
+                'no_se_menciona' => $noSeMenciona,
+            ];
+        }
+
+        unset($data['coordinador_uns'], $data['coordinador_institucion'], $data['no_se_menciona']);
 
         return $data;
     }
@@ -130,6 +174,8 @@ class ConvenioService
 
         return compact('convenio');
     }
+
+    //calcularFechaVencimiento
 }
 
  

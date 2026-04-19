@@ -3,7 +3,7 @@
     'title' => null,
     'message' => null,
     'show' => true,
-    'duration' => 4000,
+    'duration' => 7000,
     'dismissible' => true,
 ])
 
@@ -34,12 +34,12 @@
         x-init="if (open && {{ (int) $duration }} > 0) { setTimeout(() => open = false, {{ (int) $duration }}); }"
         x-show="open"
         x-cloak
-        x-transition:enter="transform ease-out duration-200"
-        x-transition:enter-start="translate-y-1 opacity-0"
-        x-transition:enter-end="translate-y-0 opacity-100"
-        x-transition:leave="transform ease-in duration-150"
-        x-transition:leave-start="translate-y-0 opacity-100"
-        x-transition:leave-end="translate-y-1 opacity-0"
+        x-transition:enter="ease-out duration-300"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
+        x-transition:leave="ease-in-out duration-700"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
         class="pointer-events-auto rounded-xl border {{ $variant['ring'] }} bg-white p-3 shadow-lg"
         role="status"
         aria-live="polite"
