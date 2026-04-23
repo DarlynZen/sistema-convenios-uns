@@ -16,7 +16,10 @@ class ConvenioController extends Controller
 
     public function index()
     {
-        return view('admin.convenios.index', $this->convenioService->obtenerDatosIndex());
+        return view('admin.convenios.index', array_merge(
+            ['convenios' => $this->convenioService->listarConRelaciones()],
+            $this->convenioService->obtenerCatalogos()
+        ));
     }
 
     public function create()
@@ -64,13 +67,19 @@ class ConvenioController extends Controller
 
     public function show(Convenio $convenio)
     {
-        return view('admin.convenios.show', $this->convenioService->getShowViewData($convenio->id));
+        return view('admin.convenios.show', [
+            'convenio' => $this->convenioService->obtenerConRelaciones($convenio->id),
+        ]);
     }
 
     public function edit(Convenio $convenio)
     {
-        $data = $this->convenioService->getEditFormData($convenio);
-        return view('admin.convenios.edit', $data);
+        return view('admin.convenios.edit', array_merge(
+            [
+                'convenio' => $this->convenioService->obtenerConRelaciones($convenio->id),
+            ],
+            $this->convenioService->obtenerCatalogos()
+        ));
     }
 
     public function update(ConvenioRequest $request, Convenio $convenio)

@@ -2,12 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Ambito;
-use App\Models\Convenio;
-use App\Models\TipoConvenio;
-use App\Models\Estado;
-use App\Models\Beneficiario;
 use App\Enums\EstadoConvenio;
+use App\Models\Ambito;
+use App\Models\Beneficiario;
+use App\Models\Convenio;
+use App\Models\Estado;
+use App\Models\TipoConvenio;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ConvenioRepository
 {
@@ -24,40 +27,42 @@ class ConvenioRepository
         return $this->modelo->findOrFail($id);
     }
 
-    public function obtenerTodoConRelaciones()
+    public function obtenerConRelaciones(int $id): Convenio
     {
-        return $this->modelo->with([
-            'tipoConvenio',
-            'ambito',
-            'estadoConvenio',
-            'beneficiario',
-            'documento',
-            'convenioAnterior'
-        ])->get();
+        return $this->queryConRelaciones()->findOrFail($id);
     }
 
-    public function obtenerIdConRelaciones(int $id)
+    public function listarConRelaciones(): Collection
     {
-        return $this->modelo->with([
-            'tipoConvenio',
-            'ambito',
-            'estadoConvenio',
-            'beneficiario',
-            'documento',
-            'convenioAnterior'
-        ])->find($id);
+        return $this->queryConRelaciones()->get();
     }
 
-    public function crear(array $data): Convenio
+    public function crear(array $data, ?array $beneficiarios = null): Convenio
     {
-        return $this->modelo->create($data);
+        return DB::transaction(function () use ($data, $beneficiarios) {
+            $convenio = $this->modelo->create($data);
+
+            if ($beneficiarios !== null) {
+                $convenio->beneficiario()->sync($beneficiarios);
+                $convenio = $convenio->fresh();
+            }
+
+            return $convenio;
+        });
     }
 
-    public function actualizar(int $id, array $data): Convenio
+    public function actualizar(int $id, array $data, ?array $beneficiarios = null): Convenio
     {
-        $convenio = $this->modelo->findOrFail($id);
-        $convenio->update($data);
-        return $convenio->fresh();
+        return DB::transaction(function () use ($id, $data, $beneficiarios) {
+            $convenio = $this->modelo->findOrFail($id);
+            $convenio->update($data);
+
+            if ($beneficiarios !== null) {
+                $convenio->beneficiario()->sync($beneficiarios);
+            }
+
+            return $convenio->fresh();
+        });
     }
 
     public function eliminar(int $id): bool
@@ -104,5 +109,17 @@ class ConvenioRepository
             ->latest()
             ->limit($limit)
             ->get();
+    }
+
+    private function queryConRelaciones(): Builder
+    {
+        return $this->modelo->newQuery()->with([
+            'tipoConvenio',
+            'ambito',
+            'estadoConvenio',
+            'beneficiario',
+            'documento',
+            'convenioAnterior',
+        ]);
     }
 }

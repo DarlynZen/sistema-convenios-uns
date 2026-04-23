@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Convenio;
 use App\Repositories\ConvenioRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class ConvenioService
 {
@@ -18,51 +17,38 @@ class ConvenioService
         return $this->repository->obtenerPorId($id);
     }
 
-    public function listarConvenios()
+    public function obtenerConRelaciones(int $id): Convenio
     {
-        return $this->repository->obtenerTodoConRelaciones();
+        return $this->repository->obtenerConRelaciones($id);
     }
 
-    /**
-     * @throws \Throwable
-     */
+    public function listarConRelaciones()
+    {
+        return $this->repository->listarConRelaciones();
+    }
+
     public function crear(array $data): Convenio
     {
-        return DB::transaction(function () use ($data) {
-            [$data, $beneficiarios] = $this->normalizarDatosFormulario($data);
+        [$data, $beneficiarios] = $this->validarDatosFormulario($data);
 
-            $convenio = $this->repository->crear($data);
-
-            if ($beneficiarios !== null) {
-                $convenio->beneficiario()->sync($beneficiarios);
-            }
-            return $convenio;
-        });
+        return $this->repository->crear($data, $beneficiarios);
     }
 
     public function actualizar(int $id, array $data): Convenio
     {
-        return DB::transaction(function () use ($id, $data) {
-            [$data, $beneficiarios] = $this->normalizarDatosFormulario($data);
-            $convenio = $this->repository->actualizar($id, $data);
+        [$data, $beneficiarios] = $this->validarDatosFormulario($data);
 
-            if ($beneficiarios !== null) {
-                $convenio->beneficiario()->sync($beneficiarios);
-                $convenio = $convenio->fresh();
-            }
-
-            return $convenio;
-        });
+        return $this->repository->actualizar($id, $data, $beneficiarios);
     }
 
-    private function normalizarDatosFormulario(array $data): array
+    private function validarDatosFormulario(array $data): array
     {
         $beneficiarios = array_key_exists('beneficiarios', $data)
             ? (array) ($data['beneficiarios'] ?? [])
             : null;
 
-        $data = $this->enriquecerFechasConDuracion($data);
-        $data = $this->enriquecerCoordinadores($data);
+        $data = $this->calcularFechaConDuracion($data);
+        $data = $this->generarDetallesCoordinadores($data);
 
         unset(
             $data['beneficiarios'],
@@ -74,7 +60,7 @@ class ConvenioService
         return [$data, $beneficiarios];
     }
 
-    private function enriquecerFechasConDuracion(array $data): array
+    private function calcularFechaConDuracion(array $data): array
     {
         $fechaInicio = $data['fecha_inicio'] ?? null;
         $duracionValor = isset($data['duracion_valor']) ? (int) $data['duracion_valor'] : null;
@@ -98,7 +84,7 @@ class ConvenioService
         return $data;
     }
 
-    private function enriquecerCoordinadores(array $data): array
+    private function generarDetallesCoordinadores(array $data): array
     {
         $coordinadoresUns = collect($data['coordinador_uns'] ?? [])
             ->map(fn($value) => trim((string) $value))
@@ -136,46 +122,4 @@ class ConvenioService
     {
         return $this->repository->obtenerCatalogos();
     }
-
-    public function obtenerDatosIndex(): array
-    {
-        return array_merge(
-            ['convenios' => $this->listarConvenios()],
-            $this->obtenerCatalogos()
-        );
-    }
-
-    public function getEditFormData(Convenio $convenio): array
-    {
-        return $this->getEditFormDataById($convenio->id);
-    }
-
-    public function getEditFormDataById(int $id): array
-    {
-        $convenio = $this->obtenerPorId($id);
-        $convenio->load('beneficiario');
-
-        return array_merge([
-            'convenio' => $convenio,
-        ], $this->obtenerCatalogos());
-    }
-
-    public function getShowViewData(int $id): array
-    {
-        $convenio = $this->obtenerPorId($id);
-        $convenio->load([
-            'tipoConvenio',
-            'ambito',
-            'estadoConvenio',
-            'beneficiario',
-            'documento',
-            'convenioAnterior',
-        ]);
-
-        return compact('convenio');
-    }
-
-    //calcularFechaVencimiento
 }
-
- 

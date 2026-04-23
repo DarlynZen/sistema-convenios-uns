@@ -67,32 +67,46 @@
     class="flex min-h-full flex-col sm:flex-row gap-3 w-full"
 >
     {{-- Sidebar de secciones --}}
-    <aside class="w-full sm:w-44 border-b sm:border-b-0 sm:border-r border-neutral-200 pb-3 sm:pb-0 sm:pr-4">
+    <aside class="w-full sm:w-[17rem] border-b sm:border-b-0 sm:border-r border-neutral-300 px-4 py-4">
         <div class="sm:sticky sm:top-0 sm:bg-white sm:z-10">
-            <p class="mb-2 px-2.5 pt-4 text-xs font-semibold text-neutral-700">Pasos</p>
-            <ol class="flex sm:block gap-2 sm:gap-1.5 text-sm overflow-x-auto pb-1">
+            <p class="mb-3 px-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">Pasos</p>
+            <ol class="flex gap-3 overflow-x-auto pb-1 text-sm sm:block sm:space-y-3 sm:overflow-visible sm:pb-0">
                 @foreach($steps as $index => $stepDef)
                     @php $i = $index + 1; @endphp
-                    <li class="shrink-0">
+                    <li class="shrink-0 sm:shrink">
                         <button
                             type="button"
                             @click="requestStep({{ $i }})"
-                            class="w-full inline-flex items-center gap-2.5 text-left px-2.5 py-2 rounded-lg transition-colors"
-                            :class="step === {{ $i }} ? 'bg-primary/10' : 'hover:bg-neutral-100'"
+                            class="flex w-full min-w-[16rem] items-start gap-3 rounded border px-4 py-3 text-left transition-colors sm:min-w-0"
+                            :class="step === {{ $i }}
+                                ? 'border-brand-600/25 bg-brand-25'
+                                : 'border-neutral-300 bg-white hover:bg-neutral-50'"
                         >
-                            <span
-                                class="inline-flex h-6 w-6 items-center justify-center rounded-full border text-[11px] font-semibold flex-none"
+                            <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full border text-[12px] font-semibold"
                                 :class="step === {{ $i }}
-                                    ? 'bg-primary text-neutral-700 border-primary'
-                                    : 'border-neutral-300 bg-white text-neutral-700'"
-                            >
+                                    ? 'border-brand-600 bg-brand-600 text-white'
+                                    : 'border-neutral-300 bg-white text-neutral-500'">
                                 {{ $i }}
                             </span>
-                            <span
-                                class="text-xs sm:text-sm font-medium truncate max-w-[10rem] sm:max-w-none"
-                                :class="step === {{ $i }} ? 'text-neutral-900' : 'text-neutral-700'"
-                            >
-                                {{ $stepDef['label'] ?? 'Paso '.$i }}
+
+                            <span class="min-w-0 flex-1">
+                                <span class="flex items-center gap-2">
+                                    @if (!empty($stepDef['icon']))
+                                        <span
+                                            class="inline-flex flex-none items-center justify-center [&>svg]:h-[1em] [&>svg]:w-[1em] [&>svg]:fill-current"
+                                            :class="step === {{ $i }} ? 'text-brand-600' : 'text-neutral-500'">
+                                            {!! $stepDef['icon'] !!}
+                                        </span>
+                                    @endif
+
+                                    <span class="block text-sm font-semibold leading-5"
+                                        :class="step === {{ $i }} ? 'text-brand-600' : 'text-neutral-800'">
+                                        {{ $stepDef['label'] ?? 'Paso '.$i }}
+                                    </span>
+                                </span>
+                                <span class="mt-0.5 block text-xs leading-4 text-neutral-500">
+                                    {{ $stepDef['description'] ?? '' }}
+                                </span>
                             </span>
                         </button>
                     </li>

@@ -14,19 +14,37 @@
             </div>
         </x-admin.block>
 
+        @php
+            $stepperIconConvenio = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M254.3,107.91,228.78,56.85a16,16,0,0,0-21.47-7.15L182.44,62.13,130.05,48.27a8.14,8.14,0,0,0-4.1,0L73.56,62.13,48.69,49.7a16,16,0,0,0-21.47,7.15L1.7,107.9a16,16,0,0,0,7.15,21.47l27,13.51,55.49,39.63a8.06,8.06,0,0,0,2.71,1.25l64,16a8,8,0,0,0,7.6-2.1l55.07-55.08,26.42-13.21a16,16,0,0,0,7.15-21.46Zm-54.89,33.37L165,113.72a8,8,0,0,0-10.68.61C136.51,132.27,116.66,130,104,122L147.24,80h31.81l27.21,54.41ZM41.53,64,62,74.22,36.43,125.27,16,115.06Zm116,119.13L99.42,168.61l-49.2-35.14,28-56L128,64.28l9.8,2.59-45,43.68-.08.09a16,16,0,0,0,2.72,24.81c20.56,13.13,45.37,11,64.91-5L188,152.66Zm62-57.87-25.52-51L214.47,64,240,115.06Zm-87.75,92.67a8,8,0,0,1-7.75,6.06,8.13,8.13,0,0,1-1.95-.24L80.41,213.33a7.89,7.89,0,0,1-2.71-1.25L51.35,193.26a8,8,0,0,1,9.3-13l25.11,17.94L126,208.24A8,8,0,0,1,131.82,217.94Z"></path></svg>';
+            $stepperIconInstitucion = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M248,208H232V96a8,8,0,0,0,0-16H184V48a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16V208H24a8,8,0,0,0,0,16H248a8,8,0,0,0,0-16ZM216,96V208H184V96ZM56,48H168V208H144V160a8,8,0,0,0-8-8H88a8,8,0,0,0-8,8v48H56Zm72,160H96V168h32ZM72,80a8,8,0,0,1,8-8H96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,80Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H128A8,8,0,0,1,120,80ZM72,120a8,8,0,0,1,8-8H96a8,8,0,0,1,0,16H80A8,8,0,0,1,72,120Zm48,0a8,8,0,0,1,8-8h16a8,8,0,0,1,0,16H128A8,8,0,0,1,120,120Z"></path></svg>';
+            $stepperIconDocumentos = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-42.34-77.66a8,8,0,0,1-11.32,11.32L136,139.31V184a8,8,0,0,1-16,0V139.31l-10.34,10.35a8,8,0,0,1-11.32-11.32l24-24a8,8,0,0,1,11.32,0Z"></path></svg>';
+        @endphp
+
         <div class="bg-white rounded border border-neutral-400">
             <x-admin.stepper :steps="[
-                ['key' => 'info', 'label' => 'General'],
-                ['key' => 'details', 'label' => 'Detalles'],
-                ['key' => 'docs', 'label' => 'Documentación'],
+                ['key' => 'info', 'label' => 'Convenio', 'description' => 'Datos generales y vigencia', 'icon' => $stepperIconConvenio],
+                ['key' => 'details', 'label' => 'Institución', 'description' => 'Entidad y coordinadores', 'icon' => $stepperIconInstitucion],
+                ['key' => 'docs', 'label' => 'Documentación', 'description' => 'Archivos PDF requeridos', 'icon' => $stepperIconDocumentos],
             ]" current="1">
                 <form id="form-crear-convenio" method="POST" action="{{ route('admin.convenios.store') }}"
                     enctype="multipart/form-data" class="space-y-3">
                     @csrf
 
-                    {{-- Sección: Información básica del convenio (Paso 1) --}}
+                    {{-- Sección: Información principal del convenio (Paso 1) --}}
                     <section class="w-full" x-show="step === 1" x-cloak data-step-section="1">
                         <div class="p-5">
+                            <div class="mb-4 flex items-start gap-2">
+                                <span
+                                    class="mt-0.5 inline-flex flex-none items-center justify-center text-brand-600 [&>svg]:h-[1em] [&>svg]:w-[1em] [&>svg]:fill-current">
+                                    {!! $stepperIconConvenio !!}
+                                </span>
+                                <div class="min-w-0">
+                                    <h2 class="text-sm font-semibold text-neutral-800">Información del Convenio</h2>
+                                    <p class="mt-0.5 text-xs text-neutral-500">Completa los datos generales y la
+                                        vigencia del convenio.</p>
+                                </div>
+                            </div>
+
                             <div class="space-y-4">
                                 {{-- Título del convenio (texto largo) --}}
                                 <div>
@@ -37,7 +55,7 @@
                                     <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
                                 </div>
 
-                                {{-- Tipo de convenio, Tipo de ámbito, Nro. de Transcripción y Tipo de Entidad --}}
+                                {{-- Tipo de convenio, Tipo de ámbito, Nro. de Transcripción y Estado --}}
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                                     <div>
                                         <x-input-label for="tipo_convenio_id" value="Tipo de convenio" />
@@ -75,25 +93,9 @@
                                         <x-input-error :messages="$errors->get('resolucion')" class="mt-1" />
                                     </div>
 
-                                    <div>
-                                        <x-input-label for="entidad_tipo" value="Tipo de Entidad" />
-                                        <x-text-input id="entidad_tipo" name="entidad_tipo" type="text"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                            placeholder="Tipo de entidad" :value="old('entidad_tipo')" />
-                                        <x-input-error :messages="$errors->get('entidad_tipo')" class="mt-1" />
-                                    </div>
                                 </div>
 
-                                {{-- Institución/Entidad/Organismo --}}
-                                <div>
-                                    <x-input-label for="entidad_nombre" value="Institución/Entidad/Organismo" />
-                                    <x-text-input id="entidad_nombre" name="entidad_nombre" type="text"
-                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
-                                        placeholder="Nombre de la Institución" required :value="old('entidad_nombre')" />
-                                    <x-input-error :messages="$errors->get('entidad_nombre')" class="mt-1" />
-                                </div>
-
-                                {{-- Nacionalidad y Estado del convenio --}}
+                                {{-- Nacionalidad, Estado del convenio y beneficiarios --}}
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <x-input-label for="nacionalidad" value="Nacionalidad" />
@@ -261,34 +263,55 @@
                                         <x-input-error :messages="$errors->get('plazo_prorroga_unidad')" class="mt-1" />
                                     </div>
                                 </div>
-
-                                {{-- Fecha de vencimiento (se calcula en el backend) --}}
-                                <div>
-                                    <x-input-label for="fecha_fin" value="Fecha de vencimiento" />
-                                    <x-text-input id="fecha_fin" name="fecha_fin" type="date"
-                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] bg-neutral-50"
-                                        readonly :value="old('fecha_fin')" />
-                                    <p class="mt-1 text-xs text-neutral-500">Se calcula automáticamente en el servidor
-                                        basándose en la fecha de suscripción y la duración.</p>
-                                    <x-input-error :messages="$errors->get('fecha_fin')" class="mt-1" />
-                                </div>
-
                             </div>
                         </div>
                     </section>
 
-                    {{-- Detalles del Convenio (Paso 2) --}}
+                    {{-- Sección: Información de la Institución colaboradora (Paso 2) --}}
                     <section class="space-y-3" x-show="step === 2" x-cloak data-step-section="2">
                         <div class="p-4 sm:p-5">
-                            <div class="mb-4 flex items-start justify-between gap-3">
-                                <div>
-                                    <h2 class="text-sm font-semibold text-neutral-800">Detalles</h2>
-                                    <p class="mt-0.5 text-xs text-neutral-500">Información adicional y objetivo
-                                        específico del convenio.</p>
+                            <div class="mb-4 flex items-start gap-2">
+                                <span
+                                    class="mt-0.5 inline-flex flex-none items-center justify-center text-brand-600 [&>svg]:h-[1em] [&>svg]:w-[1em] [&>svg]:fill-current">
+                                    {!! $stepperIconInstitucion !!}
+                                </span>
+                                <div class="min-w-0">
+                                    <h2 class="text-sm font-semibold text-neutral-800">Información de la Institución
+                                        colaboradora</h2>
+                                    <p class="mt-0.5 text-xs text-neutral-500">Datos de la institución externa,
+                                        coordinadores y observaciones del convenio.</p>
                                 </div>
                             </div>
 
                             <div class="space-y-3">
+                                {{-- Institución/Entidad/Organismo --}}
+                                <div>
+                                    <x-input-label for="entidad_nombre" value="Institución/Entidad/Organismo" />
+                                    <x-text-input id="entidad_nombre" name="entidad_nombre" type="text"
+                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                        placeholder="Nombre de la Institución" required :value="old('entidad_nombre')" />
+                                    <x-input-error :messages="$errors->get('entidad_nombre')" class="mt-1" />
+                                </div>
+
+                                {{-- Tipo de Entidad y Nacionalidad --}}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <x-input-label for="entidad_tipo" value="Tipo de Entidad" />
+                                        <x-text-input id="entidad_tipo" name="entidad_tipo" type="text"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            placeholder="Tipo de entidad" :value="old('entidad_tipo')" />
+                                        <x-input-error :messages="$errors->get('entidad_tipo')" class="mt-1" />
+                                    </div>
+
+                                    <div>
+                                        <x-input-label for="nacionalidad" value="Nacionalidad" />
+                                        <x-text-input id="nacionalidad" name="nacionalidad" type="text"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            placeholder="Nombre del país" :value="old('nacionalidad')" />
+                                        <x-input-error :messages="$errors->get('nacionalidad')" class="mt-1" />
+                                    </div>
+                                </div>
+
                                 {{-- Observación (solo visible si tipo de convenio es "específico") --}}
                                 @php
                                     // Obtener el tipo de convenio "específico"
@@ -416,8 +439,12 @@
                     {{-- Sección: Archivos PDF / Documentos (Paso 3) --}}
                     <section class="space-y-3" x-show="step === 3" x-cloak data-step-section="3">
                         <div class="p-4 sm:p-5">
-                            <div class="mb-4 flex items-start justify-between gap-3">
-                                <div>
+                            <div class="mb-4 flex items-start gap-2">
+                                <span
+                                    class="mt-0.5 inline-flex flex-none items-center justify-center text-brand-600 [&>svg]:h-[1em] [&>svg]:w-[1em] [&>svg]:fill-current">
+                                    {!! $stepperIconDocumentos !!}
+                                </span>
+                                <div class="min-w-0">
                                     <h2 class="text-sm font-semibold text-neutral-800">Documentación</h2>
                                     <p class="mt-0.5 text-xs text-neutral-500">Adjunta los documentos requeridos (PDF).
                                     </p>
@@ -425,20 +452,22 @@
                             </div>
 
                             <div class="space-y-3">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div>
-                                        <x-input-label value="Archivo 1 (PDF)" />
-                                        <input type="file" name="archivo_uno" accept="application/pdf" required
-                                            class="mt-1 block w-full text-sm text-neutral-700 file:mr-4 file:rounded-md file:border-0 file:bg-neutral-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-neutral-700 hover:file:bg-neutral-200">
-                                    </div>
+                                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                    <x-admin.file-dropzone label="Resolución (PDF)" name="archivo_uno" required />
+                                    <x-admin.file-dropzone label="Convenio (PDF)" name="archivo_dos" required />
+                                </div>
 
-                                    <div>
-                                        <x-input-label value="Archivo 2 (PDF)" />
-                                        <input type="file" name="archivo_dos" accept="application/pdf" required
-                                            class="mt-1 block w-full text-sm text-neutral-700 file:mr-4 file:rounded-md file:border-0 file:bg-neutral-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-neutral-700 hover:file:bg-neutral-200">
+                                <div class="rounded border border-neutral-400 bg-neutral-100 px-4 py-4">
+                                    <div class="flex items-start gap-3">
+                                        <div>
+                                            <p class="text-sm font-semibold text-neutral-800">Antes de guardar</p>
+                                            <p class="mt-1 text-sm text-neutral-600">Verifica que los documentos sean
+                                                legibles y correspondan al convenio descrito en los pasos anteriores.
+                                                Una vez guardado, podrás editar la información pero no eliminar el
+                                                convenio.</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="text-xs text-neutral-500">Solo PDF. Máximo 5 MB por archivo.</p>
                             </div>
                         </div>
                     </section>
