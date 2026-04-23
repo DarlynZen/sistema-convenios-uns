@@ -13,11 +13,11 @@
 
 <div x-data>
     <div
-        class="w-full max-w-full overflow-x-hidden rounded border border-gray-200 bg-white shadow-sm">
+        class="w-full max-w-full overflow-x-hidden rounded border border-neutral-400 bg-white shadow-sm">
         <div class="w-full max-w-full overflow-x-auto">
             <div class="max-h-[500px] overflow-y-auto">
                 <table class="w-full table-auto bg-white text-sm text-[#393939]">
-                    <thead class="sticky top-0 z-20 bg-neutral-50 text-xs md:text-sm tracking-wide text-neutral-700">
+                    <thead class="sticky top-0 z-20 border-b border-neutral-300 bg-neutral-50 text-xs md:text-sm tracking-wide text-neutral-700">
                     <tr class="text-left">
                         @foreach($columns as $col)
                             <th class="px-4 py-3 font-bold bg-neutral-50/95 {{ $col['classes'] ?? '' }}">
@@ -26,14 +26,14 @@
                         @endforeach
                         @if($actions)
                             <th
-                                class="sticky right-0 px-4 py-3 text-center font-bold bg-neutral-50/95 z-30 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-4 before:bg-gradient-to-r before:from-neutral-200/70 before:to-transparent"
+                                class="sticky right-0 px-4 py-3 text-center font-bold bg-neutral-50/95 z-30 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-4 before:bg-gradient-to-r before:from-neutral-400/70 before:to-transparent"
                             >Acciones</th>
                         @endif
                     </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100 align-top">
+                    <tbody class="divide-y divide-neutral-300 align-top">
                     @forelse($rows as $row)
-                        <tr class="group transition hover:bg-slate-50">
+                        <tr class="group transition hover:bg-neutral-100">
                             @foreach($columns as $col)
                                 @php $val = $get($row, $col['key'] ?? ''); @endphp
                                 <td class="px-4 py-3 align-top text-xs md:text-sm break-words {{ $col['cellClasses'] ?? '' }}">
@@ -71,7 +71,7 @@
 
                             @if($actions)
                                 <td
-                                    class="sticky right-0 px-4 py-3 align-top text-xs md:text-sm bg-white group-hover:bg-slate-50 z-10 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-gradient-to-r before:from-neutral-200/80 before:to-transparent"
+                                    class="sticky right-0 px-4 py-3 align-top text-xs md:text-sm bg-white group-hover:bg-neutral-50 z-10 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-gradient-to-r before:from-neutral-300/80 before:to-transparent"
                                 >
                                     <div class="flex flex-wrap items-center justify-center gap-2">
                                         @if(is_string($actions))

@@ -67,7 +67,7 @@ class ConvenioController extends Controller
 
     public function show(Convenio $convenio)
     {
-        return view('admin.convenios.show', [
+        return view('admin.convenios.verConvenio', [
             'convenio' => $this->convenioService->obtenerConRelaciones($convenio->id),
         ]);
     }

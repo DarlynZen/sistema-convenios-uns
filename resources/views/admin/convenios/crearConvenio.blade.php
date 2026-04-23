@@ -50,7 +50,7 @@
                                 <div>
                                     <x-input-label for="titulo" value="Título del convenio" />
                                     <textarea id="titulo" name="titulo" rows="4" required
-                                        class="mt-1 block min-h-[96px] w-full resize-y rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                        class="mt-1 block min-h-[96px] w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                         placeholder="Nombre del título del convenio">{{ old('titulo') }}</textarea>
                                     <x-input-error :messages="$errors->get('titulo')" class="mt-1" />
                                 </div>
@@ -60,7 +60,7 @@
                                     <div>
                                         <x-input-label for="tipo_convenio_id" value="Tipo de convenio" />
                                         <select id="tipo_convenio_id" name="tipo_convenio_id" required
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
                                             <option value="">Seleccionar tipo</option>
                                             @foreach ($tiposConvenio as $tipo)
                                                 <option value="{{ $tipo->id }}" @selected(old('tipo_convenio_id') == $tipo->id)>
@@ -74,7 +74,7 @@
                                     <div>
                                         <x-input-label for="ambito_id" value="Tipo de ámbito" />
                                         <select id="ambito_id" name="ambito_id" required
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
                                             <option value="">Seleccionar ámbito</option>
                                             @foreach ($ambitos as $ambito)
                                                 <option value="{{ $ambito->id }}" @selected(old('ambito_id') == $ambito->id)>
@@ -88,7 +88,7 @@
                                     <div>
                                         <x-input-label for="resolucion" value="Nro. de Transcripción" />
                                         <x-text-input id="resolucion" name="resolucion" type="text"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             placeholder="Nro. de transcripción" :value="old('resolucion')" />
                                         <x-input-error :messages="$errors->get('resolucion')" class="mt-1" />
                                     </div>
@@ -100,7 +100,7 @@
                                     <div>
                                         <x-input-label for="nacionalidad" value="Nacionalidad" />
                                         <x-text-input id="nacionalidad" name="nacionalidad" type="text"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             placeholder="Nombre del país" :value="old('nacionalidad')" />
                                         <x-input-error :messages="$errors->get('nacionalidad')" class="mt-1" />
                                     </div>
@@ -108,7 +108,7 @@
                                     <div>
                                         <x-input-label for="estado_convenio_id" value="Estado del convenio" />
                                         <select id="estado_convenio_id" name="estado_convenio_id" required
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
                                             <option value="">Seleccionar estado</option>
                                             @foreach ($estadosConvenio as $estado)
                                                 <option value="{{ $estado->id }}" @selected(old('estado_convenio_id') == $estado->id)>
@@ -122,7 +122,6 @@
 
                                 {{-- Dirigido a (beneficiarios), Fecha de suscripción, Duración y Tiempo para renovación --}}
                                 <div>
-                                    <x-input-label for="beneficiarios_general" value="Dirigido a" />
                                     @php
                                         $beneficiariosOptions = collect($beneficiarios ?? [])
                                             ->map(function ($beneficiario) {
@@ -141,77 +140,13 @@
                                             ->values();
                                     @endphp
 
-                                    <div class="relative mt-1" x-data="{
-                                        open: false,
-                                        options: @js($beneficiariosOptions),
-                                        selected: @js($beneficiariosOld),
-                                    
-                                        isSelected(id) { return this.selected.includes(Number(id)); },
-                                        toggle(id) {
-                                            id = Number(id);
-                                            if (this.isSelected(id)) {
-                                                this.selected = this.selected.filter((v) => v !== id);
-                                            } else {
-                                                this.selected = [...this.selected, id];
-                                            }
-                                        },
-                                        remove(id) {
-                                            id = Number(id);
-                                            this.selected = this.selected.filter((v) => v !== id);
-                                        },
-                                        labelFor(id) {
-                                            id = Number(id);
-                                            const opt = this.options.find((o) => Number(o.id) === id);
-                                            return opt ? opt.label : id;
-                                        },
-                                    }">
-                                        <div id="beneficiarios_general" role="combobox" aria-haspopup="listbox"
-                                            x-bind:aria-expanded="open" tabindex="0" @click="open = true"
-                                            @keydown.enter.prevent="open = !open" @keydown.escape.prevent="open = false"
-                                            class="min-h-[42px] w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus-within:border-red-400 focus-within:ring-2 focus-within:ring-red-200">
-                                            <div class="flex flex-wrap items-center gap-1.5">
-                                                <template x-for="id in selected" :key="id">
-                                                    <span
-                                                        class="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-1 text-[12px] text-neutral-700">
-                                                        <span x-text="labelFor(id)"></span>
-                                                        <button type="button"
-                                                            class="ml-0.5 inline-flex h-4 w-4 items-center justify-center rounded text-neutral-500 hover:text-neutral-700"
-                                                            @click.stop="remove(id)" aria-label="Quitar">
-                                                            &times;
-                                                        </button>
-                                                    </span>
-                                                </template>
-
-                                                <span x-show="selected.length === 0"
-                                                    class="text-neutral-400">Selecciona beneficiarios</span>
-                                            </div>
-                                        </div>
-
-                                        <div x-show="open" x-transition.origin.top x-cloak
-                                            @click.outside="open = false"
-                                            class="absolute z-50 mt-1 w-full rounded-lg border border-neutral-200 bg-white shadow-sm"
-                                            role="listbox">
-                                            <ul class="max-h-52 overflow-y-auto py-1">
-                                                <template x-for="opt in options" :key="opt.id">
-                                                    <li>
-                                                        <button type="button"
-                                                            class="flex w-full items-center justify-between px-3 py-2 text-left text-sm hover:bg-neutral-50"
-                                                            :class="isSelected(opt.id) ? 'bg-red-50/50' : ''"
-                                                            @click="toggle(opt.id)">
-                                                            <span class="text-neutral-700" x-text="opt.label"></span>
-                                                            <span class="text-xs text-neutral-400"
-                                                                x-show="isSelected(opt.id)">✓</span>
-                                                        </button>
-                                                    </li>
-                                                </template>
-                                            </ul>
-                                        </div>
-
-                                        <template x-for="id in selected" :key="'hidden-' + id">
-                                            <input type="hidden" name="beneficiarios[]" :value="id" />
-                                        </template>
-                                    </div>
-                                    <x-input-error :messages="$errors->get('beneficiarios')" class="mt-1" />
+                                    <x-admin.beneficiarios-multiselect
+                                        label="Dirigido a"
+                                        name="beneficiarios"
+                                        :options="$beneficiariosOptions"
+                                        :selected="$beneficiariosOld"
+                                        :error-messages="$errors->get('beneficiarios')"
+                                    />
                                 </div>
 
                                 {{-- Fecha de suscripción, Duración y Plazo de prórroga --}}
@@ -219,7 +154,7 @@
                                     <div>
                                         <x-input-label for="fecha_inicio" value="Fecha de suscripción" />
                                         <x-text-input id="fecha_inicio" name="fecha_inicio" type="date"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             required :value="old('fecha_inicio')" />
                                         <x-input-error :messages="$errors->get('fecha_inicio')" class="mt-1" />
                                     </div>
@@ -229,10 +164,10 @@
                                         <div class="mt-1 grid grid-cols-2 gap-2">
                                             <x-text-input id="duracion_valor" name="duracion_valor" type="number"
                                                 min="1" step="1" required
-                                                class="block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                                class="block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                                 placeholder="Valor" :value="old('duracion_valor')" />
                                             <select id="duracion_unidad" name="duracion_unidad" required
-                                                class="block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
+                                                class="block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
                                                 <option value="">Unidad</option>
                                                 <option value="dias" @selected(old('duracion_unidad') === 'dias')>Días</option>
                                                 <option value="semanas" @selected(old('duracion_unidad') === 'semanas')>Semanas</option>
@@ -249,10 +184,10 @@
                                         <div class="mt-1 grid grid-cols-2 gap-2">
                                             <x-text-input id="plazo_prorroga_valor" name="plazo_prorroga_valor"
                                                 type="number" min="1" step="1" required
-                                                class="block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                                class="block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                                 placeholder="Valor" :value="old('plazo_prorroga_valor')" />
                                             <select id="plazo_prorroga_unidad" name="plazo_prorroga_unidad" required
-                                                class="block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
+                                                class="block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200">
                                                 <option value="">Unidad</option>
                                                 <option value="dias" @selected(old('plazo_prorroga_unidad') === 'dias')>Días</option>
                                                 <option value="semanas" @selected(old('plazo_prorroga_unidad') === 'semanas')>Semanas</option>
@@ -288,7 +223,7 @@
                                 <div>
                                     <x-input-label for="entidad_nombre" value="Institución/Entidad/Organismo" />
                                     <x-text-input id="entidad_nombre" name="entidad_nombre" type="text"
-                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                        class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                         placeholder="Nombre de la Institución" required :value="old('entidad_nombre')" />
                                     <x-input-error :messages="$errors->get('entidad_nombre')" class="mt-1" />
                                 </div>
@@ -298,7 +233,7 @@
                                     <div>
                                         <x-input-label for="entidad_tipo" value="Tipo de Entidad" />
                                         <x-text-input id="entidad_tipo" name="entidad_tipo" type="text"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             placeholder="Tipo de entidad" :value="old('entidad_tipo')" />
                                         <x-input-error :messages="$errors->get('entidad_tipo')" class="mt-1" />
                                     </div>
@@ -306,7 +241,7 @@
                                     <div>
                                         <x-input-label for="nacionalidad" value="Nacionalidad" />
                                         <x-text-input id="nacionalidad" name="nacionalidad" type="text"
-                                            class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             placeholder="Nombre del país" :value="old('nacionalidad')" />
                                         <x-input-error :messages="$errors->get('nacionalidad')" class="mt-1" />
                                     </div>
@@ -327,18 +262,19 @@
                                     }
                                 }" x-show="checkVisibility()"
                                     @step-changed.window="$nextTick(() => { if ($el.style.display !== 'none') { $el.style.display = 'block'; } })"
-                                    x-cloak class="rounded-lg border border-neutral-200 bg-neutral-50/60 p-4">
+                                    x-cloak class="rounded-lg border border-neutral-300 bg-neutral-50/60 p-4">
                                     <x-input-label for="observacion" value="Observación" />
                                     <p class="mt-1 text-xs text-neutral-500">Solo visible si el tipo de convenio es
                                         "específico".</p>
-                                    <textarea id="observacion" name="observacion" rows="3"
-                                        class="mt-2 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                        <textarea id="observacion" name="observacion" rows="3"
+                                        class="mt-2 block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                        style="border-color: rgb(212 212 216) !important; border-style: solid !important;"
                                         placeholder="Observación sobre el convenio específico...">{{ old('observacion') }}</textarea>
                                     <x-input-error :messages="$errors->get('observacion')" class="mt-1" />
                                 </div>
 
                                 {{-- Coordinadores --}}
-                                <div class="rounded-lg border border-neutral-200 bg-neutral-50/60 p-4">
+                                <div class="rounded-lg border border-neutral-300 bg-neutral-50/60 p-4">
                                     <div class="mb-4 flex items-start justify-between gap-3">
                                         <div>
                                             <h3 class="text-sm font-semibold text-neutral-800">Coordinadores</h3>
@@ -366,18 +302,18 @@
                                     }" x-init="if (coordinadores.length === 0) agregarCoordinador()" class="space-y-3">
                                         <template x-for="(coord, index) in coordinadores" :key="index">
                                             <div
-                                                class="flex flex-col gap-3 rounded-lg border border-neutral-200 bg-white p-3 md:flex-row md:items-end">
+                                                class="flex flex-col gap-3 rounded-lg border border-neutral-300 bg-white p-3 md:flex-row md:items-end">
                                                 <div class="flex-1">
                                                     <x-input-label value="Coordinador UNS" />
                                                     <x-text-input name="coordinador_uns[]" type="text"
-                                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                                        class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                                         placeholder="Nombre del coordinador UNS" />
                                                 </div>
 
                                                 <div class="flex-1">
                                                     <x-input-label value="Coordinador Institución" />
                                                     <x-text-input name="coordinador_institucion[]" type="text"
-                                                        class="mt-1 block w-full rounded-lg border border-neutral-200 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                                        class="mt-1 block w-full rounded-lg border border-neutral-300 px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                                         placeholder="Nombre del coordinador institución" />
                                                 </div>
 
@@ -385,7 +321,7 @@
                                                     <label
                                                         class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-neutral-700">
                                                         <input type="checkbox" name="no_se_menciona[]" value="1"
-                                                            class="rounded border-neutral-200" />
+                                                            class="rounded-lg border-neutral-300" />
                                                         No se menciona
                                                     </label>
                                                 </div>
@@ -404,7 +340,7 @@
                                         </template>
 
                                         <button type="button" @click="agregarCoordinador()"
-                                            class="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
+                                            class="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"
                                                 fill="currentColor" class="h-4 w-4">
                                                 <path
@@ -418,7 +354,7 @@
                                         marcar "No se menciona" si no aplica.</p>
                                 </div>
 
-                                <details class="rounded-lg border border-neutral-200 bg-neutral-50/60">
+                                <details class="rounded-lg border border-neutral-300 bg-neutral-50/60">
                                     <summary
                                         class="cursor-pointer select-none px-3 py-2 text-sm font-medium text-neutral-700">
                                         Objetivo (opcional)
@@ -427,7 +363,7 @@
                                         <p class="text-xs text-neutral-500">Si aplica, describe el objetivo del
                                             convenio específico.</p>
                                         <textarea id="objetivo_personalizado" name="objetivo_personalizado" rows="3"
-                                            class="mt-2 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                                            class="mt-2 block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                             placeholder="Describe el objetivo del convenio.">{{ old('objetivo_personalizado') }}</textarea>
                                         <x-input-error :messages="$errors->get('objetivo_personalizado')" class="mt-1" />
                                     </div>
