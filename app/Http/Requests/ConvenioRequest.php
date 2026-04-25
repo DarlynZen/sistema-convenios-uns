@@ -34,6 +34,7 @@ class ConvenioRequest extends FormRequest
             'nacionalidad' => 'nullable|string|max:100',
             'beneficiarios' => 'nullable|array',
             'beneficiarios.*' => 'exists:beneficiarios,id',
+            'observaciones_prorroga' => 'nullable|string|max:2000',
             'observacion' => 'nullable|string|max:2000',
             'coordinador_uns' => 'nullable|array',
             'coordinador_uns.*' => 'nullable|string|max:255',
@@ -98,6 +99,7 @@ class ConvenioRequest extends FormRequest
             'archivo_dos' => 'archivo 2',
             'transcripcion_resolucion' => 'archivo 1',
             'anexo_convenio' => 'archivo 2',
+            'observaciones_prorroga' => 'observaciones de prórroga',
             'coordinador_uns' => 'coordinador UNS',
             'coordinador_institucion' => 'coordinador institución',
         ];

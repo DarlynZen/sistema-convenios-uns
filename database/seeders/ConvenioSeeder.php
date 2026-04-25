@@ -33,6 +33,7 @@ class ConvenioSeeder extends Seeder
 
                 'plazo_prorroga_valor'  => 12,
                 'plazo_prorroga_unidad' => 'meses',
+                'observaciones_prorroga' => 'La prórroga se otorgará si se han cumplido al menos el 90% de las actividades programadas.',
 
                 // Datos de entidad asociada
                 'entidad_nombre'        => 'Universidad de Lima',
@@ -68,6 +69,7 @@ class ConvenioSeeder extends Seeder
 
                 'plazo_prorroga_valor'  => 6,
                 'plazo_prorroga_unidad' => 'meses',
+                'observaciones_prorroga' => 'La prórroga se otorgará si se han cumplido al menos el 80% de las actividades programadas.',
 
                 'entidad_nombre'        => 'Universidad Nacional Mayor de San Marcos',
                 'entidad_logo'          => 'convenios/logos/medicina.png',

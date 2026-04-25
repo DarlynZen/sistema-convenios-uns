@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('duracion_unidad', 50);
             $table->integer('plazo_prorroga_valor');
             $table->enum('plazo_prorroga_unidad', ['dias','semanas','meses']);
+            $table->text('observaciones_prorroga')->nullable();
         
             //Datos de la entidad asociada
             $table->string('entidad_nombre', 255);

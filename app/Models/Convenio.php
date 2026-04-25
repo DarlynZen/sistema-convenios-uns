@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $resolucion
  * @property string $titulo
  * @property string|null $objetivo_personalizado
+ * @property string|null $observaciones_prorroga
  * @property \Illuminate\Support\Carbon $fecha_inicio
  * @property \Illuminate\Support\Carbon $fecha_fin
  * @property int $plazo_prorroga_valor
@@ -76,6 +77,7 @@ class Convenio extends Model
         'resolucion',
         'titulo',
         'objetivo_personalizado',
+        'observaciones_prorroga',
         'fecha_inicio',
         'fecha_fin',
         'duracion_valor',
@@ -97,6 +99,7 @@ class Convenio extends Model
         'resolucion' => 'string',
         'titulo' => 'string',
         'objetivo_personalizado' => 'string',
+        'observaciones_prorroga' => 'string',
         'fecha_inicio' => 'date',
         'fecha_fin' => 'date',
         'plazo_prorroga_valor' => 'integer',  //enum ver docs

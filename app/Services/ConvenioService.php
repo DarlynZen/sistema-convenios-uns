@@ -49,6 +49,7 @@ class ConvenioService
 
         $data = $this->calcularFechaConDuracion($data);
         $data = $this->generarDetallesCoordinadores($data);
+        $data['observaciones_prorroga'] = $data['observaciones_prorroga'] ?? ($data['observacion'] ?? null);
 
         unset(
             $data['beneficiarios'],

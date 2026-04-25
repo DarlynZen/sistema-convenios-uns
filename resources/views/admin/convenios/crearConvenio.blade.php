@@ -263,14 +263,14 @@
                                 }" x-show="checkVisibility()"
                                     @step-changed.window="$nextTick(() => { if ($el.style.display !== 'none') { $el.style.display = 'block'; } })"
                                     x-cloak class="rounded-lg border border-neutral-300 bg-neutral-50/60 p-4">
-                                    <x-input-label for="observacion" value="Observación" />
+                                    <x-input-label for="observaciones_prorroga" value="Observación" />
                                     <p class="mt-1 text-xs text-neutral-500">Solo visible si el tipo de convenio es
                                         "específico".</p>
-                                        <textarea id="observacion" name="observacion" rows="3"
+                                        <textarea id="observaciones_prorroga" name="observaciones_prorroga" rows="3"
                                         class="mt-2 block w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-[13px] focus:border-red-400 focus:ring-2 focus:ring-red-200"
                                         style="border-color: rgb(212 212 216) !important; border-style: solid !important;"
-                                        placeholder="Observación sobre el convenio específico...">{{ old('observacion') }}</textarea>
-                                    <x-input-error :messages="$errors->get('observacion')" class="mt-1" />
+                                        placeholder="Observación sobre el convenio específico...">{{ old('observaciones_prorroga', old('observacion')) }}</textarea>
+                                    <x-input-error :messages="$errors->get('observaciones_prorroga')" class="mt-1" />
                                 </div>
 
                                 {{-- Coordinadores --}}
