@@ -67,8 +67,28 @@ class ConvenioController extends Controller
 
     public function show(Convenio $convenio)
     {
+        $convenio = $this->convenioService->obtenerConRelaciones($convenio->id);
+        $resolucion = $convenio->resolucion ?? 'Sin resolución';
+        preg_match('/\b(19|20)\d{2}\b/', (string) $resolucion, $matches);
+
+        $entidadLogo = $convenio->entidad_logo ?? null;
+
         return view('admin.convenios.verConvenio', [
-            'convenio' => $this->convenioService->obtenerConRelaciones($convenio->id),
+            'convenio' => $convenio,
+            'tipoNombre' => data_get($convenio, 'tipoConvenio.nombre', 'Sin tipo'),
+            'ambitoNombre' => data_get($convenio, 'ambito.nombre', 'Sin ámbito'),
+            'estadoNombre' => data_get($convenio, 'estadoConvenio.nombre', 'Sin estado'),
+            'resolucion' => $resolucion,
+            'anioResolucion' => $matches[0] ?? '-',
+            'titulo' => $convenio->titulo ?? 'Convenio sin título',
+            'beneficiariosTexto' => ($beneficiarios = collect($convenio->beneficiarios ?? []))
+                ->pluck('codigo_beneficiario')
+                ->filter()
+                ->join(', ') ?: '-',
+            'observacionProrroga' => $convenio->observaciones_prorroga ?? data_get($convenio, 'observaciones_prorroga', '-'),
+            'entidadLogoUrl' => filled($entidadLogo)
+                ? (preg_match('/^https?:\/\//', $entidadLogo) ? $entidadLogo : asset('storage/' . ltrim($entidadLogo, '/')))
+                : null,
         ]);
     }
 

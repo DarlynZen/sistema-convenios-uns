@@ -5,12 +5,14 @@ namespace App\Services;
 use App\Models\Convenio;
 use App\Repositories\ConvenioRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class ConvenioService
 {
     public function __construct(
         private ConvenioRepository $repository
-    ){}
+    ) {
+    }
 
     public function obtenerPorId(int $id): Convenio
     {
@@ -22,26 +24,26 @@ class ConvenioService
         return $this->repository->obtenerConRelaciones($id);
     }
 
-    public function listarConRelaciones()
+    public function listarConRelaciones(): Collection
     {
         return $this->repository->listarConRelaciones();
     }
 
     public function crear(array $data): Convenio
     {
-        [$data, $beneficiarios] = $this->validarDatosFormulario($data);
+        [$data, $beneficiarios] = $this->prepararDatosFormulario($data);
 
         return $this->repository->crear($data, $beneficiarios);
     }
 
     public function actualizar(int $id, array $data): Convenio
     {
-        [$data, $beneficiarios] = $this->validarDatosFormulario($data);
+        [$data, $beneficiarios] = $this->prepararDatosFormulario($data);
 
         return $this->repository->actualizar($id, $data, $beneficiarios);
     }
 
-    private function validarDatosFormulario(array $data): array
+    private function prepararDatosFormulario(array $data): array
     {
         $beneficiarios = array_key_exists('beneficiarios', $data)
             ? (array) ($data['beneficiarios'] ?? [])
@@ -49,7 +51,9 @@ class ConvenioService
 
         $data = $this->calcularFechaConDuracion($data);
         $data = $this->generarDetallesCoordinadores($data);
-        $data['observaciones_prorroga'] = $data['observaciones_prorroga'] ?? ($data['observacion'] ?? null);
+        $data['observaciones_prorroga'] = filled($data['observaciones_prorroga'] ?? null)
+            ? $data['observaciones_prorroga']
+            : ($data['observacion'] ?? null);
 
         unset(
             $data['beneficiarios'],
@@ -73,13 +77,20 @@ class ConvenioService
 
         $fechaFin = Carbon::parse($fechaInicio);
 
-        match ($duracionUnidad) {
-            'dias' => $fechaFin->addDays($duracionValor),
-            'semanas' => $fechaFin->addWeeks($duracionValor),
-            'meses' => $fechaFin->addMonths($duracionValor),
-            'anios' => $fechaFin->addYears($duracionValor),
-            default => null,
-        };
+        switch ($duracionUnidad) {
+            case 'dias':
+                $fechaFin->addDays($duracionValor);
+                break;
+            case 'semanas':
+                $fechaFin->addWeeks($duracionValor);
+                break;
+            case 'meses':
+                $fechaFin->addMonths($duracionValor);
+                break;
+            case 'anios':
+                $fechaFin->addYears($duracionValor);
+                break;
+        }
 
         $data['fecha_fin'] = $fechaFin->toDateString();
         return $data;

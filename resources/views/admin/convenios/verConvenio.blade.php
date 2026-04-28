@@ -1,22 +1,4 @@
 <x-admin-layout>
-    @php
-        $tipoNombre = data_get($convenio, 'tipoConvenio.nombre', 'Sin tipo');
-        $ambitoNombre = data_get($convenio, 'ambito.nombre', 'Sin ámbito');
-        $estadoNombre = data_get($convenio, 'estadoConvenio.nombre', 'Sin estado');
-        $resolucion = $convenio->resolucion ?? 'Sin resolución';
-        preg_match('/\b(19|20)\d{2}\b/', (string) $resolucion, $matches);
-        $anioResolucion = $matches[0] ?? '-';
-        $titulo = $convenio->titulo ?? 'Convenio sin título';
-        $beneficiarios = collect($convenio->beneficiarios ?? []);
-        $beneficiariosTexto = $beneficiarios->pluck('codigo_beneficiario')->filter()->join(', ');
-        $beneficiariosTexto = $beneficiariosTexto !== '' ? $beneficiariosTexto : '-';
-        $observacionProrroga = $convenio->observaciones_prorroga ?? data_get($convenio, 'observaciones_prorroga', '-');
-        $entidadLogo = $convenio->entidad_logo ?? null;
-        $entidadLogoUrl = filled($entidadLogo)
-            ? (preg_match('/^https?:\/\//', $entidadLogo) ? $entidadLogo : asset('storage/' . ltrim($entidadLogo, '/')))
-            : null;
-    @endphp
-
     <div class="space-y-4">
         <x-admin.block>
             <div class="flex w-full items-start gap-3">
