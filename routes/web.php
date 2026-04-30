@@ -19,6 +19,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::get('/convenios/crear', [ConvenioController::class, 'create'])->name('convenios.create');
     Route::get('/convenios/{convenio}', [ConvenioController::class, 'show'])->name('convenios.show');
     Route::post('/convenios', [ConvenioController::class, 'store'])->name('convenios.store');
+    Route::delete('/convenios/{convenio}', [ConvenioController::class, 'destroy'])->name('convenios.destroy');
     Route::get('/contenido', [AdminController::class, 'contenido'])->name('contenido.index');
     Route::post('/contenido/hero', [AdminController::class, 'guardarHero'])->name(name: 'contenido.hero.save');
     Route::post('/contenido/contacto', [AdminController::class, 'guardarContacto'])->name(name: 'contenido.contacto.save');
