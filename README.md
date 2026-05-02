@@ -1,5 +1,64 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Convenios UNS
 
-## License
+Plataforma web para la gestion de convenios institucionales de la UNS. Ofrece un sitio publico con informacion de convenios y un panel de administracion seguro para gestionar contenido, catalogos y documentos.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Destacado
+
+- Publicacion de convenios al publico con contenido institucional.
+- Panel de administracion para crear, consultar y eliminar convenios.
+- Gestion de documentos vinculados a cada convenio.
+- Catalogos y contenido editable (hero, contacto, FAQ).
+
+## Stack tecnologico
+
+- Laravel
+- Livewire
+- Vite + Tailwind CSS
+- Pest / PHPUnit
+
+## Estructura general (arbol de carpetas)
+
+```
+app/
+|-- Enums/
+|-- Http/
+|   |-- Controllers/
+|   `-- Requests/
+|-- Livewire/
+|   |-- Actions/
+|   `-- Forms/
+|-- Models/
+|-- Repositories/
+|-- Services/
+resources/
+`-- views/
+routes/
+database/
+public/
+tests/
+```
+
+## Modulos principales
+
+- Convenios: altas, listado, detalle y eliminacion.
+- Documentos de convenio: adjuntos y gestion de archivos.
+- Contenido institucional: hero, contacto y FAQ.
+- Catalogos: beneficiarios y datos auxiliares.
+
+## Rutas clave
+
+- Publico: `/inicio`, `/nuestros-convenios`
+- Admin: `/admin` (requiere autenticacion)
+
+## Configuracion rapida
+
+1. Clonar el repositorio.
+2. Instalar dependencias: `composer install` y `npm install`.
+3. Crear `.env` desde `.env.example` y configurar base de datos.
+4. Generar clave: `php artisan key:generate`.
+5. Ejecutar migraciones: `php artisan migrate`.
+6. Compilar assets: `npm run dev`.
+
+## Licencia
+
+Uso interno. Revisar politicas institucionales antes de redistribuir.
