@@ -94,7 +94,7 @@ class ConvenioController extends Controller
 
     public function edit(Convenio $convenio)
     {
-        return view('admin.convenios.edit', array_merge(
+        return view('admin.convenios.editarConvenio', array_merge(
             [
                 'convenio' => $this->convenioService->obtenerConRelaciones($convenio->id),
             ],

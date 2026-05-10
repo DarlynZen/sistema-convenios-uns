@@ -424,7 +424,7 @@
 
                             <div class="flex items-center gap-2" x-show="step === maxStep" x-cloak>
                                 <x-admin.cancel-button
-                                    onclick="window.location.href='{{ route('admin.convenios.index') }}'">
+                                    @click="window.location.href='{{ route('admin.convenios.index') }}'">
                                     Cancelar
                                 </x-admin.cancel-button>
 

@@ -2,7 +2,7 @@
 
 <div class="flex flex-wrap items-center justify-center gap-2">
     {{-- Botón Editar --}}
-    <a href="{{ route('admin.convenios.show', $convenio) }}"
+    <a href="{{ route('admin.convenios.edit', $convenio) }}"
        class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 hover:text-neutral-800"
        aria-label="Editar"
        title="Editar">
@@ -51,8 +51,7 @@
             <button
                 type="button"
                 class="inline-flex items-center rounded border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
-                x-on:click="$dispatch('close-modal')"
-            >
+                x-on:click="$dispatch('close-modal')">
                 Cancelar
             </button>
 
