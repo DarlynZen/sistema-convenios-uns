@@ -13,7 +13,7 @@
     class="w-full"
 >
     {{-- Header de tabs --}}
-    <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-1">
+    <div class="rounded-lg border border-neutral-400 bg-neutral-50 p-1">
         {{-- Mobile: dropdown --}}
         <div class="md:hidden">
             <label class="sr-only" for="admin-tabs-select">Sección</label>
@@ -31,7 +31,6 @@
             </select>
         </div>
 
-        {{-- Desktop: pill tabs (scrollable if needed) --}}
         <div
             class="hidden md:flex md:flex-nowrap md:items-stretch md:gap-1 md:overflow-x-auto"
             role="tablist"
@@ -74,4 +73,3 @@
         @endforeach
     </div>
 </div>
-

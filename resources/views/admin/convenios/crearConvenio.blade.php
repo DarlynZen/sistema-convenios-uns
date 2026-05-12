@@ -9,8 +9,7 @@
         <x-admin.block>
             <div class="flex flex-col gap-2">
                 <h1 class="text-neutral-600 text-2xl font-bold">Crear nuevo convenio</h1>
-                <p class="text-neutral-600 text-sm">Completa los pasos para registrar un nuevo convenio académico o de
-                    investigación</p>
+                <p class="text-neutral-600 text-sm">Completa los pasos para registrar un nuevo convenio</p>
             </div>
         </x-admin.block>
 
@@ -22,7 +21,7 @@
 
         <div class="bg-white rounded border border-neutral-400">
             <x-admin.stepper :steps="[
-                ['key' => 'info', 'label' => 'Convenio', 'description' => 'Datos generales y vigencia', 'icon' => $stepperIconConvenio],
+                ['key' => 'info', 'label' => 'Convenio', 'description' => 'Datos generales', 'icon' => $stepperIconConvenio],
                 ['key' => 'details', 'label' => 'Institución', 'description' => 'Entidad y coordinadores', 'icon' => $stepperIconInstitucion],
                 ['key' => 'docs', 'label' => 'Documentación', 'description' => 'Archivos PDF requeridos', 'icon' => $stepperIconDocumentos],
             ]" current="1">

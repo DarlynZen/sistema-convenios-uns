@@ -6,6 +6,7 @@ use App\Http\Requests\ConvenioRequest;
 use App\Models\Convenio;
 use App\Services\ConvenioService;
 use App\Services\DocumentoConvenioService;
+use Illuminate\Support\Facades\Storage;
 
 class ConvenioController extends Controller
 {
@@ -72,6 +73,39 @@ class ConvenioController extends Controller
         preg_match('/\b(19|20)\d{2}\b/', (string) $resolucion, $matches);
 
         $entidadLogo = $convenio->entidad_logo ?? null;
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $storage */
+        $storage = Storage::disk('public');
+        $formatSize = function (?int $bytes): string {
+            if (!is_int($bytes) || $bytes <= 0) {
+                return '-';
+            }
+            $units = ['B', 'KB', 'MB', 'GB'];
+            $index = (int) floor(log($bytes, 1024));
+            $index = min($index, count($units) - 1);
+            $value = $bytes / (1024 ** $index);
+            return number_format($value, $index === 0 ? 0 : 1) . ' ' . $units[$index];
+        };
+        $documentosAdjuntos = collect($convenio->documento)
+            ->filter(fn($documento) => (bool) ($documento->activo ?? false))
+            ->map(function ($documento) use ($storage, $formatSize) {
+                $ruta = $documento->ruta_archivo ?? $documento->ruta_documento;
+                $hasFile = filled($ruta) && $storage->exists($ruta);
+                $fechaLabel = optional($documento->created_at)
+                    ->locale('es')
+                    ->translatedFormat('d \\d\\e F \\d\\e Y');
+
+                return [
+                    'nombre' => $documento->nombre_archivo
+                        ?? $documento->nombre_documento
+                        ?? $documento->tipo_documento
+                        ?? 'Documento',
+                    'sizeLabel' => $hasFile ? $formatSize($storage->size($ruta)) : '-',
+                    'fechaLabel' => $fechaLabel ?: '-',
+                    'downloadUrl' => $hasFile ? $storage->url($ruta) : '#',
+                    'hasFile' => $hasFile,
+                ];
+            })
+            ->values();
 
         return view('admin.convenios.verConvenio', [
             'convenio' => $convenio,
@@ -89,6 +123,7 @@ class ConvenioController extends Controller
             'entidadLogoUrl' => filled($entidadLogo)
                 ? (preg_match('/^https?:\/\//', $entidadLogo) ? $entidadLogo : asset('storage/' . ltrim($entidadLogo, '/')))
                 : null,
+            'documentosAdjuntos' => $documentosAdjuntos,
         ]);
     }
 

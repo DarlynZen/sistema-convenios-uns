@@ -213,38 +213,9 @@
                     </div>
                 </div>
 
-                @php
-                    $documentos = collect($convenio->documento)->filter(fn($documento) => $documento->activo);
-                    $storage = \Illuminate\Support\Facades\Storage::disk('public');
-                    $formatSize = function (?int $bytes): string {
-                        if (!is_int($bytes) || $bytes <= 0) {
-                            return '-';
-                        }
-                        $units = ['B', 'KB', 'MB', 'GB'];
-                        $index = (int) floor(log($bytes, 1024));
-                        $index = min($index, count($units) - 1);
-                        $value = $bytes / (1024 ** $index);
-                        return number_format($value, $index === 0 ? 0 : 1) . ' ' . $units[$index];
-                    };
-                @endphp
-
-                @if ($documentos->isNotEmpty())
+                @if ($documentosAdjuntos->isNotEmpty())
                     <div class="space-y-3">
-                        @foreach ($documentos as $documento)
-                            @php
-                                $ruta = $documento->ruta_archivo ?? $documento->ruta_documento;
-                                $hasFile = filled($ruta) && $storage->exists($ruta);
-                                $downloadUrl = $hasFile ? $storage->url($ruta) : '#';
-                                $sizeLabel = $hasFile ? $formatSize($storage->size($ruta)) : '-';
-                                $fechaLabel = optional($documento->created_at)
-                                    ->locale('es')
-                                    ->translatedFormat('d \d\e F \d\e Y');
-                                $nombreDocumento = $documento->nombre_archivo
-                                    ?? $documento->nombre_documento
-                                    ?? $documento->tipo_documento
-                                    ?? 'Documento';
-                            @endphp
-
+                        @foreach ($documentosAdjuntos as $documento)
                             <div class="flex flex-wrap items-center justify-between gap-4 rounded border border-neutral-300 bg-white px-4 py-3">
                                 <div class="flex items-start gap-3">
                                     <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
@@ -256,15 +227,15 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-semibold text-neutral-800">{{ $nombreDocumento }}</div>
+                                        <div class="text-sm font-semibold text-neutral-800">{{ $documento['nombre'] }}</div>
                                         <div class="mt-0.5 text-xs text-neutral-500">
-                                            {{ $sizeLabel }} · Subido el {{ $fechaLabel ?: '-' }}
+                                            {{ $documento['sizeLabel'] }} · Subido el {{ $documento['fechaLabel'] }}
                                         </div>
                                     </div>
                                 </div>
-                                <a href="{{ $downloadUrl }}"
-                                    class="inline-flex items-center gap-2 text-sm font-semibold text-neutral-700 transition hover:text-neutral-900 {{ $hasFile ? '' : 'pointer-events-none text-neutral-400' }}"
-                                    @if ($hasFile) download @endif>
+                                <a href="{{ $documento['downloadUrl'] }}"
+                                    class="inline-flex items-center gap-2 text-sm font-semibold text-neutral-700 transition hover:text-neutral-900 {{ $documento['hasFile'] ? '' : 'pointer-events-none text-neutral-400' }}"
+                                    @if ($documento['hasFile']) download @endif>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"
                                         class="h-4 w-4">
                                         <path
