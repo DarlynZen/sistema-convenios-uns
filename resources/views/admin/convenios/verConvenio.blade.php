@@ -54,21 +54,9 @@
                     </div>
                 </div>
 
-                @php
-                    $rows = [
-                        ['label' => 'N° Resolución', 'value' => $resolucion],
-                        ['label' => 'Año de Resolución', 'value' => $anioResolucion],
-                        ['label' => 'Título', 'value' => $titulo],
-                        ['label' => 'Tipo de convenio', 'value' => $tipoNombre],
-                        ['label' => 'Estado', 'value' => $estadoNombre],
-                        ['label' => 'Ámbito', 'value' => $ambitoNombre],
-                        ['label' => 'Dirigido a', 'value' => $beneficiariosTexto],
-                    ];
-                @endphp
-
                 <x-admin.simple-table
                     :columns="[]"
-                    :rows="$rows"
+                    :rows="$informacionRows"
                     :show-header="false"
                     :column-widths="['w-[18%]', 'w-[12%]', 'w-[30%]', 'w-[12%]', 'w-[10%]', 'w-[10%]', 'w-[18%]']"
                     table-min-width="1100px"
@@ -93,16 +81,6 @@
                         <p class="mt-1 text-sm text-neutral-500">Fechas y plazos del convenio</p>
                     </div>
                 </div>
-
-                @php
-                    $vigenciaRows = [
-                        ['label' => 'Fecha de inicio', 'value' => optional($convenio->fecha_inicio)->format('d/m/Y') ?? '-'],
-                        ['label' => 'Duración', 'value' => $convenio->duracion ?? '-'],
-                        ['label' => 'Fecha de fin', 'value' => optional($convenio->fecha_fin)->format('d/m/Y') ?? '-'],
-                        ['label' => 'Plazo de prórroga', 'value' => trim(($convenio->plazo_prorroga_valor ?? '-') . ' ' . ($convenio->plazo_prorroga_unidad ?? ''))],
-                        ['label' => 'Observaciones', 'value' => $observacionProrroga ?: '-'],
-                    ];
-                @endphp
 
                 <x-admin.simple-table
                     :columns="[]"
@@ -132,23 +110,6 @@
                     </div>
                 </div>
 
-                @php
-                    $entidadRows = [
-                        [
-                            'institución/entidad/organismo' => $convenio->entidad_nombre ?? '-',
-                            'tipo de entidad' => $convenio->entidad_tipo ?? '-',
-                            'nacionalidad' => $convenio->nacionalidad ?? '-',
-                            'logo' => $entidadLogoUrl,
-                        ],
-                    ];
-                    $entidadColumns = [
-                        ['key' => 'institución/entidad/organismo', 'label' => 'Institución/Entidad/Organismo', 'classes' => 'w-[42%]'],
-                        ['key' => 'tipo de entidad', 'label' => 'Tipo de entidad', 'classes' => 'w-[18%]'],
-                        ['key' => 'nacionalidad', 'label' => 'Nacionalidad', 'classes' => 'w-[15%]'],
-                        ['key' => 'logo', 'label' => 'Logo', 'type' => 'image', 'classes' => 'w-[15%]', 'cellClasses' => 'align-middle'],
-                    ];
-                @endphp
-
                 <x-admin.simple-table
                     :columns="$entidadColumns"
                     :rows="$entidadRows"
@@ -174,16 +135,6 @@
                         <p class="mt-1 text-sm text-neutral-500">Relación con convenios anteriores</p>
                     </div>
                 </div>
-
-                @php
-                    $convenioAnterior = $convenio->convenioAnterior;
-                    $renovacionTexto = $convenioAnterior
-                        ? ($convenioAnterior->resolucion ?: ($convenioAnterior->titulo ?: ('Convenio #' . $convenioAnterior->id)))
-                        : 'No es una renovación';
-                    $renovacionRows = [
-                        ['label' => 'Convenio renovado de', 'value' => $renovacionTexto],
-                    ];
-                @endphp
 
                 <x-admin.simple-table
                     :columns="[]"
@@ -255,7 +206,7 @@
             </div>
         </x-admin.block>
 
-        @if (filled(data_get($convenio, 'detalles_coordinadores_json.coordinador_uns')) || filled(data_get($convenio, 'detalles_coordinadores_json.coordinador_institucion')) || data_get($convenio, 'detalles_coordinadores_json.no_se_menciona'))
+        @if ($mostrarCoordinadores)
             <x-admin.block>
                 <div class="w-full">
                     <div class="flex items-start gap-3 pb-4">
@@ -272,13 +223,6 @@
                             <p class="mt-1 text-sm text-neutral-500">Personas de contacto designadas por cada institución</p>
                         </div>
                     </div>
-
-                    @php
-                        $coordinadoresJson = data_get($convenio, 'detalles_coordinadores_json', []);
-                        $coordinadoresUns = collect(data_get($coordinadoresJson, 'coordinador_uns', []))->filter()->values();
-                        $coordinadoresInst = collect(data_get($coordinadoresJson, 'coordinador_institucion', []))->filter()->values();
-                        $entidadEtiqueta = $convenio->entidad_nombre ?: 'Institucion';
-                    @endphp
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="rounded border border-neutral-400 bg-white p-4 shadow-sm">

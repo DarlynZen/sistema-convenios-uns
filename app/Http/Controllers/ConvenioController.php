@@ -42,7 +42,7 @@ class ConvenioController extends Controller
             }
 
             if ($request->hasFile('anexo_convenio')) {
-                 $this->documentoConvenioService->create($convenio, [
+                $this->documentoConvenioService->create($convenio, [
                     'documento'        => $request->file('anexo_convenio'),
                     'nombre_documento' => 'Anexo de Convenio',
                 ]);
@@ -69,10 +69,63 @@ class ConvenioController extends Controller
     public function show(Convenio $convenio)
     {
         $convenio = $this->convenioService->obtenerConRelaciones($convenio->id);
+        $convenioAnterior = $convenio->convenioAnterior;
+        $renovacionTexto = $convenioAnterior
+            ? ($convenioAnterior->resolucion ?: ($convenioAnterior->titulo ?: ('Convenio #' . $convenioAnterior->id)))
+            : 'No es una renovación';
         $resolucion = $convenio->resolucion ?? 'Sin resolución';
         preg_match('/\b(19|20)\d{2}\b/', (string) $resolucion, $matches);
 
+        $informacionRows = [
+            ['label' => 'N° Resolución', 'value' => $resolucion],
+            ['label' => 'Año de Resolución', 'value' => $matches[0] ?? '-'],
+            ['label' => 'Título', 'value' => $convenio->titulo ?? 'Convenio sin título'],
+            ['label' => 'Tipo de convenio', 'value' => data_get($convenio, 'tipoConvenio.nombre', 'Sin tipo')],
+            ['label' => 'Estado', 'value' => data_get($convenio, 'estadoConvenio.nombre', 'Sin estado')],
+            ['label' => 'Ámbito', 'value' => data_get($convenio, 'ambito.nombre', 'Sin ámbito')],
+            ['label' => 'Dirigido a', 'value' => ($beneficiarios = collect($convenio->beneficiarios ?? []))
+                ->pluck('codigo_beneficiario')
+                ->filter()
+                ->join(', ') ?: '-'],
+        ];
+
+        $vigenciaRows = [
+            ['label' => 'Fecha de inicio', 'value' => optional($convenio->fecha_inicio)->format('d/m/Y') ?? '-'],
+            ['label' => 'Duración', 'value' => $convenio->duracion ?? '-'],
+            ['label' => 'Fecha de fin', 'value' => optional($convenio->fecha_fin)->format('d/m/Y') ?? '-'],
+            ['label' => 'Plazo de prórroga', 'value' => trim(($convenio->plazo_prorroga_valor ?? '-') . ' ' . ($convenio->plazo_prorroga_unidad ?? ''))],
+            ['label' => 'Observaciones', 'value' => $convenio->observaciones_prorroga ?? data_get($convenio, 'observaciones_prorroga', '-')],
+        ];
+
         $entidadLogo = $convenio->entidad_logo ?? null;
+        $entidadRows = [
+            [
+                'institución/entidad/organismo' => $convenio->entidad_nombre ?? '-',
+                'tipo de entidad' => $convenio->entidad_tipo ?? '-',
+                'nacionalidad' => $convenio->nacionalidad ?? '-',
+                'logo' => filled($entidadLogo)
+                    ? (preg_match('/^https?:\/\//', $entidadLogo) ? $entidadLogo : asset('storage/' . ltrim($entidadLogo, '/')))
+                    : null,
+            ],
+        ];
+        $entidadColumns = [
+            ['key' => 'institución/entidad/organismo', 'label' => 'Institución/Entidad/Organismo', 'classes' => 'w-[42%]'],
+            ['key' => 'tipo de entidad', 'label' => 'Tipo de entidad', 'classes' => 'w-[18%]'],
+            ['key' => 'nacionalidad', 'label' => 'Nacionalidad', 'classes' => 'w-[15%]'],
+            ['key' => 'logo', 'label' => 'Logo', 'type' => 'image', 'classes' => 'w-[15%]', 'cellClasses' => 'align-middle'],
+        ];
+
+        $renovacionRows = [
+            ['label' => 'Convenio renovado de', 'value' => $renovacionTexto],
+        ];
+
+        $coordinadoresJson = data_get($convenio, 'detalles_coordinadores_json', []);
+        $coordinadoresUns = collect(data_get($coordinadoresJson, 'coordinador_uns', []))->filter()->values();
+        $coordinadoresInst = collect(data_get($coordinadoresJson, 'coordinador_institucion', []))->filter()->values();
+        $mostrarCoordinadores = filled(data_get($convenio, 'detalles_coordinadores_json.coordinador_uns'))
+            || filled(data_get($convenio, 'detalles_coordinadores_json.coordinador_institucion'))
+            || data_get($convenio, 'detalles_coordinadores_json.no_se_menciona');
+        $entidadEtiqueta = data_get($convenio, 'entidad_nombre', 'Institucion');
         /** @var \Illuminate\Filesystem\FilesystemAdapter $storage */
         $storage = Storage::disk('public');
         $formatSize = function (?int $bytes): string {
@@ -109,6 +162,16 @@ class ConvenioController extends Controller
 
         return view('admin.convenios.verConvenio', [
             'convenio' => $convenio,
+            'renovacionTexto' => $renovacionTexto,
+            'informacionRows' => $informacionRows,
+            'vigenciaRows' => $vigenciaRows,
+            'entidadRows' => $entidadRows,
+            'entidadColumns' => $entidadColumns,
+            'renovacionRows' => $renovacionRows,
+            'coordinadoresUns' => $coordinadoresUns,
+            'coordinadoresInst' => $coordinadoresInst,
+            'mostrarCoordinadores' => $mostrarCoordinadores,
+            'entidadEtiqueta' => $entidadEtiqueta,
             'tipoNombre' => data_get($convenio, 'tipoConvenio.nombre', 'Sin tipo'),
             'ambitoNombre' => data_get($convenio, 'ambito.nombre', 'Sin ámbito'),
             'estadoNombre' => data_get($convenio, 'estadoConvenio.nombre', 'Sin estado'),

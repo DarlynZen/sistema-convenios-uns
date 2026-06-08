@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('tipo_convenio_id')->constrained('tipos_convenio');
             $table->foreignId('ambito_id')->constrained('ambitos');
             $table->foreignId('estado_convenio_id')->constrained('estados_convenio');
-            $table->text('resolucion', 255);
+            $table->text('resolucion');
             $table->string('titulo', 255);
             $table->text('objetivo_personalizado')->nullable();
             $table->date('fecha_inicio');

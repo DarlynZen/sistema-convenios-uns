@@ -13,8 +13,8 @@ class AmbitosSeeder extends Seeder
     public function run(): void
     {
         DB::table('ambitos')->insert([
-            ['id' => 1, 'nombre' => 'Nacional', 'descripcion' => 'Convenios que se aplican a nivel nacional.'],
-            ['id' => 2, 'nombre' => 'Internacional', 'descripcion' => 'Convenios que involucran a entidades de otros países.'],
+            ['id' => 1, 'nombre' => 'Nacional'],
+            ['id' => 2, 'nombre' => 'Internacional'],
         ]);
     }
 }

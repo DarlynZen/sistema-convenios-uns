@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('ambitos', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('nombre', 150);
-            $table->text('descripcion')->nullable();
             $table->timestamps();
         });
     }

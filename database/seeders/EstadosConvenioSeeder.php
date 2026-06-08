@@ -10,9 +10,9 @@ class EstadosConvenioSeeder extends Seeder
     public function run(): void
     {
         DB::table('estados_convenio')->insert([
-            ['id' => 1, 'nombre' => 'Activo', 'descripcion' => 'El convenio está activo.'],
-            ['id' => 2, 'nombre' => 'Vencido', 'descripcion' => 'El convenio ha vencido.'],
-            ['id' => 3, 'nombre' => 'En Revisión', 'descripcion' => 'El convenio está en revisión.'],
+            ['id' => 1, 'nombre' => 'Activo'],
+            ['id' => 2, 'nombre' => 'Vencido'],
+            ['id' => 3, 'nombre' => 'En Revisión'],
         ]);
     }
 }

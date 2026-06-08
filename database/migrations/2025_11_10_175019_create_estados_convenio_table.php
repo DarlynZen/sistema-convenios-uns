@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('estados_convenio', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('nombre');
-            $table->text('descripcion')->nullable();
             $table->timestamps();
         });
     }
