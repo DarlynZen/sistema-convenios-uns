@@ -12,7 +12,7 @@ Route::view('admin/convenios', 'admin.gestion-convenios')->middleware(['auth'])-
 
  */
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(function () {
+Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
     Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/convenios', [ConvenioController::class, 'index'])->name('convenios.index');
@@ -29,11 +29,9 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->name('admin.')->group(
     Route::post('/contenido/faq/update', [AdminController::class, 'actualizarFaq'])->name(name: 'contenido.faq.update');
     Route::post('/contenido/faq/delete', [AdminController::class, 'eliminarFaq'])->name(name: 'contenido.faq.delete');
     Route::get('/catalogo', [AdminController::class, 'catalogo'])->name('catalogo.index');
-    Route::patch('/catalogo/beneficiarios/{beneficiario}', [AdminController::class, 'actualizarBeneficiarioCatalogo'])
-        ->name('catalogo.beneficiarios.update');
+    Route::patch('/catalogo/beneficiarios/{beneficiario}', [AdminController::class, 'actualizarBeneficiarioCatalogo'])->name('catalogo.beneficiarios.update');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 });
-
-Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
 
 //public
 /* Route::view('/', 'site/convenios/welcome');
