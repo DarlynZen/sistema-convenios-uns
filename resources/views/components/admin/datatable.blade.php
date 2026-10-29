@@ -27,7 +27,7 @@
                         @if($actions)
                             <th
                                 class="sticky right-0 px-4 py-3 text-center font-bold bg-neutral-50/95 z-30 relative before:content-[''] before:pointer-events-none before:absolute before:inset-y-0 before:left-0 before:w-4 before:bg-gradient-to-r before:from-neutral-400/70 before:to-transparent"
-                            >Acciones</th>
+                            >Acción</th>
                         @endif
                     </tr>
                     </thead>
