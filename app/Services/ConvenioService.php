@@ -6,6 +6,7 @@ use App\Models\Convenio;
 use App\Repositories\ConvenioRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class ConvenioService
 {
@@ -133,5 +134,82 @@ class ConvenioService
     public function obtenerCatalogos(): array
     {
         return $this->repository->obtenerCatalogos();
+    }
+
+    public function obtenerDatosMapa(): array
+    {
+        $datos = [];
+
+        foreach ($this->repository->obtenerDatosMapa() as $nacionalidad) {
+            $codigo = $this->normalizarCodigoPais((string) $nacionalidad);
+
+            if ($codigo === null) {
+                continue;
+            }
+
+            $datos[$codigo] = ($datos[$codigo] ?? 0) + 1;
+        }
+
+        ksort($datos);
+
+        return array_map(
+            fn (int $total) => ['agreements' => $total],
+            $datos
+        );
+    }
+
+    private function normalizarCodigoPais(string $nacionalidad): ?string
+    {
+        $valor = trim($nacionalidad);
+
+        if ($valor === '') {
+            return null;
+        }
+
+        $normalizado = Str::lower($valor);
+        $normalizado = strtr($normalizado, [
+            'á' => 'a', 'à' => 'a', 'ä' => 'a', 'â' => 'a',
+            'é' => 'e', 'è' => 'e', 'ë' => 'e', 'ê' => 'e',
+            'í' => 'i', 'ì' => 'i', 'ï' => 'i', 'î' => 'i',
+            'ó' => 'o', 'ò' => 'o', 'ö' => 'o', 'ô' => 'o',
+            'ú' => 'u', 'ù' => 'u', 'ü' => 'u', 'û' => 'u',
+            'ñ' => 'n', 'ç' => 'c',
+        ]);
+
+        $normalizado = preg_replace('/[^a-z0-9\s]/', '', $normalizado);
+        $normalizado = trim((string) $normalizado);
+
+        $mapeo = [
+            'argentina' => 'ARG',
+            'bolivia' => 'BOL',
+            'brasil' => 'BRA',
+            'chile' => 'CHL',
+            'colombia' => 'COL',
+            'ecuador' => 'ECU',
+            'guatemala' => 'GTM',
+            'honduras' => 'HND',
+            'mexico' => 'MEX',
+            'nicaragua' => 'NIC',
+            'panama' => 'PAN',
+            'paraguay' => 'PRY',
+            'peru' => 'PER',
+            'uruguay' => 'URY',
+            'venezuela' => 'VEN',
+            'estados unidos' => 'USA',
+            'united states' => 'USA',
+            'united states of america' => 'USA',
+            'usa' => 'USA',
+            'canada' => 'CAN',
+            'espana' => 'ESP',
+            'francia' => 'FRA',
+            'italia' => 'ITA',
+            'alemania' => 'DEU',
+            'japon' => 'JPN',
+            'corea del sur' => 'KOR',
+            'republica dominicana' => 'DOM',
+            'dominican republic' => 'DOM',
+        ];
+
+        return $mapeo[$normalizado] ?? null;
     }
 }

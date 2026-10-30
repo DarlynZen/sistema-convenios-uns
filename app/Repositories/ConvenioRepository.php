@@ -90,6 +90,19 @@ class ConvenioRepository
             ->count('id');
     }
 
+    public function obtenerDatosMapa(): array
+    {
+        return $this->modelo->newQuery()
+            ->select('nacionalidad')
+            ->where('estado_convenio_id', EstadoConvenio::ACTIVO->value)
+            ->whereNotNull('nacionalidad')
+            ->get()
+            ->pluck('nacionalidad')
+            ->filter()
+            ->values()
+            ->all();
+    }
+
     public function contarTipos(): int { 
         return (int) DB::table((new TipoConvenio())->getTable())->count('id'); 
     }

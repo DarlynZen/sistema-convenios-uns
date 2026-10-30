@@ -64,22 +64,33 @@
         (function() {
             'use strict';
             const DESKTOP = 1024;
-            let sidebar, overlay;
+            let sidebar, overlay, sidebarOpen = window.innerWidth >= DESKTOP;
 
             const isMobile = () => window.innerWidth < DESKTOP;
-            const getState = () => sidebar && (isMobile() ? !sidebar.classList.contains("-translate-x-full") : !sidebar.classList.contains("hidden"));
+
+            function applySidebarState() {
+                if (!sidebar) return;
+
+                if (isMobile()) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.toggle('-translate-x-full', !sidebarOpen);
+                    if (overlay) {
+                        overlay.classList.toggle('hidden', !sidebarOpen);
+                    }
+                    return;
+                }
+
+                sidebar.classList.remove('-translate-x-full');
+                sidebar.classList.toggle('hidden', !sidebarOpen);
+                if (overlay) {
+                    overlay.classList.add('hidden');
+                }
+            }
 
             function toggle() {
                 if (!sidebar) return;
-                const open = getState();
-                const mobile = isMobile();
-
-                if (mobile) {
-                    sidebar.classList.toggle("-translate-x-full", open);
-                    if (overlay) overlay.classList.toggle("hidden", open);
-                } else {
-                    sidebar.classList.toggle("hidden", open);
-                }
+                sidebarOpen = !sidebarOpen;
+                applySidebarState();
             }
 
             function init() {
@@ -103,12 +114,12 @@
 
                 if (overlay) {
                     overlay.addEventListener('click', () => {
-                        if (isMobile() && sidebar) {
-                            sidebar.classList.add("-translate-x-full");
-                            overlay.classList.add("hidden");
-                        }
+                        sidebarOpen = false;
+                        applySidebarState();
                     });
                 }
+
+                applySidebarState();
             }
 
             const start = () => {
@@ -128,14 +139,7 @@
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
                     if (!sidebar) return;
-                    const mobile = isMobile();
-                    const wasOpen = getState();
-
-                    if (mobile) {
-                        sidebar.classList.toggle("-translate-x-full", wasOpen);
-                    } else {
-                        sidebar.classList.toggle("hidden", wasOpen);
-                    }
+                    applySidebarState();
                 }, 150);
             });
         })();

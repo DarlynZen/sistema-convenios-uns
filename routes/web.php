@@ -12,6 +12,8 @@ Route::view('admin/convenios', 'admin.gestion-convenios')->middleware(['auth'])-
 
  */
 
+Route::get('/admin/convenios/map-data', [ConvenioController::class, 'mapData'])->name('admin.convenios.map-data');
+
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
     Route::redirect('/', '/admin/dashboard');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');

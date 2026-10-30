@@ -239,4 +239,9 @@ class ConvenioController extends Controller
             ]);
         }
     }
+
+    public function mapData()
+    {
+        return response()->json($this->convenioService->obtenerDatosMapa());
+    }
 }

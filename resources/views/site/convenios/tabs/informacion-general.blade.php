@@ -152,26 +152,7 @@
     </div>
 
     {{-- Mapa de Convenios --}}
-    <div class="flex flex-col items-start w-full h-auto py-2">
-        <!-- Título -->
-        <div class="py-3">
-            <h2 class="font-extrabold text-xl">Tenemos convenios en</h2>
-        </div>
-
-        <div class="flex gap-2 mb-3">
-            <button id="btn-world" type="button"
-                class="py-2 px-3 text-sm font-medium rounded-lg border bg-white hover:bg-gray-50">
-                Ver mundo
-            </button>
-
-            <button id="btn-latam" type="button"
-                class="py-2 px-3 text-sm font-medium rounded-lg border bg-white hover:bg-gray-50">
-                Ver LATAM
-            </button>
-        </div>
-
-        <div id="hs-users-datamap" style="height:420px; width:100%;"></div>
-    </div>
+    <x-page.mapa-convenios />
 
     {{-- Pasos --}}
     <div class="flex flex-col items-start w-full h-auto py-2">
